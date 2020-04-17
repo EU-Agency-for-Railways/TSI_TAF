@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by - (European Railway Agency (ERA)) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.2" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.2.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.2" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.2.2">
 	<xs:annotation>
 		<xs:appinfo>
 			<dcterms:title>TAF TSI - message exchange.</dcterms:title>
@@ -9,6 +9,7 @@
 			<dcterms:coverage>European Union</dcterms:coverage>
 			<dcterms:created>2013-06-27</dcterms:created>
 			<dcterms:modified>2017-02-23</dcterms:modified>
+			<dcterms:modified>2018-05-31</dcterms:modified>
 			<dcterms:type>text/xml</dcterms:type>
 			<dcterms:subject>Transport, Freigth Transport, Rail</dcterms:subject>
 			<dcterms:identifier>{http://www.era.europa.eu/schemes/TAFTSI}taf_cat_codelists.xsd</dcterms:identifier>
@@ -16,7 +17,7 @@
 			<dcterms:publisher>ERA European Railway Agency, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
 			<dcterms:rights>Unclassified</dcterms:rights>
 			<dcterms:rightsHolder>European Railway Agency</dcterms:rightsHolder>
-			<dcterms:copyright>ERA 2017</dcterms:copyright>
+			<dcterms:copyright>ERA 2018</dcterms:copyright>
 			<dcterms:status>Draft</dcterms:status>
 		</xs:appinfo>
 	</xs:annotation>
@@ -1068,13 +1069,18 @@ W6-A		W6a is designed for non- bogied wagons with axle spacings of 12.8m (42'), 
 				<xs:enumeration value="G2"/>
 				<xs:enumeration value="GA"/>
 				<xs:enumeration value="GB"/>
+				<xs:enumeration value="GC"/>
+				<xs:enumeration value="CM"/>
+				<xs:enumeration value="CE"/>
+				<xs:enumeration value="M2"/>
+				<xs:enumeration value="M3"/>
+				<xs:enumeration value="M4"/>
 				<xs:enumeration value="GB1"/>
 				<xs:enumeration value="GB2"/>
 				<xs:enumeration value="GB-M6"/>
 				<xs:enumeration value="GHE16"/>
-				<xs:enumeration value="GC"/>
-				<xs:enumeration value="G"/>
 				<xs:enumeration value="W6-A"/>
+				<xs:enumeration value="SEa"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -1719,7 +1725,7 @@ Passenger with Freight - military trains, the Overnight Express; Royalty, Head o
 19    pre-accepted offer
 21    no alternative available
 22    booked 
-
+23  - preparation of draft alternative offer is in progress
 30	Create Dossier
 31	Close Dossier
 
@@ -1757,6 +1763,11 @@ Passenger with Freight - military trains, the Overnight Express; Royalty, Head o
 			<xs:enumeration value="19"/>
 			<xs:enumeration value="21"/>
 			<xs:enumeration value="22"/>
+			<xs:enumeration value="23">
+				<xs:annotation>
+					<xs:documentation>preparation of draft alternative offer is in progress</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
 			<xs:enumeration value="30"/>
 			<xs:enumeration value="31"/>
 			<xs:enumeration value="40"/>
