@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2015 sp2 (http://www.altova.com) by - - - (European Railway Agency (ERA)) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.1" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.1">
+<!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by - (European Railway Agency (ERA)) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.2" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.2.0">
 	<xs:annotation>
 		<xs:appinfo>
 			<dcterms:title>TAF TSI - message exchange.</dcterms:title>
@@ -8,6 +8,7 @@
 			<dcterms:creator>European Railway Agency. mailto:taf_tsi@era.europa.eu</dcterms:creator>
 			<dcterms:coverage>European Union</dcterms:coverage>
 			<dcterms:created>2013-06-27</dcterms:created>
+			<dcterms:modified>2017-02-23</dcterms:modified>
 			<dcterms:type>text/xml</dcterms:type>
 			<dcterms:subject>Transport, Freigth Transport, Rail</dcterms:subject>
 			<dcterms:identifier>{http://www.era.europa.eu/schemes/TAFTSI}taf_cat_codelists.xsd</dcterms:identifier>
@@ -15,7 +16,7 @@
 			<dcterms:publisher>ERA European Railway Agency, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
 			<dcterms:rights>Unclassified</dcterms:rights>
 			<dcterms:rightsHolder>European Railway Agency</dcterms:rightsHolder>
-			<dcterms:copyright>ERA 2013</dcterms:copyright>
+			<dcterms:copyright>ERA 2017</dcterms:copyright>
 			<dcterms:status>Draft</dcterms:status>
 		</xs:appinfo>
 	</xs:annotation>
@@ -1471,6 +1472,31 @@ Note: some existing applications are not able to handle more than two characters
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
+	<xs:attribute name="TimingQualifierCode">
+		<xs:annotation>
+			<xs:documentation>
+PLA = Public Location Arrival
+ELA = Earliest Location Arrival
+ALA = Actual Location Arival
+LLA = Latest Location Arrival
+PLD = Public Location Departure
+ELD = Earliest Location Departure
+ALD = Actual Location Departure
+LLD = Latest Location Departure</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="PLA"/>
+				<xs:enumeration value="PLD"/>
+				<xs:enumeration value="ELA"/>
+				<xs:enumeration value="ELD"/>
+				<xs:enumeration value="LLA"/>
+				<xs:enumeration value="LLD"/>
+				<xs:enumeration value="ALA"/>
+				<xs:enumeration value="ALD"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
 	<xs:element name="TractionMode">
 		<xs:annotation>
 			<xs:documentation>Identifies the mode of deployment of a traction within a train
@@ -1532,7 +1558,7 @@ Second digit – position in group of traction units with the same role
 				<xs:enumeration value="24"/>
 				<xs:enumeration value="34"/>
 				<xs:enumeration value="44"/>
-				<xs:enumeration value="44"/>
+				<xs:enumeration value="54"/>
 				<xs:enumeration value="15"/>
 				<xs:enumeration value="25"/>
 				<xs:enumeration value="35"/>
@@ -1543,6 +1569,43 @@ Second digit – position in group of traction units with the same role
 				<xs:enumeration value="36"/>
 				<xs:enumeration value="46"/>
 				<xs:enumeration value="56"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="TractionType">
+		<xs:annotation>
+			<xs:documentation>Identifies the type of a locomotive: 
+First digit:
+“0” = not specified
+“1” = external electric power supply for traction (catenary and pantograph, third rail or other such as maglev)
+“2” = on-board traction power supply for traction without external electrical or other power supply available
+“3” = hybrid traction (both on-board or electric traction available)
+Second digit (definitions in chapter 2.2.2 of the LOC and PAS TSI 1302/2014):
+“0” = not specified
+“1” = locomotive or power unit
+“2” = trainset or multiple unit or railcar
+“3” = shunter
+“4” = on track machine or infrastructure inspection vehicle
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="01"/>
+				<xs:enumeration value="02"/>
+				<xs:enumeration value="03"/>
+				<xs:enumeration value="04"/>
+				<xs:enumeration value="11"/>
+				<xs:enumeration value="12"/>
+				<xs:enumeration value="13"/>
+				<xs:enumeration value="14"/>
+				<xs:enumeration value="21"/>
+				<xs:enumeration value="22"/>
+				<xs:enumeration value="23"/>
+				<xs:enumeration value="24"/>
+				<xs:enumeration value="31"/>
+				<xs:enumeration value="32"/>
+				<xs:enumeration value="33"/>
+				<xs:enumeration value="34"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>

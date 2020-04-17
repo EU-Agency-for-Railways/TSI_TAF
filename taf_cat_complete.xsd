@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2015 sp2 (http://www.altova.com) by - - - (European Railway Agency (ERA)) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.1" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.3" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:ns1="http://www.era.europa.eu/schemes/TAFTSI/2.1" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.1">
+<!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by - (European Railway Agency (ERA)) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.2" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.3" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:ns1="http://www.era.europa.eu/schemes/TAFTSI/2.2" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.2.0">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.3" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
@@ -10,6 +10,7 @@
 			<dcterms:creator>European Railway Agency. mailto:taf_tsi@era.europa.eu</dcterms:creator>
 			<dcterms:coverage>European Union</dcterms:coverage>
 			<dcterms:created>2013-06-27</dcterms:created>
+			<dcterms:modified>2017-02-23</dcterms:modified>
 			<dcterms:type>text/xml</dcterms:type>
 			<dcterms:subject>Transport, Freight Transport, Rail</dcterms:subject>
 			<dcterms:identifier>{http://www.era.europa.eu/schemes/TAFTSI}taf_cat_complete.xsd</dcterms:identifier>
@@ -17,7 +18,7 @@
 			<dcterms:publisher>ERA European Railway Agency, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
 			<dcterms:rights>Unclassified</dcterms:rights>
 			<dcterms:rightsHolder>European Railway Agency</dcterms:rightsHolder>
-			<dcterms:copyright>ERA 2013</dcterms:copyright>
+			<dcterms:copyright>ERA 2017</dcterms:copyright>
 			<dcterms:status>Draft</dcterms:status>
 		</xs:appinfo>
 	</xs:annotation>
@@ -83,8 +84,28 @@
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="StartOfSection" type="LocationIdent"/>
-				<xs:element name="EndOfSection" type="LocationIdent"/>
+				<xs:element name="StartOfSection">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="LocationIdent">
+								<xs:sequence minOccurs="0">
+									<xs:element ref="BookedLocationDateTime" minOccurs="0"/>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="EndOfSection">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="LocationIdent">
+								<xs:sequence minOccurs="0">
+									<xs:element ref="BookedLocationDateTime" minOccurs="0"/>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
 				<xs:element ref="OperationalTrainNumber" minOccurs="0"/>
 				<xs:element ref="PlannedCalendar"/>
 				<xs:element ref="NetworkSpecificParameter" minOccurs="0" maxOccurs="unbounded"/>
@@ -274,7 +295,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:int">
-				<xs:minInclusive value="1"/>
+				<xs:minInclusive value="0"/>
 				<xs:maxInclusive value="99999"/>
 			</xs:restriction>
 		</xs:simpleType>
@@ -1086,7 +1107,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 							<xs:simpleType>
 								<xs:restriction base="xs:token">
 									<xs:enumeration value="CR"/>
-									<xs:enumeration value="CN"/>
+									<xs:enumeration value="CE"/>
 								</xs:restriction>
 							</xs:simpleType>
 						</xs:element>
@@ -1266,12 +1287,12 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 			<xs:sequence>
 				<xs:element name="CustomerType">
 					<xs:annotation>
-						<xs:documentation>Type of participation CR: Consignor  CE: Consignee In the consignment order,the Lead RU acts as both types </xs:documentation>
+						<xs:documentation>Type of participation CR: Consignor  CE: Consignee  </xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="CR"/>
-							<xs:enumeration value="CN"/>
+							<xs:enumeration value="CE"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
@@ -1289,7 +1310,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 	</xs:element>
 	<xs:element name="DangerousGoodsIndication" type="DanGoodsType">
 		<xs:annotation>
-			<xs:documentation>Identifies the Dangerous Goods by code</xs:documentation>
+			<xs:documentation>Identifies dangerous goods</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="DangerousGoodsIndicator" type="xs:boolean">
@@ -1304,7 +1325,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 	</xs:element>
 	<xs:element name="DangerousGoodsWeight" type="WeightValueKilo">
 		<xs:annotation>
-			<xs:documentation>The weight of dangerous goods in Kilograms</xs:documentation>
+			<xs:documentation>The weight of dangerous goods in kilograms</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="DanGoodsType">
@@ -1317,7 +1338,6 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 					<xs:restriction base="xs:string">
 						<xs:minLength value="2"/>
 						<xs:maxLength value="4"/>
-						<xs:pattern value="X? [0-9] [2,3]"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
@@ -1631,7 +1651,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 	</xs:simpleType>
 	<xs:element name="ErrorMessage">
 		<xs:annotation>
-			<xs:documentation>This message should be sent from the receiver to the sender after the processing of the previously sent TAF/TAP message in the backend (legacy) system of the receiver has failed.  </xs:documentation>
+			<xs:documentation>This message should be sent from the receiver to the sender after the processing of the previously sent TAF/TAP message in the backend (legacy) system of the receiver has failed.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
@@ -1667,12 +1687,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 				</xs:element>
 				<xs:element name="Severity">
 					<xs:annotation>
-						<xs:documentation>1 = WARNING
-2 = FATAL
-3 = SEVER
-4 = SEVER-FATAL
-
-The senders and receivers should agree about the severity levels and their interpretation: should the process stop, should the message be resent etc.</xs:documentation>
+						<xs:documentation>1 = WARNING 2 = FATAL 3 = SEVER 4 = SEVER-FATAL The senders and receivers should agree about the severity levels and their interpretation: should the process stop, should the message be resent etc.</xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:integer">
@@ -1725,9 +1740,9 @@ The senders and receivers should agree about the severity levels and their inter
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="ExceptionalGaugingInd" type="InfoIndex">
+	<xs:element name="ExceptionalGaugingInd" type="xs:boolean">
 		<xs:annotation>
-			<xs:documentation>Indicates that an exceptional Gauging is in the train or for the wagon</xs:documentation>
+			<xs:documentation>Indicates that an exceptional gauging is in the train or for the wagon - (true/false)</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="ExceptionalGaugingProfile">
@@ -1993,23 +2008,13 @@ The senders and receivers should agree about the severity levels and their inter
 				</xs:element>
 				<xs:element name="ParkingBrakeForce" minOccurs="0">
 					<xs:annotation>
-						<xs:documentation>Parking force of the hand brake measured in kN, with one fraction digit (with comma!)</xs:documentation>
+						<xs:documentation>Indicates the parking brake force of the hand brake (kN).
+When the parking brake force is marked on the wagon the information must be provided in the RSRD message.</xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:decimal">
 							<xs:totalDigits value="5"/>
 							<xs:fractionDigits value="1"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-				<xs:element name="MaxParkingBrakeGradient" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>Maximum gradient for parking only with hand brake measured in °</xs:documentation>
-					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:integer">
-							<xs:minInclusive value="1"/>
-							<xs:maxInclusive value="99"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
@@ -2336,7 +2341,7 @@ The other subelements help describing the interruption information more precisel
 	</xs:element>
 	<xs:element name="LengthOverBuffers">
 		<xs:annotation>
-			<xs:documentation>Measured in dm</xs:documentation>
+			<xs:documentation>Length over buffers is expressed in cm.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:integer">
@@ -2496,7 +2501,7 @@ The other subelements help describing the interruption information more precisel
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
-				<xs:element name="LocationValidityPeriod" type="ValidityPeriod"/>
+				<xs:element ref="LocationValidityPeriod"/>
 				<xs:element ref="ContainerHandlingFlag" minOccurs="0"/>
 				<xs:element ref="HandoverPointFlag" minOccurs="0"/>
 				<xs:sequence minOccurs="0">
@@ -2561,7 +2566,7 @@ The other subelements help describing the interruption information more precisel
 				<xs:element ref="LocationSubsidiaryCode"/>
 				<xs:element ref="LocationSubsidiaryName"/>
 				<xs:element ref="AllocationCompany"/>
-				<xs:element ref="ValidityPeriod"/>
+				<xs:element ref="LocationValidityPeriod"/>
 				<xs:element ref="Comments" minOccurs="0"/>
 				<xs:element ref="GeographicCoordinates" minOccurs="0"/>
 			</xs:sequence>
@@ -2571,6 +2576,17 @@ The other subelements help describing the interruption information more precisel
 		<xs:annotation>
 			<xs:documentation>To be completed in an official language of the Country using the ISO Unicode alphabet</xs:documentation>
 		</xs:annotation>
+	</xs:element>
+	<xs:element name="LocoNumber">
+		<xs:annotation>
+			<xs:documentation>Identifies the number of the locomotive, usually the European Vehicle Number on 12N. It is currently not restricted only to numeric values.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="12"/>
+				<xs:minLength value="4"/>
+			</xs:restriction>
+		</xs:simpleType>
 	</xs:element>
 	<xs:element name="LocoTypeNumber">
 		<xs:annotation>
@@ -2590,12 +2606,23 @@ The other subelements help describing the interruption information more precisel
 	</xs:element>
 	<xs:element name="MaxAxleWeight">
 		<xs:annotation>
-			<xs:documentation>Maximum allowed axle weight for a wagon within a train.  Unit in tonnes per axle</xs:documentation>
+			<xs:documentation>Indicates the maximum design axle weight (to).</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
-			<xs:restriction base="xs:int">
-				<xs:minInclusive value="01"/>
-				<xs:maxInclusive value="99"/>
+			<xs:restriction base="xs:decimal">
+				<xs:minInclusive value="0.1"/>
+				<xs:maxInclusive value="99.9"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+		<xs:element name="MaxDesignSpeed">
+		<xs:annotation>
+			<xs:documentation>Maximum approved speed of the wagon (km/h)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="1"/>
+				<xs:maxInclusive value="999"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -2612,28 +2639,6 @@ The other subelements help describing the interruption information more precisel
 			<xs:restriction base="xs:integer">
 				<xs:minInclusive value="1"/>
 				<xs:maxInclusive value="999999"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="MaxSpeedEmpty">
-		<xs:annotation>
-			<xs:documentation>Maxumum speed conditions empty arising rom wagon construction characteristics (in km)</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:integer">
-				<xs:minInclusive value="1"/>
-				<xs:maxInclusive value="999"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="MaxSpeedLoad">
-		<xs:annotation>
-			<xs:documentation>Maximum speed conditions according to load</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:integer">
-				<xs:minInclusive value="1"/>
-				<xs:maxInclusive value="999"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -2794,14 +2799,14 @@ The other subelements help describing the interruption information more precisel
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-	<xs:element name="MinVerticleRadiusYardHump">
+	<xs:element name="MinVerticalRadiusYardHump">
 		<xs:annotation>
-			<xs:documentation>Measured in mm</xs:documentation>
+			<xs:documentation>Minimum allowed vertical radius over yard humps. Measured in meters.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:integer">
 				<xs:minInclusive value="1"/>
-				<xs:maxInclusive value="9999"/>
+				<xs:maxInclusive value="999"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -2863,7 +2868,7 @@ The other subelements help describing the interruption information more precisel
 	</xs:element>
 	<xs:element name="NHM_Code" type="NHMCodeType">
 		<xs:annotation>
-			<xs:documentation>NHM code of the good</xs:documentation>
+			<xs:documentation>NHM code of the goods</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:simpleType name="NHMCodeType">
@@ -3181,7 +3186,7 @@ The other subelements help describing the interruption information more precisel
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:integer">
-				<xs:minInclusive value="1"/>
+				<xs:minInclusive value="0"/>
 				<xs:maxInclusive value="99"/>
 			</xs:restriction>
 		</xs:simpleType>
@@ -4151,32 +4156,27 @@ The following values/codes are proposed for the usage (defined in the InteropCap
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element ref="NormalLoadingGauge"/>
+							<xs:element ref="NormalLoadingGauge" minOccurs="0"/>
 							<xs:element ref="MinCurveRadius">
 								<xs:annotation>
 									<xs:documentation> Minimum allowed curve radius due to design characteristics, measured in meters</xs:documentation>
 								</xs:annotation>
 							</xs:element>
-							<xs:element ref="MinVerticleRadiusYardHump" minOccurs="0">
-								<xs:annotation>
-									<xs:documentation>Minimum allowed verticle radius over yard humps
-Measured in meters</xs:documentation>
-								</xs:annotation>
-							</xs:element>
+							<xs:element ref="MinVerticalRadiusYardHump" minOccurs="0"/>
 							<xs:element ref="WagonWeightEmpty">
 								<xs:annotation>
 									<xs:documentation>Weight of the empty wagon (tara weight) in kg</xs:documentation>
 								</xs:annotation>
 							</xs:element>
-							<xs:element ref="LengthOverBuffers">
-								<xs:annotation>
-									<xs:documentation>Length of the wagon over buffers measured in mm</xs:documentation>
-								</xs:annotation>
-							</xs:element>
+							<xs:element ref="LengthOverBuffers"/>
 							<xs:element ref="MaxAxleWeight"/>
-							<xs:element name="LoadTable" maxOccurs="unbounded">
+							<xs:element name="LoadTable" maxOccurs="unbounded" minOccurs="0" >
 								<xs:annotation>
-									<xs:documentation>Load table, can be used for international, product specific and additional (country-specific) load tables</xs:documentation>
+									<xs:documentation>Indicates the load tables marked on the wagon. 
+When load tables are marked on the wagon the information must be provided in the RSRD message.
+Several load tables (international, product specific for LPG wagons  and additional/country specific) can be specified by providing the element several times consecutively.
+For special wagons with specific load tables (e.g. heavy haul wagons) no load table need to be provided. 
+The complete load table must be provided including the empty load row (if existent).</xs:documentation>
 								</xs:annotation>
 								<xs:complexType>
 									<xs:sequence>
@@ -4244,11 +4244,7 @@ Measured in meters</xs:documentation>
 									</xs:sequence>
 								</xs:complexType>
 							</xs:element>
-							<xs:element ref="MaxSpeedEmpty">
-								<xs:annotation>
-									<xs:documentation>Maxumum speed conditions empty arising rom wagon construction characteristics (in km/h)</xs:documentation>
-								</xs:annotation>
-							</xs:element>
+							<xs:element ref="MaxDesignSpeed"/>
 							<xs:element ref="AirBrake"/>
 							<xs:element ref="HandBrake">
 								<xs:annotation>
@@ -4335,7 +4331,7 @@ TypeOfRemovableAccessories code list is used. Values refer to UIC Leaflet 920-13
 </xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="NumberOfAccesorOfSpecType" type="Numeric2-2">
+										<xs:element name="NumberOfAccessorOfSpecType" type="Numeric2-2">
 											<xs:annotation>
 												<xs:documentation>Number of specified accessory equipped on the wagon</xs:documentation>
 											</xs:annotation>
@@ -4347,11 +4343,6 @@ TypeOfRemovableAccessories code list is used. Values refer to UIC Leaflet 920-13
 							<xs:element ref="MaxGrossWeight">
 								<xs:annotation>
 									<xs:documentation>Weight of max Gross Load Weight  plus the tare weight of the equipment in kg</xs:documentation>
-								</xs:annotation>
-							</xs:element>
-							<xs:element ref="MaxSpeedLoad">
-								<xs:annotation>
-									<xs:documentation>Maximum speed conditions according to load (in km/h)</xs:documentation>
 								</xs:annotation>
 							</xs:element>
 							<xs:element name="VapourReturnSystem" type="xs:boolean" minOccurs="0">
@@ -4655,16 +4646,10 @@ Type will be the RestrictionCode instead of ForwardingRestrictionType, according
 		</xs:annotation>
 		<xs:restriction base="Numeric3-3"/>
 	</xs:simpleType>
-	<xs:element name="StartDate">
+	<xs:element name="StartDate" type="xs:date">
 		<xs:annotation>
 			<xs:documentation>The start of the date/time in effect</xs:documentation>
 		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:date">
-				<xs:minInclusive value="2012-01-01"/>
-				<xs:maxInclusive value="2097-12-31"/>
-			</xs:restriction>
-		</xs:simpleType>
 	</xs:element>
 	<xs:element name="StartDateTime" type="xs:dateTime">
 		<xs:annotation>
@@ -4793,44 +4778,41 @@ Code	F or P	Description																																				T	D	L
 	</xs:element>
 	<xs:element name="TimingAtLocation">
 		<xs:annotation>
-			<xs:documentation>Timing at an operation point</xs:documentation>
+			<xs:documentation>Timing at an operation point
+It has an attribute TimerQualifierCode with the following values:
+PLA = Public Location Arrival
+ELA = Earliest Location Arrival
+ALA = Actual Location Arival
+LLA = Latest Location Arrival
+PLD = Public Location Departure
+ELD = Earliest Location Departure
+ALD = Actual Location Departure
+LLD = Latest Location Departure			
+			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="Timing" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="Time" type="xs:time">
+							<xs:element name="Time">
 								<xs:annotation>
 									<xs:documentation>hh:mm:ss</xs:documentation>
 								</xs:annotation>
+								<xs:complexType>
+									<xs:simpleContent>
+										<xs:extension base="xs:time"/>
+									</xs:simpleContent>
+								</xs:complexType>
 							</xs:element>
 							<xs:element ref="Offset">
 								<xs:annotation>
 									<xs:documentation>in days</xs:documentation>
 								</xs:annotation>
 							</xs:element>
+							<xs:element ref="BookedLocationDateTime" minOccurs="0"/>
 						</xs:sequence>
-						<xs:attribute name="TimingQualifierCode">
-							<xs:annotation>
-								<xs:documentation>ELA = Earliest Location Arrival
-ALA = Actual Location Arival
-LLA = Latest Location Arrival
-ELD = Earliest Location Departure
-ALD = Actual Location Departure
-LLD = Latest Location Departure</xs:documentation>
-							</xs:annotation>
-							<xs:simpleType>
-								<xs:restriction base="xs:token">
-									<xs:enumeration value="ELA"/>
-									<xs:enumeration value="ELD"/>
-									<xs:enumeration value="LLA"/>
-									<xs:enumeration value="LLD"/>
-									<xs:enumeration value="ALA"/>
-									<xs:enumeration value="ALD"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:attribute>
+						<xs:attribute ref="TimingQualifierCode"/>
 					</xs:complexType>
 				</xs:element>
 				<xs:element ref="DwellTime" minOccurs="0"/>
@@ -4884,11 +4866,6 @@ LLD = Latest Location Departure</xs:documentation>
 				<xs:maxInclusive value="99"/>
 			</xs:restriction>
 		</xs:simpleType>
-	</xs:element>
-	<xs:element name="TractionType" type="Numeric2-2">
-		<xs:annotation>
-			<xs:documentation>Identifies the type of a locomotive </xs:documentation>
-		</xs:annotation>
 	</xs:element>
 	<xs:element name="TractionWeight" type="WeightValueTonne">
 		<xs:annotation>
@@ -4946,9 +4923,70 @@ LLD = Latest Location Departure</xs:documentation>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="TrainCC_System" type="TrainCC_Syst">
+	<xs:element name="TrainCC_System" type="xs:token">
 		<xs:annotation>
-			<xs:documentation>Type of Train Control System by code (UIC 407-1)</xs:documentation>
+			<xs:documentation>Type of Train Control System. The following types are used: 
+CCS TSI Class A:
+
+ETCS Level 0
+ETCS Level NSC
+ETCS Level 1
+ETCS Level 2
+ETCS Level 3
+
+ERA/TD/2011-11, Class B:
+PZB
+LZB
+Crocodile
+TBL 1
+TBL 2
+TVM 430TBL1+
+EBICAB 700
+LS
+ZUB 123
+ALSN
+ATP-VR/RHK
+KVB
+TVM 300
+TVM 430
+KVBP
+KCVP
+KCVB
+NEXTEO
+DAAT
+EVM
+CAWS
+ATP
+BACC
+RSDD/SCMT
+SSC
+MEMOR II+
+SHP
+PKP
+ASFA
+EBICAB 900
+SELCAB
+SIGNUM
+ZUB
+ATB 1st Gen
+ATB Next Gen
+GW ATP
+RETB
+TPWS 
+
+
+ UIC Leaflet 407-1 Codes (legacy) are covered in the ERA/TD/2011-11:
+
+91	ETCS L1
+92	ETCS L2
+51	PZB
+3	LZB
+22	KVB
+52	EVM
+11	ZUB
+31	ATB
+32	ATBNG
+</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="TrainCompositionJourneySection">
@@ -4967,6 +5005,7 @@ LLD = Latest Location Departure</xs:documentation>
 						<xs:sequence>
 							<xs:element ref="TractionType"/>
 							<xs:element ref="LocoTypeNumber" minOccurs="0"/>
+							<xs:element ref="LocoNumber" minOccurs="0"/>
 							<xs:element ref="TractionMode" minOccurs="0"/>
 							<xs:element name="DriverIndication" minOccurs="0">
 								<xs:annotation>
@@ -4984,7 +5023,7 @@ LLD = Latest Location Departure</xs:documentation>
 					</xs:complexType>
 				</xs:element>
 				<xs:element ref="LivestockOrPeopleIndicator"/>
-				<xs:element ref="WagonData" maxOccurs="unbounded"/>
+				<xs:element ref="WagonData" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -5272,7 +5311,7 @@ LLD = Latest Location Departure</xs:documentation>
 			<xs:sequence>
 				<xs:element ref="TrainRunningTechData"/>
 				<xs:element ref="ExceptionalGaugingInd" minOccurs="0"/>
-				<xs:element ref="DangerousGoodsIndication" minOccurs="0"/>
+				<xs:element ref="DangerousGoodsIndicator" minOccurs="0"/>
 				<xs:element name="Activities" minOccurs="0" maxOccurs="99">
 					<xs:complexType>
 						<xs:sequence>
@@ -5668,7 +5707,10 @@ LLD = Latest Location Departure</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>Identification code of a freight wagon based on the TSI OPE and CEN Recommendations and CIS wagons coded according to OSJD-UIC leaflet 402, which allows the conversion from 8 digits to 12 digits and viceversa.</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="xs:integer"/>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="12"/>
+			<xs:pattern value="[0-9]{12}"/>
+		</xs:restriction>
 	</xs:simpleType>
 	<xs:element name="WagonInformation">
 		<xs:annotation>
@@ -5729,11 +5771,6 @@ LLD = Latest Location Departure</xs:documentation>
 			<xs:documentation>identifies the status of a wagon, related to the actual time at a reporting point</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="WagonNumberFreight" type="WagonIdent">
-		<xs:annotation>
-			<xs:documentation>Identifies uniquely the freight wagon by its number</xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<xs:element name="WagonMaxSpeed">
 		<xs:annotation>
 			<xs:documentation>Maximum allowed speed of the wagon according to the load and entry in the Rolling Stock Databases.  In kmh</xs:documentation>
@@ -5744,6 +5781,11 @@ LLD = Latest Location Departure</xs:documentation>
 				<xs:maxInclusive value="999"/>
 			</xs:restriction>
 		</xs:simpleType>
+	</xs:element>
+	<xs:element name="WagonNumberFreight" type="WagonIdent">
+		<xs:annotation>
+			<xs:documentation>Identifies uniquely the freight wagon by its number</xs:documentation>
+		</xs:annotation>
 	</xs:element>
 	<xs:element name="WagonNumberOfAxles">
 		<xs:annotation>
@@ -5961,7 +6003,7 @@ LLD = Latest Location Departure</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="WagonLength"/>
+				<xs:element ref="LengthOverBuffers"/>
 				<xs:element ref="WagonNumberOfAxles"/>
 				<xs:element ref="AirBrakeType" minOccurs="0"/>
 				<xs:element ref="BrakingPowerVariationDevice" minOccurs="0"/>
@@ -5977,10 +6019,16 @@ LLD = Latest Location Departure</xs:documentation>
 					</xs:simpleType>
 				</xs:element>
 				<xs:element ref="HandBrakeType" minOccurs="0"/>
-				<xs:element name="HandBrakeBrakedWeight" type="Numeric3-3" minOccurs="0">
+				<xs:element name="HandBrakeBrakedWeight" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>Coding in 404-2, chapter 1.7 </xs:documentation>
 					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:minInclusive value="000"/>
+							<xs:maxInclusive value="999"/>
+						</xs:restriction>
+					</xs:simpleType>
 				</xs:element>
 				<xs:element ref="NormalLoadingGauge" minOccurs="0"/>
 				<xs:element ref="WagonWeightEmpty"/>
@@ -6185,4 +6233,5 @@ Reference wheel diameter at maximum.
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
+	<xs:element name="LocationValidityPeriod" type="ValidityPeriod"/>
 </xs:schema>
