@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 (x64) (http://www.altova.com) by - - (European Railway Agency) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/5.2" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/5.2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.2.0">
+	<xs:annotation>
+		<xs:appinfo>
+			<dcterms:title>TAF TSI - message exchange.</dcterms:title>
+			<dcterms:description>This schema defines code lists for the TAF TSI.</dcterms:description>
+			<dcterms:creator>European Railway Agency. mailto:taf_tsi@era.europa.eu</dcterms:creator>
+			<dcterms:coverage>European Union</dcterms:coverage>
+			<dcterms:created>2012-10-18</dcterms:created>
+			<dcterms:modified>2012-10-xx</dcterms:modified>
+			<dcterms:references>To be defined</dcterms:references>
+			<dcterms:type>text/xml</dcterms:type>
+			<dcterms:subject>Transport, Freigth Transport, Rail</dcterms:subject>
+			<dcterms:identifier>{http://www.era.europa.eu/schemes/TAFTSI}taf_cat_codelists.xsd</dcterms:identifier>
+			<dcterms:language>en</dcterms:language>
+			<dcterms:publisher>ERA European Railway Agency, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
+			<dcterms:rights>Unclassified</dcterms:rights>
+			<dcterms:rightsHolder>European Railway Agency</dcterms:rightsHolder>
+			<dcterms:copyright>ERA 2012</dcterms:copyright>
+			<dcterms:status>Draft</dcterms:status>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:simpleType name="ActivityCode">
+		<xs:annotation>
+			<xs:documentation>Indicate certain treatments or operations required for a train, a wagon or a load</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="IdentCode">
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="13"/>
+			<xs:enumeration value="14"/>
+			<xs:enumeration value="21"/>
+			<xs:enumeration value="22"/>
+			<xs:enumeration value="23"/>
+			<xs:enumeration value="24"/>
+			<xs:enumeration value="25"/>
+			<xs:enumeration value="26"/>
+			<xs:enumeration value="41"/>
+			<xs:enumeration value="42"/>
+			<xs:enumeration value="43"/>
+			<xs:enumeration value="44"/>
+			<xs:enumeration value="45"/>
+			<xs:enumeration value="46"/>
+			<xs:enumeration value="74"/>
+			<xs:enumeration value="76"/>
+			<xs:enumeration value="77"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="AirBrakeChangeoverLever">
+		<xs:annotation>
+			<xs:documentation>Coded Values</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="0"/>
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="8"/>
+				<xs:enumeration value="9"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="AirBrakeType">
+		<xs:annotation>
+			<xs:documentation>Coded Values</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="0"/>
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+				<xs:enumeration value="9"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="BrakeType">
+		<xs:annotation>
+			<xs:documentation>Type of braking system</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="G"/>
+				<xs:enumeration value="P"/>
+				<xs:enumeration value="R"/>
+				<xs:enumeration value="M"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:simpleType name="CapacityIndicator">
+		<xs:annotation>
+			<xs:documentation>Capacity used of the transport unit</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0"/>
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ConsignmentTypeCode">
+		<xs:annotation>
+			<xs:documentation>Identifies the type of a waybill</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="IdentCode">
+			<xs:enumeration value="CIM"/>
+			<xs:enumeration value="Other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="CouplingType">
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="0"/>
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+				<xs:enumeration value="4"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:simpleType name="DelayCode">
+		<xs:annotation>
+			<xs:documentation>Reason for a delay or interruption.  UIC Leaflet 450-2, Appendix C.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="IdentCode">
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="13"/>
+			<xs:enumeration value="14"/>
+			<xs:enumeration value="15"/>
+			<xs:enumeration value="16"/>
+			<xs:enumeration value="17"/>
+			<xs:enumeration value="18"/>
+			<xs:enumeration value="19"/>
+			<xs:enumeration value="20"/>
+			<xs:enumeration value="21"/>
+			<xs:enumeration value="22"/>
+			<xs:enumeration value="24"/>
+			<xs:enumeration value="25"/>
+			<xs:enumeration value="26"/>
+			<xs:enumeration value="27"/>
+			<xs:enumeration value="28"/>
+			<xs:enumeration value="29"/>
+			<xs:enumeration value="31"/>
+			<xs:enumeration value="30"/>
+			<xs:enumeration value="32"/>
+			<xs:enumeration value="33"/>
+			<xs:enumeration value="34"/>
+			<xs:enumeration value="39"/>
+			<xs:enumeration value="40"/>
+			<xs:enumeration value="41"/>
+			<xs:enumeration value="42"/>
+			<xs:enumeration value="43"/>
+			<xs:enumeration value="49"/>
+			<xs:enumeration value="50"/>
+			<xs:enumeration value="51"/>
+			<xs:enumeration value="52"/>
+			<xs:enumeration value="53"/>
+			<xs:enumeration value="54"/>
+			<xs:enumeration value="59"/>
+			<xs:enumeration value="60"/>
+			<xs:enumeration value="61"/>
+			<xs:enumeration value="62"/>
+			<xs:enumeration value="63"/>
+			<xs:enumeration value="64"/>
+			<xs:enumeration value="65"/>
+			<xs:enumeration value="66"/>
+			<xs:enumeration value="70"/>
+			<xs:enumeration value="69"/>
+			<xs:enumeration value="71"/>
+			<xs:enumeration value="72"/>
+			<xs:enumeration value="73"/>
+			<xs:enumeration value="74"/>
+			<xs:enumeration value="75"/>
+			<xs:enumeration value="76"/>
+			<xs:enumeration value="79"/>
+			<xs:enumeration value="80"/>
+			<xs:enumeration value="81"/>
+			<xs:enumeration value="82"/>
+			<xs:enumeration value="83"/>
+			<xs:enumeration value="84"/>
+			<xs:enumeration value="85"/>
+			<xs:enumeration value="86"/>
+			<xs:enumeration value="89"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="HandBrakeType">
+		<xs:annotation>
+			<xs:documentation>Coded Values</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="0"/>
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+				<xs:enumeration value="4"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:simpleType name="IdentCode">
+		<xs:annotation>
+			<xs:documentation>Enumerated value</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="InfoIndex">
+		<xs:annotation>
+			<xs:documentation>indicates additional information</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="20"/>
+			<xs:enumeration value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="InfoOnGoodsShapeTypeDanger">
+		<xs:annotation>
+			<xs:documentation>Additional codified information on the load.  Coding Structures as defined in 404-2  chapter 4.1</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="01"/>
+				<xs:enumeration value="02"/>
+				<xs:enumeration value="03"/>
+				<xs:enumeration value="06"/>
+				<xs:enumeration value="98"/>
+				<xs:enumeration value="99"/>
+				<xs:enumeration value="10"/>
+				<xs:enumeration value="14"/>
+				<xs:enumeration value="15"/>
+				<xs:enumeration value="16"/>
+				<xs:enumeration value="21"/>
+				<xs:enumeration value="22"/>
+				<xs:enumeration value="23"/>
+				<xs:enumeration value="30"/>
+				<xs:enumeration value="41"/>
+				<xs:enumeration value="42"/>
+				<xs:enumeration value="43"/>
+				<xs:enumeration value="51"/>
+				<xs:enumeration value="52"/>
+				<xs:enumeration value="61"/>
+				<xs:enumeration value="62"/>
+				<xs:enumeration value="71"/>
+				<xs:enumeration value="72"/>
+				<xs:enumeration value="73"/>
+				<xs:enumeration value="74"/>
+				<xs:enumeration value="75"/>
+				<xs:enumeration value="80"/>
+				<xs:enumeration value="90"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="IRN_EventCause">
+		<xs:annotation>
+			<xs:documentation>Type of event cause based on the codification found  in UIC Leaflet 407-1, message 2701.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="01"/>
+				<xs:enumeration value="02"/>
+				<xs:enumeration value="03"/>
+				<xs:enumeration value="04"/>
+				<xs:enumeration value="05"/>
+				<xs:enumeration value="07"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="LoadingGauge">
+		<xs:annotation>
+			<xs:documentation>The enlarged reference profile as defined in UIC Leaflet 506.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="GA"/>
+				<xs:enumeration value="GB"/>
+				<xs:enumeration value="GB1"/>
+				<xs:enumeration value="GC"/>
+				<xs:enumeration value="G"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="MessageStatus">
+		<xs:annotation>
+			<xs:documentation>Assigned by the Sender 1=creation, 2=modification, 3=deletion</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="NormalLoadingGauge">
+		<xs:annotation>
+			<xs:documentation>Wagon or load gauge code used in UK, coded in UIC 505-1 and 503</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="GA"/>
+				<xs:enumeration value="GB"/>
+				<xs:enumeration value="GB1"/>
+				<xs:enumeration value="GC"/>
+				<xs:enumeration value="G"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="PackingGroup">
+		<xs:annotation>
+			<xs:documentation>Identification of a packing group by code as defined by UN (1=Great Danger, 2=Medium Danger, 3=Minor Danger)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="RestrictionOrProhibition">
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="0"/>
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+				<xs:enumeration value="4"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="RestrictionsDueToLoadOrDamage">
+		<xs:annotation>
+			<xs:documentation>These are possible restrictions applicable in the originating country to shunting operations in stations and to main-line movements on account of the nature of the load. Coding in 404-2, chapter 4.4 and 2.11
+	  </xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="08"/>
+				<xs:enumeration value="09"/>
+				<xs:enumeration value="15"/>
+				<xs:enumeration value="16"/>
+				<xs:enumeration value="41"/>
+				<xs:enumeration value="42"/>
+				<xs:enumeration value="61"/>
+				<xs:enumeration value="62"/>
+				<xs:enumeration value="63"/>
+				<xs:enumeration value="70"/>
+				<xs:enumeration value="71"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="RouteClass">
+		<xs:annotation>
+			<xs:documentation>Indication of the route class (based on CEN EN 15528: line categories for managing the interface between load limits of vehicels on infrastructure).</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="1"/>
+				<xs:maxLength value="4"/>
+				<xs:pattern value=""/>
+				<xs:enumeration value="A"/>
+				<xs:enumeration value="B"/>
+				<xs:enumeration value="C2"/>
+				<xs:enumeration value="C4"/>
+				<xs:enumeration value="D2"/>
+				<xs:enumeration value="D4"/>
+				<xs:enumeration value="A2"/>
+				<xs:enumeration value="A4"/>
+				<xs:enumeration value="B1"/>
+				<xs:enumeration value="B2"/>
+				<xs:enumeration value="C3"/>
+				<xs:enumeration value="D3"/>
+				<xs:enumeration value="E4"/>
+				<xs:enumeration value="E5"/>
+				<xs:enumeration value="D4xL"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:simpleType name="RunningStatus">
+		<xs:annotation>
+			<xs:documentation>Identifies the status of a train related to the actual time at the reporting point</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="IdentCode">
+			<xs:enumeration value="00"/>
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="03"/>
+			<xs:enumeration value="04"/>
+			<xs:enumeration value="05"/>
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="13"/>
+			<xs:enumeration value="14"/>
+			<xs:enumeration value="15"/>
+			<xs:enumeration value="16"/>
+			<xs:enumeration value="17"/>
+			<xs:enumeration value="18"/>
+			<xs:enumeration value="19"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TrainCC_Syst">
+		<xs:annotation>
+			<xs:documentation>Identifies the command control system of the train in coded values</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="IdentCode">
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="03"/>
+			<xs:enumeration value="04"/>
+			<xs:enumeration value="05"/>
+			<xs:enumeration value="06"/>
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="21"/>
+			<xs:enumeration value="22"/>
+			<xs:enumeration value="23"/>
+			<xs:enumeration value="31"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="TrainCC_SystemCode">
+		<xs:annotation>
+			<xs:documentation>Type of Train Control System</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="01"/>
+				<xs:enumeration value="02"/>
+				<xs:enumeration value="03"/>
+				<xs:enumeration value="04"/>
+				<xs:enumeration value="05"/>
+				<xs:enumeration value="06"/>
+				<xs:enumeration value="11"/>
+				<xs:enumeration value="12"/>
+				<xs:enumeration value="21"/>
+				<xs:enumeration value="22"/>
+				<xs:enumeration value="31"/>
+				<xs:enumeration value="32"/>
+				<xs:enumeration value="91"/>
+				<xs:enumeration value=""/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="TrainRadioSystem">
+		<xs:annotation>
+			<xs:documentation>The on board radio system of the train in coded format</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:simpleType name="UnitType">
+		<xs:annotation>
+			<xs:documentation>Indicates the type of a Transportation unit</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="IdentCode">
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="20"/>
+			<xs:enumeration value="25"/>
+			<xs:enumeration value="30"/>
+			<xs:enumeration value="40"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="WagonType">
+		<xs:annotation>
+			<xs:documentation>Category Code as defined in UIC Leaflet 438-1</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="IdentCode">
+				<xs:enumeration value="E"/>
+				<xs:enumeration value="F"/>
+				<xs:enumeration value="G"/>
+				<xs:enumeration value="H"/>
+				<xs:enumeration value="I"/>
+				<xs:enumeration value="K"/>
+				<xs:enumeration value="L"/>
+				<xs:enumeration value="O"/>
+				<xs:enumeration value="R"/>
+				<xs:enumeration value="S"/>
+				<xs:enumeration value="T"/>
+				<xs:enumeration value="U"/>
+				<xs:enumeration value="Z"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+</xs:schema>
