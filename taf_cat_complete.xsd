@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by - (ERA) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.3" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.3" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:ns1="http://www.era.europa.eu/schemes/TAFTSI/2.2" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.3" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.3.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.3" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.3" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.3" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.3.1">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.3" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
 		<xs:appinfo>
 			<dcterms:title>TAF TSI - message exchange.</dcterms:title>
 			<dcterms:description>This schema defines messages for the TAF TSI.</dcterms:description>
-			<dcterms:creator>European Railway Agency. mailto:taf_tsi@era.europa.eu</dcterms:creator>
+			<dcterms:creator>European Union Agency for Railways. mailto:taf_tsi@era.europa.eu</dcterms:creator>
 			<dcterms:coverage>European Union</dcterms:coverage>
 			<dcterms:created>2013-06-27</dcterms:created>
 			<dcterms:modified>2017-02-23</dcterms:modified>
 			<dcterms:modified>2018-05-31</dcterms:modified>
+			<dcterms:modified>2019-05-31</dcterms:modified>
 			<dcterms:type>text/xml</dcterms:type>
 			<dcterms:subject>Transport, Freight Transport, Rail</dcterms:subject>
 			<dcterms:identifier>{http://www.era.europa.eu/schemes/TAFTSI}taf_cat_complete.xsd</dcterms:identifier>
 			<dcterms:language>en</dcterms:language>
-			<dcterms:publisher>ERA European Railway Agency, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
+			<dcterms:publisher>ERA European Union Agency for Railways, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
 			<dcterms:rights>Unclassified</dcterms:rights>
-			<dcterms:rightsHolder>European Railway Agency</dcterms:rightsHolder>
-			<dcterms:copyright>ERA 2017</dcterms:copyright>
-			<dcterms:status>Draft</dcterms:status>
+			<dcterms:rightsHolder>European Union Agency for Railways</dcterms:rightsHolder>
+			<dcterms:copyright>ERA 2019</dcterms:copyright>
+			<dcterms:status>Final</dcterms:status>
 		</xs:appinfo>
 	</xs:annotation>
 	<xs:element name="AcceptanceInterchangePoint">
@@ -2614,94 +2615,15 @@ The other subelements help describing the interruption information more precisel
 		</xs:simpleType>
 	</xs:element>
 	<xs:element name="LocoTypeNumber">
-		<xs:complexType>
-			<xs:annotation>
-				<xs:documentation>Composite identifier for the loco types and locomotives. First four elements identify the series of the loco, rest can identify the exact individual locomotive</xs:documentation>
-			</xs:annotation>
-			<xs:sequence>
-				<xs:element name="TypeCode1">
-					<xs:annotation>
-						<xs:documentation>Value is 9 as it's written in Part 0 of the Appendix 6 of the decision 2007/756</xs:documentation>
-					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:minLength value="1"/>
-							<xs:whiteSpace value="replace"/>
-							<xs:maxLength value="1"/>
-							<xs:pattern value="9"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-				<xs:element name="TypeCode2">
-					<!--In PCS the following types are differentiated: Eletric, Diesel, Steam, Hybrid:-->
-					<xs:annotation>
-						<xs:documentation>Type of tractive rolling stock as in Part 8 of the Appendix 6 of the decision 2007/756</xs:documentation>
-					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:minLength value="1"/>
-							<xs:whiteSpace value="replace"/>
-							<xs:maxLength value="1"/>
-							<xs:pattern value="0-9"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-				<xs:element name="CountryCode">
-					<xs:annotation>
-						<xs:documentation>Numerical country code as in Part 4 of the Appendix 6 of the decision 2007/756</xs:documentation>
-					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:minLength value="2"/>
-							<xs:whiteSpace value="replace"/>
-							<xs:maxLength value="2"/>
-							<xs:pattern value="0-9"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-				<xs:element name="SeriesNumber">
-					<xs:annotation>
-						<xs:documentation>4 digits representing the type according to the country rules and based on the national vehicle register of the country indicated with the CountryCode</xs:documentation>
-					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:minLength value="1"/>
-							<xs:whiteSpace value="replace"/>
-							<xs:maxLength value="4"/>
-							<xs:pattern value="0-9"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-				<xs:element name="SerialNumber">
-					<!--Not necessary for Planning. Composite identifier should be unique with the series number inside one country:-->
-					<xs:annotation>
-						<xs:documentation>3 digits representing the serial number of the traction of the series. Not used in Planning</xs:documentation>
-					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:minLength value="1"/>
-							<xs:whiteSpace value="replace"/>
-							<xs:maxLength value="3"/>
-							<xs:pattern value="0-9"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-				<xs:element name="ControlDigit">
-					<!--Not necessary for Planning. Composite identifier should be unique with the series number inside one country:-->
-					<xs:annotation>
-						<xs:documentation>1 control digit as usual at the end of the 12 digit UIC identifier. Not used in Planning</xs:documentation>
-					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:minLength value="1"/>
-							<xs:whiteSpace value="replace"/>
-							<xs:maxLength value="1"/>
-							<xs:pattern value="0-9"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-			</xs:sequence>
-		</xs:complexType>
+		<xs:annotation>
+			<xs:documentation>Identifies the design series of the locomotive type.  The definition is made on a national basis by each IM.  The first 4 characters will be the CompanyIdent of the Engine Operator; the next 8 characters are based on national/company rules.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="12"/>
+				<xs:minLength value="5"/>
+			</xs:restriction>
+		</xs:simpleType>
 	</xs:element>
 	<xs:element name="Longitude" type="xs:float">
 		<xs:annotation>

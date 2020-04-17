@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by - (European Railway Agency (ERA)) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.3" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.3" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.3.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.3" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.3" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.3.1">
 	<xs:annotation>
 		<xs:appinfo>
 			<dcterms:title>TAF TSI - message exchange.</dcterms:title>
 			<dcterms:description>This schema defines code lists for the TAF TSI.</dcterms:description>
-			<dcterms:creator>European Railway Agency. mailto:taf_tsi@era.europa.eu</dcterms:creator>
+			<dcterms:creator>European Union Agency for Railways. mailto:taf_tsi@era.europa.eu</dcterms:creator>
 			<dcterms:coverage>European Union</dcterms:coverage>
 			<dcterms:created>2013-06-27</dcterms:created>
 			<dcterms:modified>2017-02-23</dcterms:modified>
 			<dcterms:modified>2018-05-31</dcterms:modified>
+			<dcterms:modified>2019-05-31</dcterms:modified>
 			<dcterms:type>text/xml</dcterms:type>
 			<dcterms:subject>Transport, Freigth Transport, Rail</dcterms:subject>
 			<dcterms:identifier>{http://www.era.europa.eu/schemes/TAFTSI}taf_cat_codelists.xsd</dcterms:identifier>
 			<dcterms:language>en</dcterms:language>
-			<dcterms:publisher>ERA European Railway Agency, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
+			<dcterms:publisher>ERA European Union Agency for Railways, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
 			<dcterms:rights>Unclassified</dcterms:rights>
-			<dcterms:rightsHolder>European Railway Agency</dcterms:rightsHolder>
-			<dcterms:copyright>ERA 2018</dcterms:copyright>
-			<dcterms:status>Draft</dcterms:status>
+			<dcterms:rightsHolder>European Union Agency for Railways</dcterms:rightsHolder>
+			<dcterms:copyright>ERA 2019</dcterms:copyright>
+			<dcterms:status>Final</dcterms:status>
 		</xs:appinfo>
 	</xs:annotation>
 	<xs:element name="AirBrakeType">
