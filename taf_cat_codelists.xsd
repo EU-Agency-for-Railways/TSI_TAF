@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by - (European Railway Agency (ERA)) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.3" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.3" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.3.1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.4.0">
 	<xs:annotation>
 		<xs:appinfo>
 			<dcterms:title>TAF TSI - message exchange.</dcterms:title>
@@ -42,27 +42,60 @@ additional code:
 	</xs:element>
 	<xs:element name="BrakeSpecialCharacteristics">
 		<xs:annotation>
-			<xs:documentation>General brake characteristics:
-Should be made as the Code List. The values refer to UIC leaflet 920-13:
-0 = No special characteristic (graduated release brake with cast iron blocks) "GG"
-1 = Disc brake
-2 = Composite brake blocks
-3 = Single release brake
-4 = Single release brake with composite brake blocks
-5 = L-Brake
-6 = LL-Brake
-9 = Non-coded information</xs:documentation>
+			<xs:documentation>
+General brake characteristics. The values refer to UIC leaflet 920-13:
+0 = Cast Iron Brake Blocks
+1 = Disc Brake
+2 = K-Brake Blocks
+3 = Cast Iron Brake Blocks, single release brake
+4 = Composite Brake Blocks, single release brake
+5 = L-Brake Blocks
+6 = LL-Brake Blocks
+9 = Unknown or non-coded information
+			</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:token">
-				<xs:enumeration value="0"/>
-				<xs:enumeration value="1"/>
-				<xs:enumeration value="2"/>
-				<xs:enumeration value="3"/>
-				<xs:enumeration value="4"/>
-				<xs:enumeration value="5"/>
-				<xs:enumeration value="6"/>
-				<xs:enumeration value="9"/>
+				<xs:enumeration value="0">
+					<xs:annotation>
+						<xs:documentation>Cast Iron Brake Blocks</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="1">
+					<xs:annotation>
+						<xs:documentation>Disc Brake</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="2">
+					<xs:annotation>
+						<xs:documentation>K-Brake Blocks</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="3">
+					<xs:annotation>
+						<xs:documentation>Cast Iron Brake Blocks, single release brake</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="4">
+					<xs:annotation>
+						<xs:documentation>Composite Brake Blocks, single release brake</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="5">
+					<xs:annotation>
+						<xs:documentation>L-Brake Blocks</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="6">
+					<xs:annotation>
+						<xs:documentation>LL-Brake Blocks</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="9">
+					<xs:annotation>
+						<xs:documentation>Unknown or non-coded information</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -971,6 +1004,12 @@ The following values/codes are proposed for the usage:
 				</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
+				<xs:enumeration value="66">
+					<xs:annotation>
+						<xs:documentation>Location ENEE Code</xs:documentation>
+						<xs:documentation>Legacy ENEE code of the parent primary location</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
 				<xs:enumeration value="90">
 					<xs:annotation>
 						<xs:documentation>Test Loc</xs:documentation>
@@ -1205,51 +1244,37 @@ Code	F or P	Description																																				T	D	L
 	</xs:element>
 	<xs:element name="RouteClass">
 		<xs:annotation>
-			<xs:documentation>Indication of the route class (based on CEN EN 15528: line categories for managing the interface between load limits of vehicels on infrastructure).
-All the codes in this code list refer to CEN EN 15528: line categories for managing the interface between load limits of vehicles on infrastructure
-New codes added:
-C		
-D		
-E		
-F		
-G		
-CM2	(M2 for those who accept 2 Alphanumeric)
-CM3	(M3 for those who accept 2 Alphanumeric)
-CM4	(M4 for those who accept 2 Alphanumeric)
-CM		
-CE		
-Note: some existing applications are not able to handle more than two characters for the value of this code. Therefore, the documentation of the codes should contain the hint given in the table above (e.g. “(M2 for those who accept 2 Alphanumeric)”)
-			
-			</xs:documentation>
+			<xs:documentation>Indication of the route class (based on CEN EN 15528: line categories for managing the interface between load limits of vehicles on infrastructure). All the codes in this code list refer to CEN EN 15528: line categories for managing the interface between load limits of vehicles on infrastructure.
+CM2, CM3 and CM 4 equal M2, M3 and M4 which might be used in some legacy systems which only support two character codes.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
 				<xs:minLength value="1"/>
-				<xs:maxLength value="4"/>
+				<xs:maxLength value="3"/>
 				<xs:enumeration value="A"/>
 				<xs:enumeration value="B"/>
+				<xs:enumeration value="B1"/>
+				<xs:enumeration value="B2"/>
 				<xs:enumeration value="C"/>
-				<xs:enumeration value="D"/>
-				<xs:enumeration value="E"/>
-				<xs:enumeration value="F"/>
-				<xs:enumeration value="G"/>
 				<xs:enumeration value="C2"/>
+				<xs:enumeration value="C3"/>
 				<xs:enumeration value="C4"/>
+				<xs:enumeration value="CM"/>
 				<xs:enumeration value="CM2"/>
 				<xs:enumeration value="CM3"/>
 				<xs:enumeration value="CM4"/>
-				<xs:enumeration value="CM"/>
 				<xs:enumeration value="CE"/>
+				<xs:enumeration value="D"/>
 				<xs:enumeration value="D2"/>
-				<xs:enumeration value="D4"/>
-				<xs:enumeration value="A2"/>
-				<xs:enumeration value="A4"/>
-				<xs:enumeration value="B1"/>
-				<xs:enumeration value="B2"/>
-				<xs:enumeration value="C3"/>
 				<xs:enumeration value="D3"/>
+				<xs:enumeration value="D4"/>
+				<xs:enumeration value="D5"/>
+				<xs:enumeration value="E"/>
 				<xs:enumeration value="E4"/>
 				<xs:enumeration value="E5"/>
+				<xs:enumeration value="E6"/>
+				<xs:enumeration value="F"/>
+				<xs:enumeration value="G"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -1513,32 +1538,37 @@ Second digit – position in group of traction units with the same role
 31	Banking locomotive	1st  traction unit in the group
 41	Banking locomotive not coupled	1st  traction unit in the group
 51	No Leading Engine	1st  traction unit in the group
+61	Train Traction in a push-pull train	1st  traction unit in the group
 12	Train traction	2nd  traction unit in the group
 22	Intermediate traction	2nd  traction unit in the group
 32	Banking locomotive	2nd  traction unit in the group
 42	Banking locomotive not coupled	2nd  traction unit in the group
 52	No Leading Engine	2nd  traction unit in the group
+62	Train Traction in a push-pull train	2nd  traction unit in the group
 13	Train traction	3rd  traction unit in the group
 23	Intermediate traction	3rd  traction unit in the group
 33	Banking locomotive	3rd  traction unit in the group
 43	Banking locomotive not coupled	3rd  traction unit in the group
 53	No Leading Engine	3rd  traction unit in the group
+63	Train Traction in a push-pull train	3rd  traction unit in the group
 14	Train traction	4th  traction unit in the group
 24	Intermediate traction	4th  traction unit in the group
 34	Banking locomotive	4th  traction unit in the group
 44	Banking locomotive not coupled	4th  traction unit in the group
 54	No Leading Engine	4th  traction unit in the group
+64	Train Traction in a push-pull train	4th  traction unit in the group
 15	Train traction	5th  traction unit in the group
 25	Intermediate traction	5th  traction unit in the group
 35	Banking locomotive	5th  traction unit in the group
 45	Banking locomotive not coupled	5th  traction unit in the group
 55	No Leading Engine	5th  traction unit in the group
+65	Train Traction in a push-pull train	5th  traction unit in the group
 16	Train traction	6th  traction unit in the group
 26	Intermediate traction	6th  traction unit in the group
 36	Banking locomotive	6th  traction unit in the group
 46	Banking locomotive not coupled	6th  traction unit in the group
 56	No Leading Engine	6th  traction unit in the group
-			
+66	Train Traction in a push-pull train	6th  traction unit in the group	
 			</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
@@ -1550,31 +1580,37 @@ Second digit – position in group of traction units with the same role
 				<xs:enumeration value="31"/>
 				<xs:enumeration value="41"/>
 				<xs:enumeration value="51"/>
+				<xs:enumeration value="61"/>
 				<xs:enumeration value="12"/>
 				<xs:enumeration value="22"/>
 				<xs:enumeration value="32"/>
 				<xs:enumeration value="42"/>
 				<xs:enumeration value="52"/>
+				<xs:enumeration value="62"/>
 				<xs:enumeration value="13"/>
 				<xs:enumeration value="23"/>
 				<xs:enumeration value="33"/>
 				<xs:enumeration value="43"/>
 				<xs:enumeration value="53"/>
+				<xs:enumeration value="63"/>
 				<xs:enumeration value="14"/>
 				<xs:enumeration value="24"/>
 				<xs:enumeration value="34"/>
 				<xs:enumeration value="44"/>
 				<xs:enumeration value="54"/>
+				<xs:enumeration value="64"/>
 				<xs:enumeration value="15"/>
 				<xs:enumeration value="25"/>
 				<xs:enumeration value="35"/>
 				<xs:enumeration value="45"/>
 				<xs:enumeration value="55"/>
+				<xs:enumeration value="65"/>
 				<xs:enumeration value="16"/>
 				<xs:enumeration value="26"/>
 				<xs:enumeration value="36"/>
 				<xs:enumeration value="46"/>
 				<xs:enumeration value="56"/>
+				<xs:enumeration value="66"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -1723,57 +1759,232 @@ Passenger with Freight - military trains, the Overnight Express; Royalty, Head o
 17	final offer - accepted
 18	alternative offer accepted
 19    pre-accepted offer
+20 – Final Offer rejected
 21    no alternative available
 22    booked 
 23  - preparation of draft alternative offer is in progress
-30	Create Dossier
+24 - Preparation of draft offer - accepted
+25 – offer/final offer rejected (without revision)
+26 – alternative offer rejected (without revision)
+27 – offer/final offer rejected (revision required)
+28 – alternative offer rejected (revision required)
 31	Close Dossier
-
+30	Create Dossier
 40          Fully Assembled Path (FAP, constructed path)
-
-	
-	
-	
+41 – Final Offer rejected
+42 – Preparation of draft offer – accepted 
+43 – Preparation of draft offer – rejected 
+44 – Draft offer rejected
+45 - Draft no alternative available
 50	activate path (utilisation notification)
 51	deactivate path (utilisation notification)
 52	confirmation of utilisation notification
+53 Path and train cancelled 
 </xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:integer">
 			<xs:maxInclusive value="99"/>
 			<xs:minInclusive value="0"/>
-			<xs:enumeration value="1"/>
-			<xs:enumeration value="2"/>
-			<xs:enumeration value="3"/>
-			<xs:enumeration value="4"/>
-			<xs:enumeration value="5"/>
-			<xs:enumeration value="6"/>
-			<xs:enumeration value="7"/>
-			<xs:enumeration value="8"/>
-			<xs:enumeration value="9"/>
-			<xs:enumeration value="10"/>
-			<xs:enumeration value="11"/>
-			<xs:enumeration value="12"/>
-			<xs:enumeration value="13"/>
-			<xs:enumeration value="14"/>
-			<xs:enumeration value="15"/>
-			<xs:enumeration value="16"/>
-			<xs:enumeration value="17"/>
-			<xs:enumeration value="18"/>
-			<xs:enumeration value="19"/>
-			<xs:enumeration value="21"/>
-			<xs:enumeration value="22"/>
+			<xs:enumeration value="1">
+				<xs:annotation>
+					<xs:documentation>harmonisation - in process</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="2">
+				<xs:annotation>
+					<xs:documentation>harmonisation - accepted</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="3">
+				<xs:annotation>
+					<xs:documentation>harmonisation - rejected</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="4">
+				<xs:annotation>
+					<xs:documentation>harmonisation - completed</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="5">
+				<xs:annotation>
+					<xs:documentation>path study request</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="6">
+				<xs:annotation>
+					<xs:documentation>pre-arranged path/reserve capacity</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="7">
+				<xs:annotation>
+					<xs:documentation>create offer</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="8">
+				<xs:annotation>
+					<xs:documentation>coordination update</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="9">
+				<xs:annotation>
+					<xs:documentation>draft offer</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="10">
+				<xs:annotation>
+					<xs:documentation>draft alternative offer</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="11">
+				<xs:annotation>
+					<xs:documentation>observation - in process</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="12">
+				<xs:annotation>
+					<xs:documentation>observation - complete</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="13">
+				<xs:annotation>
+					<xs:documentation>preparation of final offer - in process</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="14">
+				<xs:annotation>
+					<xs:documentation>preparation of final offer - accepted</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="15">
+				<xs:annotation>
+					<xs:documentation>preparation of final offer - rejected</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="16">
+				<xs:annotation>
+					<xs:documentation>final offer</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="17">
+				<xs:annotation>
+					<xs:documentation>final offer - accepted</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="18">
+				<xs:annotation>
+					<xs:documentation>alternative offer accepted</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="19">
+				<xs:annotation>
+					<xs:documentation>pre-accepted offer</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="20">
+				<xs:annotation>
+					<xs:documentation>Final Offer rejected</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="21">
+				<xs:annotation>
+					<xs:documentation>no alternative available</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="22">
+				<xs:annotation>
+					<xs:documentation>booked</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
 			<xs:enumeration value="23">
 				<xs:annotation>
 					<xs:documentation>preparation of draft alternative offer is in progress</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="30"/>
-			<xs:enumeration value="31"/>
-			<xs:enumeration value="40"/>
-			<xs:enumeration value="50"/>
-			<xs:enumeration value="51"/>
-			<xs:enumeration value="52"/>
+			<xs:enumeration value="24">
+				<xs:annotation>
+					<xs:documentation>Preparation of draft offer - accepted</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="25">
+				<xs:annotation>
+					<xs:documentation>offer/final offer rejected (without revision)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="26">
+				<xs:annotation>
+					<xs:documentation>alternative offer rejected (without revision)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="27">
+				<xs:annotation>
+					<xs:documentation>offer/final offer rejected (revision required)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="28">
+				<xs:annotation>
+					<xs:documentation>alternative offer rejected (revision required)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="30">
+				<xs:annotation>
+					<xs:documentation>Create Dossier</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="31">
+				<xs:annotation>
+					<xs:documentation>Close Dossier</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="40">
+				<xs:annotation>
+					<xs:documentation>Fully Assembled Path (FAP, constructed path)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="41">
+				<xs:annotation>
+					<xs:documentation>Final Offer rejected</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="42">
+				<xs:annotation>
+					<xs:documentation>Preparation of draft offer – accepted</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="43">
+				<xs:annotation>
+					<xs:documentation>Preparation of draft offer – rejected</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="44">
+				<xs:annotation>
+					<xs:documentation>Draft offer rejected</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="45">
+				<xs:annotation>
+					<xs:documentation>Draft no alternative available</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="50">
+				<xs:annotation>
+					<xs:documentation>activate path (utilisation notification)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="51">
+				<xs:annotation>
+					<xs:documentation>deactivate path (utilisation notification)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="52">
+				<xs:annotation>
+					<xs:documentation>confirmation of utilisation notification</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="53">
+				<xs:annotation>
+					<xs:documentation>Path and train cancelled </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:element name="TypeOfRemovableAccessories">

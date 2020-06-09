@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by - (ERA) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.3" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.3" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.3" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.3.1">
+<!--
+TAF TSI maintenance release 2.4.0 (15.6.2020):
+CR 472	Update of TrainCompositionMessage with complex TrainActivityType
+CR 473	Correction of Error: Requested Calendar BitmapDays
+CR 474	New TypeOfInformation for acceptance and rejection of Draft and Final offer
+CR 475	Specification for number in “message type” for national messages
+CR 477	Addition of a Related Identifier Section in TrainRunningForecast and Information
+CR 478	Cancellation of train object
+CR 479	Addition of the a new code for the element TractionMode to identify “PushPullTrain”
+CR 480	Change of annotation of data type “Time” in xsd
+CR 482	Change of process to reject path offer
+CR 485	Identification of a Section (Operation)
+CR 489	Indication of coasting in Path construction
+CR 491	Error in pattern for LocoTypeNumber
+CR 492	TAF revision - Common Interface specification Annex D.2, Appendix E
+CR 493	Customer information in WagonReleaseNoticeMessage
+CR 494	Customer information in WagonDepartureNoticeMessage
+CR 495	Specification of the Limit Speed in the PlannedTrainData
+CR 496	Extension and clarification of overhaul date information in RSDS message
+CR 497	Spelling mistake in element “MultilateralAuthorisationCountries”
+CR 498	Clean up of code list of element “RouteClass”
+CR 500	Cardinality mistake of element “LoadChangeDevice” in RSRD design dataset
+CR 501	Representation of NOI TSI in RSDS message
+CR 502	New TypeOfInformation code for "draft no alternative available"
+CR 508	New message header element MessageDateTimeCreated
+CR 509	TrainRunningInterruptionMessage additional element "InterruptionStatus"
+CR 512	New Subsidiary Location Type Code for ENEE Codes
+CR 515	Error in xsd of TAF TrainComposition message (duplex of OTN)
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.4" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.3" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.4.0">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.3" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
@@ -160,7 +188,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 						<xs:documentation> General braked weight for wagon without any variation device or braked weight in position "empty" for wagons with a variation device or maximum brake weight for wagons with a linear aoto continouus brake weight device "0" for wagons without brake system (in tonns)</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="LoadChangeDevice" minOccurs="0">
+				<xs:element name="LoadChangeDevice" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation>Specific weights for change over air brake systems</xs:documentation>
 					</xs:annotation>
@@ -402,6 +430,11 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 	<xs:element name="ClosingTime" type="xs:dateTime">
 		<xs:annotation>
 			<xs:documentation>The closing Date and Time of the port for the delivery of the shipment by rail to a vessel.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Coasting" type="xs:boolean">
+		<xs:annotation>
+			<xs:documentation>IM indicates to the RU whether the driver can rely on coasting. This is of both economic and ecological interest, as in many parts of the journey the trains may have enough inertia to be able to match the calculated time of the next location relying on coasting only.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="Comments" type="FreeText"/>
@@ -1391,6 +1424,11 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 			<xs:documentation>Date</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:element name="DateLastOverhaul" type="xs:date">
+		<xs:annotation>
+			<xs:documentation>  Date of the last overhaul. For wagons newly placed on the market, the date put into service must be used. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:element name="DateNextOverhaul" type="xs:date"/>
 	<xs:element name="DatePutIntoService" type="xs:date">
 		<xs:annotation>
@@ -2070,7 +2108,7 @@ When the parking brake force is marked on the wagon the information must be prov
 	</xs:element>
 	<xs:element name="HighestPlannedSpeed" type="Speed">
 		<xs:annotation>
-			<xs:documentation>IM may inform the RU on the speed which was the basis for path construction</xs:documentation>
+			<xs:documentation>IM may inform the RA (Responsible applicant) on the speed which was the basis for path construction</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="Identifiers">
@@ -2327,8 +2365,34 @@ The other subelements help describing the interruption information more precisel
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="JourneySectionOrigin" type="LocationIdent"/>
-				<xs:element name="JourneySectionDestination" type="LocationIdent"/>
+				<xs:element name="JourneySectionDestination">
+					<xs:annotation>
+						<xs:documentation>Destination of the section on which train composition is unchanged</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="LocationIdent">
+								<xs:sequence minOccurs="0">
+									<xs:element ref="BookedLocationDateTime" minOccurs="0"/>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="JourneySectionOrigin">
+					<xs:annotation>
+						<xs:documentation>Origin of the section on which train composition is unchanged</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="LocationIdent">
+								<xs:sequence minOccurs="0">
+									<xs:element ref="BookedLocationDateTime" minOccurs="0"/>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
 				<xs:element ref="ResponsibilityActualSection"/>
 				<xs:element ref="ResponsibilityNextSection"/>
 			</xs:sequence>
@@ -2615,15 +2679,94 @@ The other subelements help describing the interruption information more precisel
 		</xs:simpleType>
 	</xs:element>
 	<xs:element name="LocoTypeNumber">
-		<xs:annotation>
-			<xs:documentation>Identifies the design series of the locomotive type.  The definition is made on a national basis by each IM.  The first 4 characters will be the CompanyIdent of the Engine Operator; the next 8 characters are based on national/company rules.</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:maxLength value="12"/>
-				<xs:minLength value="5"/>
-			</xs:restriction>
-		</xs:simpleType>
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Composite identifier for the loco types and locomotives. First four elements identify the series of the loco, rest can identify the exact individual locomotive</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="TypeCode1">
+					<xs:annotation>
+						<xs:documentation>Value is 9 as it's written in Part 0 of the Appendix 6 of the decision 2007/756</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:whiteSpace value="replace"/>
+							<xs:maxLength value="1"/>
+							<xs:pattern value="[9]"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="TypeCode2">
+					<xs:annotation>
+						<xs:documentation>Type of tractive rolling stock as in Part 8 of the Appendix 6 of the decision 2007/756</xs:documentation>
+					</xs:annotation>
+					<!--In PCS the following types are differentiated: Eletric, Diesel, Steam, Hybrid:-->
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:whiteSpace value="replace"/>
+							<xs:maxLength value="1"/>
+							<xs:pattern value="[0-9]"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CountryCode">
+					<xs:annotation>
+						<xs:documentation>Numerical country code as in Part 4 of the Appendix 6 of the decision 2007/756</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="2"/>
+							<xs:whiteSpace value="replace"/>
+							<xs:maxLength value="2"/>
+							<xs:pattern value="[0-9]{2}"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SeriesNumber">
+					<xs:annotation>
+						<xs:documentation>4 digits representing the type according to the country rules and based on the national vehicle register of the country indicated with the CountryCode</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:whiteSpace value="replace"/>
+							<xs:maxLength value="4"/>
+							<xs:pattern value="[0-9]{4}"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SerialNumber">
+					<xs:annotation>
+						<xs:documentation>3 digits representing the serial number of the traction of the series. Not used in Planning</xs:documentation>
+					</xs:annotation>
+					<!--Not necessary for Planning. Composite identifier should be unique with the series number inside one country:-->
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:whiteSpace value="replace"/>
+							<xs:maxLength value="3"/>
+							<xs:pattern value="[0-9]{3}"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="ControlDigit">
+					<xs:annotation>
+						<xs:documentation>1 control digit as usual at the end of the 12 digit UIC identifier. Not used in Planning</xs:documentation>
+					</xs:annotation>
+					<!--Not necessary for Planning. Composite identifier should be unique with the series number inside one country:-->
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:whiteSpace value="replace"/>
+							<xs:maxLength value="1"/>
+							<xs:pattern value="[0-9]"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
 	</xs:element>
 	<xs:element name="Longitude" type="xs:float">
 		<xs:annotation>
@@ -2690,6 +2833,11 @@ The other subelements help describing the interruption information more precisel
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
+	<xs:element name="MessageDateTimeCreated" type="xs:dateTime">
+		<xs:annotation>
+			<xs:documentation>Date and time when the message was created by the legacy system</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:element name="MessageHeader">
 		<xs:annotation>
 			<xs:documentation>Used for all messages</xs:documentation>
@@ -2700,6 +2848,7 @@ The other subelements help describing the interruption information more precisel
 				<xs:element ref="MessageRoutingID" minOccurs="0"/>
 				<xs:element ref="SenderReference" minOccurs="0"/>
 				<xs:element ref="Sender"/>
+				<xs:element ref="MessageDateTimeCreated" minOccurs="0"/>
 				<xs:element ref="Recipient"/>
 			</xs:sequence>
 		</xs:complexType>
@@ -2734,51 +2883,74 @@ The other subelements help describing the interruption information more precisel
 	<xs:element name="MessageType">
 		<xs:annotation>
 			<xs:documentation>To indicate the message type transmitted or referred to. The following list was agreed within the sector:
-2001	PathCanceledMessage
-2002	PathConfirmedMessage
-2003	PathDetailsMessage
-2004	PathDetailsRefusedMessage
-2005	PathNotAvailableMessage
-2006	PathRequestMessage
-2007	ReceiptConfirmationMessage
-3001	TrainAcceptedMessage
-3002	TrainAtStartMessage
-3003	TrainCompositionMessage
-3004	TrainNotSuitableMessage
-3005	TrainPositionMessage
-3006	TrainReadyMessage
-4001	TrainDelayCauseMessage
-4002	TrainDelayPerformanceMessage
-4003	TrainForecastAtReportingLocationMessage
-4004	TrainRunningForecastMessage
-4005	TrainRunningInformationMessage
-4006	TrainRunningInterruptionMessage
-5001	AlertMessage
-5002	WagonArrivalNoticeMessage
-5003	WagonDeliveryNoticeMessage
-5004	WagonDepartureNoticeMessage
-5005	WagonDeviationMessage
-5006	WagonETI_ETA_Message
-5007	WagonExceptionMessage
-5008	WagonExceptionReasonMessage
-5009	WagonInterchangeNoticeMessage
-5010	WagonInterchangeSubNoticeMessage
-5011	WagonOrderMessage
-5012	WagonReceivedAtInterchangeMessage
-5013	WagonRefusedAtInterchangeMessage
-5014	WagonReleaseNoticeMessage
-5015	WagonYardArrivalMessage
-5016	WagonYardDepartureMessage
-6001	IRN_DatasetMessage
-6002	LocationFileDatasetMessage
-6003	RollingStockDatasetMessage
+1000        ConsignmentOrderMessage
+
+2001        PathCanceledMessage
+2002        PathConfirmedMessage
+2003        PathDetailsMessage
+2004        PathDetailsRefusedMessage
+2005        PathNotAvailableMessage
+2006        PathRequestMessage
+2007        ReceiptConfirmationMessage
+
+-- sector messages (Planning) --
+2500      PathCoordinationMessage
+2501      PathSectionNotificationMessage
+-- sector message end --
+
+3003        TrainCompositionMessage
+3006        TrainReadyMessage
+4001        TrainDelayCauseMessage
+4004        TrainRunningForecastMessage
+4005        TrainRunningInformationMessage
+4006        TrainRunningInterruptionMessage
+
+-- sector message (Operations) --
+4500      PassengerTrainCompositionProcessMessage
+4501      RollingStockRestrictionMessage
+4504      ChangeOfTrackMessage
+4505      TrainJourneyModificationMessage
+-- sector message  end --
+
+
+5001        AlertMessage
+5002        WagonArrivalNoticeMessage
+5003        WagonDeliveryNoticeMessage
+5004        WagonDepartureNoticeMessage
+5006        WagonETI_ETA_Message
+5007        WagonExceptionMessage
+5008        WagonExceptionReasonMessage
+5009        WagonInterchangeNoticeMessage 
+5012        WagonReceivedAtInterchangeMessage
+5013        WagonRefusedAtInterchangeMessage
+5014        WagonReleaseNoticeMessage
+5015        WagonYardArrivalMessage
+5016        WagonYardDepartureMessage
+
+6002        LocationFileDatasetMessage
+6003        RollingStockDatasetMessage
+
+--sector (RU-RU) ---
+5500        WagonPerformanceMessage
+-- sector end---
+
+
+6004        RollingStockDatasetQueryMessage
+
+-- sector (TrainID) begin -- 
+8500        UpateLinkMessage
+8501        ObjectInfoMessage
+-- sector end --
+
+9000        ErrorMessage
+
 			
 			</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
-			<xs:restriction base="xs:integer">
-				<xs:minInclusive value="1"/>
-				<xs:maxInclusive value="9999"/>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="1"/>
+				<xs:maxLength value="4"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -3299,6 +3471,11 @@ The other subelements help describing the interruption information more precisel
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="PlannedDateNextOverhaul" type="xs:date">
+		<xs:annotation>
+			<xs:documentation> Date of planned next overhaul. It must be within the validity period of the last overhaul. The element serves as indication of the actually planned date of next overhaul by the wagon keeper/ECM. Minimum planned date next overhaul or overhaul validity period must be provided by the wagon keeper. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:element name="PlannedTrainData">
 		<xs:annotation>
 			<xs:documentation>Train relevant data for a planning period</xs:documentation>
@@ -3329,6 +3506,7 @@ The other subelements help describing the interruption information more precisel
 				<xs:element ref="TractionDetails" maxOccurs="unbounded"/>
 				<xs:element ref="TrainMaxSpeed"/>
 				<xs:element ref="HighestPlannedSpeed" minOccurs="0"/>
+				<xs:element ref="Coasting" minOccurs="0"/>
 				<xs:element ref="MaxAxleWeight" minOccurs="0"/>
 				<xs:element ref="RouteClass" minOccurs="0">
 					<xs:annotation>
@@ -3502,6 +3680,7 @@ The identifiers in this message have to be same as those that have come from sen
 	</xs:element>
 	<xs:element name="RelatedIdentifier" type="FreeText"/>
 	<xs:element name="RelatedPlannedTransportIdentifiers" type="CompositIdentifierPlannedType"/>
+	<xs:element name="RelatedTransportOperationalIdentifiers" type="CompositIdentifierOperationalType"/>
 	<xs:element name="RelatedReference">
 		<xs:annotation>
 			<xs:documentation>Identifies the message to which the actual message refers</xs:documentation>
@@ -4008,7 +4187,7 @@ For Path Requests, this element has to be used
 									<xs:documentation>Date of the suspension of authorisation; must be provided in case of suspension</xs:documentation>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="MulitlateralAuthorisationCountries" type="CountryIdentISO" minOccurs="0" maxOccurs="unbounded">
+							<xs:element name="MultilateralAuthorisationCountries" type="CountryIdentISO" minOccurs="0" maxOccurs="unbounded">
 								<xs:annotation>
 									<xs:documentation> ISO country code of countries where the wagon is authorised (applies only in case of limited interoperability); first entry indicates the initial authorisation country</xs:documentation>
 								</xs:annotation>
@@ -4016,6 +4195,11 @@ For Path Requests, this element has to be used
 							<xs:element name="ChannelTunnelPermitted" type="xs:boolean" minOccurs="0">
 								<xs:annotation>
 									<xs:documentation>Indication if wagon is allowed to pass the Channel Tunnel - if the transport is planned between UK and France and should use Eurotunnel infrastructure.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="QuieterRoutesExemptionCountry" type="CountryIdentISO" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>ISO code of country where the wagon has an exemption in accordance with TSI Noise to run on quieter routes although it is not TSI noise compliant</xs:documentation>
 								</xs:annotation>
 							</xs:element>
 							<xs:element ref="KeeperShortNameVKM">
@@ -4432,16 +4616,6 @@ TypeOfRemovableAccessories code list is used. Values refer to UIC Leaflet 920-13
 									</xs:sequence>
 								</xs:complexType>
 							</xs:element>
-							<xs:element ref="NoiseByPassLimit" minOccurs="0">
-								<xs:annotation>
-									<xs:documentation>Noise limit on reference track in decibels (dB)</xs:documentation>
-								</xs:annotation>
-							</xs:element>
-							<xs:element ref="Noise" minOccurs="0">
-								<xs:annotation>
-									<xs:documentation>Noise level at stand still in decibels (dB)</xs:documentation>
-								</xs:annotation>
-							</xs:element>
 							<xs:element ref="TechnicalForwardingRestrictions" minOccurs="0" maxOccurs="unbounded">
 								<xs:annotation>
 									<xs:documentation>Restrictions relevant to wagon operations in train formation, yards or in trains due to design characteristics.
@@ -4455,6 +4629,7 @@ Type will be the RestrictionCode instead of ForwardingRestrictionType, according
 							</xs:element>
 							<xs:element ref="DateNextOverhaul"/>
 							<xs:element ref="PermittedTolerance"/>
+							<xs:element ref="PlannedDateNextOverhaul"/>
 							<xs:element name="DateOfNextTankInspection" type="xs:date" minOccurs="0">
 								<xs:annotation>
 									<xs:documentation>Date of the next tank inspection, applies only for tank wagons</xs:documentation>
@@ -4816,7 +4991,7 @@ Code	F or P	Description																																				T	D	L
 	</xs:element>
 	<xs:simpleType name="Time">
 		<xs:annotation>
-			<xs:documentation>Time expressed in HH:MM</xs:documentation>
+			<xs:documentation>Time expressed in HH:MM:SS</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:time"/>
 	</xs:simpleType>
@@ -5147,7 +5322,6 @@ TPWS
 				<xs:element ref="MessageStatus"/>
 				<xs:element ref="TransportOperationalIdentifiers" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="OperationalTrainNumberIdentifier"/>
-				<xs:element ref="OperationalTrainNumber"/>
 				<xs:element ref="ReferenceOTN" minOccurs="0"/>
 				<xs:element ref="TransferPoint" minOccurs="0"/>
 				<xs:element ref="TransfereeIM" minOccurs="0"/>
@@ -5331,10 +5505,26 @@ TPWS
 			<xs:documentation>The max. possible speed of a train in km/h</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:element name="TrainNotAtInterruptionPoint">
+		<xs:annotation>
+			<xs:documentation>It is already known that train running might be interrupted in interruption point although the train has not arrived to interruption point yet</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="1"/>
+				<xs:maxInclusive value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
 	<xs:element name="TrainOperationalIdentification">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="TransportOperationalIdentifiers" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>according to the new identifier structure, ObjectType has to be used to differ between train and path id</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="RelatedTransportOperationalIdentifiers" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation>according to the new identifier structure, ObjectType has to be used to differ between train and path id</xs:documentation>
 					</xs:annotation>
@@ -5425,7 +5615,7 @@ TPWS
 				<xs:element name="Activities" minOccurs="0" maxOccurs="99">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element ref="TrainActivityType"/>
+							<xs:element name="TrainActivityType" type="TrainActivityType"/>
 							<xs:element name="ActivityLocationIdent" type="LocationIdent"/>
 						</xs:sequence>
 					</xs:complexType>
@@ -5486,6 +5676,7 @@ TPWS
 				<xs:element ref="ReferenceOTN" minOccurs="0"/>
 				<xs:element ref="ResponsibleRU" minOccurs="0"/>
 				<xs:element ref="InterruptionPoint"/>
+				<xs:element ref="TrainNotAtInterruptionPoint" minOccurs="0"/>
 				<xs:element ref="TransferPoint" minOccurs="0"/>
 				<xs:element ref="TransfereeIM" minOccurs="0"/>
 			</xs:sequence>
@@ -5716,7 +5907,7 @@ TPWS
 				<xs:element ref="MessageHeader"/>
 				<xs:element ref="RelatedReference" minOccurs="0"/>
 				<xs:element ref="WagonInformation"/>
-				<xs:element ref="Customers"/>
+				<xs:element ref="Customers" minOccurs="0"/>
 				<xs:element ref="WagonAtDeparture"/>
 			</xs:sequence>
 		</xs:complexType>
@@ -5991,7 +6182,7 @@ TPWS
 			<xs:sequence>
 				<xs:element ref="MessageHeader"/>
 				<xs:element ref="WagonInformation"/>
-				<xs:element ref="Customers"/>
+				<xs:element ref="Customers" minOccurs="0"/>
 				<xs:element ref="WagonPickupAtOrigin"/>
 			</xs:sequence>
 		</xs:complexType>
