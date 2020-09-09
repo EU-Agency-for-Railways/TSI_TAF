@@ -27,8 +27,12 @@ CR 508	New message header element MessageDateTimeCreated
 CR 509	TrainRunningInterruptionMessage additional element "InterruptionStatus"
 CR 512	New Subsidiary Location Type Code for ENEE Codes
 CR 515	Error in xsd of TAF TrainComposition message (duplex of OTN)
+TAF TSI maintenance release 2.4.1 (03.09.2020):
+CR 472	Update of TrainCompositionMessage with complex TrainActivityType
+CR 491	Error in pattern for LocoTypeNumber
+CR 496	Extension and clarification of overhaul date information in RSDS message
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.4" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.3" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.4.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/2.4" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.3" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/2.4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.4.1">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.3" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
@@ -41,6 +45,7 @@ CR 515	Error in xsd of TAF TrainComposition message (duplex of OTN)
 			<dcterms:modified>2017-02-23</dcterms:modified>
 			<dcterms:modified>2018-05-31</dcterms:modified>
 			<dcterms:modified>2019-05-31</dcterms:modified>
+			<dcterms:modified>2020-09-03</dcterms:modified>
 			<dcterms:type>text/xml</dcterms:type>
 			<dcterms:subject>Transport, Freight Transport, Rail</dcterms:subject>
 			<dcterms:identifier>{http://www.era.europa.eu/schemes/TAFTSI}taf_cat_complete.xsd</dcterms:identifier>
@@ -48,7 +53,7 @@ CR 515	Error in xsd of TAF TrainComposition message (duplex of OTN)
 			<dcterms:publisher>ERA European Union Agency for Railways, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
 			<dcterms:rights>Unclassified</dcterms:rights>
 			<dcterms:rightsHolder>European Union Agency for Railways</dcterms:rightsHolder>
-			<dcterms:copyright>ERA 2019</dcterms:copyright>
+			<dcterms:copyright>ERA 2020</dcterms:copyright>
 			<dcterms:status>Final</dcterms:status>
 		</xs:appinfo>
 	</xs:annotation>
@@ -2730,28 +2735,28 @@ The other subelements help describing the interruption information more precisel
 					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
-							<xs:minLength value="1"/>
+							<xs:minLength value="4"/>
 							<xs:whiteSpace value="replace"/>
 							<xs:maxLength value="4"/>
 							<xs:pattern value="[0-9]{4}"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
-				<xs:element name="SerialNumber">
+				<xs:element name="SerialNumber" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>3 digits representing the serial number of the traction of the series. Not used in Planning</xs:documentation>
 					</xs:annotation>
 					<!--Not necessary for Planning. Composite identifier should be unique with the series number inside one country:-->
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
-							<xs:minLength value="1"/>
+							<xs:minLength value="3"/>
 							<xs:whiteSpace value="replace"/>
 							<xs:maxLength value="3"/>
 							<xs:pattern value="[0-9]{3}"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
-				<xs:element name="ControlDigit">
+				<xs:element name="ControlDigit" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>1 control digit as usual at the end of the 12 digit UIC identifier. Not used in Planning</xs:documentation>
 					</xs:annotation>
@@ -4622,14 +4627,10 @@ TypeOfRemovableAccessories code list is used. Values refer to UIC Leaflet 920-13
 Type will be the RestrictionCode instead of ForwardingRestrictionType, according to 920-13: annotation will carry the information that only thechnical parameters are allowed to be used here. Only the code numbers should be in the annotation</xs:documentation>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="DateLastOverhaul" type="xs:date">
-								<xs:annotation>
-									<xs:documentation>Date of the last overhaul, if yet no overhaul date of putting into service</xs:documentation>
-								</xs:annotation>
-							</xs:element>
+							<xs:element ref="DateLastOverhaul"/>
 							<xs:element ref="DateNextOverhaul"/>
 							<xs:element ref="PermittedTolerance"/>
-							<xs:element ref="PlannedDateNextOverhaul"/>
+							<xs:element ref="PlannedDateNextOverhaul" minOccurs="0"/>
 							<xs:element name="DateOfNextTankInspection" type="xs:date" minOccurs="0">
 								<xs:annotation>
 									<xs:documentation>Date of the next tank inspection, applies only for tank wagons</xs:documentation>
@@ -5615,7 +5616,7 @@ TPWS
 				<xs:element name="Activities" minOccurs="0" maxOccurs="99">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="TrainActivityType" type="TrainActivityType"/>
+							<xs:element ref="TrainActivity"/>
 							<xs:element name="ActivityLocationIdent" type="LocationIdent"/>
 						</xs:sequence>
 					</xs:complexType>
