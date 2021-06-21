@@ -87,7 +87,7 @@ CR 610 - Missing values in TractionType element
 CR 611 - Addition of new JourneyLocationTypeCode "09 Network border"
 CR 612 - New element ReferenceTrainIDSubCalendar (Output from TOM Project)
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.0" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.0" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.0.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.0" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.0" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.0.1">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.4" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
@@ -1775,7 +1775,6 @@ Non coded device
 									<xs:restriction base="xs:integer">
 										<xs:minInclusive value="1"/>
 										<xs:maxInclusive value="9999"/>
-										<xs:pattern value="\d"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -3565,7 +3564,7 @@ When the parking brake force is marked on the wagon the information must be prov
 				<xs:element ref="BrakingRatio" minOccurs="0"/>
 				<xs:element ref="MinBrakedWeightPercent" minOccurs="0"/>
 				<xs:element ref="BrakeWeight" minOccurs="0"/>
-				<xs:element ref="TrainCC_System" minOccurs="0"/>
+				<xs:element ref="TrainCC_System" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="TrainRadioSystem" minOccurs="0"/>
 				<xs:element ref="TiltingFunction" minOccurs="0">
 					<xs:annotation>
