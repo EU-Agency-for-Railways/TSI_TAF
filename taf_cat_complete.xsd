@@ -56,6 +56,7 @@ CR 526 - Code list TrainActivityType update
 CR 513 - Wagon Interchange Sub Notice message
 -->
 <!--
+TAF TSI maintenance release 3.0.0 (15.06.2021):
 CR 516 - Interchange Reporting Removal
 CR 519 - New enumeration value for OSJD system based locations is needed for  LocationSubsidiaryCode
 CR 560 - New element type of used hybrid power unit in TractionDetails
@@ -87,7 +88,13 @@ CR 610 - Missing values in TractionType element
 CR 611 - Addition of new JourneyLocationTypeCode "09 Network border"
 CR 612 - New element ReferenceTrainIDSubCalendar (Output from TOM Project)
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.0" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.0" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.0.1">
+<!--
+TAF TSI maintenance release 3.0.2 (09.07.2021):
+CR 566 - Supplement of reason for using RelatedPlannedTransportIdentifier (RPTID)
+CR 612 -	 New element ReferenceTrainIDSubCalendar (Output from TOM Project), "PathNotAvailableMessage" corrected
+Corrections of CR integration errors from
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.0" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.0" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.0.2">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.4" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
@@ -2111,8 +2118,10 @@ Non coded device
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="PlannedTransportIdentifiers" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="RelatedPlannedTransportIdentifiers" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="ReasonOfReference"/>
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="RelatedPlannedTransportIdentifiers"/>
+					<xs:element ref="ReasonOfReference"/>
+				</xs:sequence>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -3363,6 +3372,7 @@ When the parking brake force is marked on the wagon the information must be prov
 				<xs:element ref="MessageHeader"/>
 				<xs:element ref="AdministrativeContactInformation"/>
 				<xs:element ref="Identifiers" minOccurs="0"/>
+				<xs:element ref="ReferenceTrainIDSubCalendar" minOccurs="0"/>
 				<xs:element ref="MessageStatus"/>
 				<xs:element ref="TypeOfRequest" minOccurs="0"/>
 				<xs:element ref="TypeOfInformation" minOccurs="0"/>
