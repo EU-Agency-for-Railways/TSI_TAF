@@ -3393,7 +3393,8 @@ When the parking brake force is marked on the wagon the information must be prov
 				<xs:element ref="MessageHeader"/>
 				<xs:element ref="AdministrativeContactInformation"/>
 				<xs:element ref="Identifiers" minOccurs="0"/>
-				<xs:element ref="MessageStatus"/>
+				<xs:element ref="ReferenceTrainIDSubCalendar" minOccurs="0"/>
+ 				<xs:element ref="MessageStatus"/>
 				<xs:element ref="TypeOfRUHarmonization" minOccurs="0"/>
 				<xs:element ref="TypeOfIMHarmonization" minOccurs="0"/>
 				<xs:element ref="CoordinatingIM" minOccurs="0">
