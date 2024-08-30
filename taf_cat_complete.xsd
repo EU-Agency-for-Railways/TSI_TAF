@@ -160,7 +160,18 @@ CR 713  Modify wagon section in Consignment Order message
 CR 714  Fax number, email and phone number for customers are duplicated in ConsignmentOrderMessage
 CR 717  Extend element TrafficType for detailed code lists
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.4" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.4.0">
+<!--
+TAF TSI maintenance release 3.4.1 (15.12.2023):
+CR 689  Inclusion of new actors "Carrier", "Loader", "Filler" and "Unloader" into ConsignmentOrderMessage for the purposes of RID sections 1.4.3.6 and 1.4.2.2.5.
+CR 711  Update of MessageType code list
+CR 715  Remove wagon movement messages
+CR 716  Create new Wagon Status Message
+CR 721  Precision of the signal quality in GNSS_DynamicPosition element
+CR 722  Reserve a message type for sector RunningStatusReportMessage
+CR 723  Adapt list in element "Severity" in ErrorMessage
+CR 724  IntermodalTrasnportData should have maxOccurs=”unbounded”
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.4" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.4.1">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.4" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
@@ -177,6 +188,7 @@ CR 717  Extend element TrafficType for detailed code lists
 			<dcterms:modified>2020-12-15</dcterms:modified>
 			<dcterms:modified>2022-12-15</dcterms:modified>
 			<dcterms:modified>2023-06-15</dcterms:modified>
+			<dcterms:modified>2023-12-15</dcterms:modified>
 			<dcterms:type>text/xml</dcterms:type>
 			<dcterms:subject>Transport, Freight Transport, Rail</dcterms:subject>
 			<dcterms:identifier>{http://www.era.europa.eu/schemes/TAFTSI}taf_cat_complete.xsd</dcterms:identifier>
@@ -184,7 +196,7 @@ CR 717  Extend element TrafficType for detailed code lists
 			<dcterms:publisher>ERA European Union Agency for Railways, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
 			<dcterms:rights>Unclassified</dcterms:rights>
 			<dcterms:rightsHolder>European Union Agency for Railways</dcterms:rightsHolder>
-			<dcterms:copyright>ERA 2022</dcterms:copyright>
+			<dcterms:copyright>ERA 2023</dcterms:copyright>
 			<dcterms:status>Final</dcterms:status>
 		</xs:appinfo>
 	</xs:annotation>
@@ -2763,14 +2775,12 @@ Non coded device
 							</xs:element>
 							<xs:element name="Severity">
 								<xs:annotation>
-									<xs:documentation>1 = WARNING 2 = FATAL 3 = SEVER 4 = SEVER-FATAL The senders and receivers should agree about the severity levels and their interpretation: should the process stop, should the message be resent etc.</xs:documentation>
+									<xs:documentation>1 = WARNING: Message content, sequence or other parameters are off standard but (partial) processing has been possible.2 = ERROR: Message cannot be processed.</xs:documentation>
 								</xs:annotation>
 								<xs:simpleType>
 									<xs:restriction base="xs:integer">
 										<xs:enumeration value="1"/>
 										<xs:enumeration value="2"/>
-										<xs:enumeration value="3"/>
-										<xs:enumeration value="4"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -3018,8 +3028,27 @@ Non coded device
 				</xs:element>
 				<xs:element name="AntennaDistanceFromFrontOfTrain" type="xs:float" minOccurs="0">
 					<xs:annotation>
-						<xs:documentation>Distance  of GNSS antenna from the front of the train, in meters.</xs:documentation>
+						<xs:documentation>Distance of the defined coordinates from the front of the train, in meters.</xs:documentation>
 					</xs:annotation>
+				</xs:element>
+				<xs:element name="SignalQuality" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicates satellite communication signal quality</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SatelliteHDOP" type="xs:decimal">
+								<xs:annotation>
+									<xs:documentation>HDOP = Horizontal Dilution Of Precision. Parameter used to describe the strength of the current satellite configuration, or geometry, and it’s impact on the accuracy of the data collected by a GNSS receiver at the time of use. HDOP provides a measure of accuracy in 2-D position (e.g. Latitude and Longitude). Smaller value indicates better precision. Values less than 1 are the best. Values from 2 - 5 are good. Values greater 10 indicate bad quality  </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NumberOfVisibleSatellites" type="xs:integer">
+								<xs:annotation>
+									<xs:documentation>Indicates the number of satellites being used in the position solution. Greater value indicates better quality.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
@@ -3042,6 +3071,13 @@ Non coded device
 					</xs:simpleType>
 				</xs:element>
 				<xs:element ref="RID" minOccurs="0"/>
+				<xs:sequence minOccurs="0">
+					<xs:element ref="RID_Checking">
+						<xs:annotation>
+							<xs:documentation>When RID DG is transported in the train the RU can transmit here the RID check results from the Carrier, Loader, Filler and Unloader (these 4 actors are defined in the RID section "1.4 Safety obligations of the participants").</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
 				<xs:element name="Packing" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>Packing information</xs:documentation>
@@ -4159,12 +4195,13 @@ The other subelements help describing the interruption information more precisel
 4004        TrainRunningForecastMessage
 4005        TrainRunningInformationMessage
 4006        TrainRunningInterruptionMessage
+4500        PassengerTrainCompositionMessage
 
 -- sector message (Operations) --
-4500      PassengerTrainCompositionProcessMessage
 4501      RollingStockRestrictionMessage
 4504      ChangeOfTrackMessage
 4505      TrainJourneyModificationMessage
+4510      RunningStatusReportMessage
 -- sector message  end --
 
 
@@ -4185,9 +4222,12 @@ The other subelements help describing the interruption information more precisel
 5014        WagonReleaseNoticeMessage
 5015        WagonYardArrivalMessage
 5016        WagonYardDepartureMessage
+5020        WagonStatusMessage
 
 6002        LocationFileDatasetMessage
 6003        RollingStockDatasetMessage
+6005        ILUDataQueryMessage
+6006        ILUDataMessage
 
 --sector (RU-RU) ---
 5500        WagonPerformanceMessage
@@ -4195,6 +4235,12 @@ The other subelements help describing the interruption information more precisel
 
 
 6004        RollingStockDatasetQueryMessage
+
+-- Sector Messages TCR begin --
+6500        TCRMessage
+6501        TCRResponseMessage
+6502        TCRCanceledMessage
+-- Sector Messages TCR end --
 
 -- sector (TrainID) begin -- 
 8500        UpateLinkMessage
@@ -5441,6 +5487,121 @@ For Path Requests, this element has to be used
 									<xs:documentation>EMPTY</xs:documentation>
 								</xs:annotation>
 							</xs:enumeration>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RID_Checking">
+		<xs:annotation>
+			<xs:documentation>When RID DG is transported in the train the Ru has to transmit here the RID check results from the Carrier, Loader, Filler and Unloader </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CheckingBody">
+					<xs:annotation>
+						<xs:documentation>Identification of the body which performed the RID check</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="BodyType">
+								<xs:annotation>
+									<xs:documentation>Following types of bodies are authorised (RID 1.4.3):
+
+01 Carrier
+02 Loader
+03 Filler
+04 Unloader</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="01"/>
+										<xs:enumeration value="02"/>
+										<xs:enumeration value="03"/>
+										<xs:enumeration value="04"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="BodyID" type="CompanyCode">
+								<xs:annotation>
+									<xs:documentation>4N Company Code</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CheckingType" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Following types of checks are authorised (RID 1.4.3):
+
+Carrier:
+01 Prescribed documentation attached to transport docuemnt
+02 Defects, leackages, cracks, missing equipment on wagons or equipment
+
+Loader:
+11 Damage of packing
+12 Compliance with prohibition on mixed loading
+13 Uncleaned empty package
+
+Filler:
+21 Date of next inspection of wagons
+22 DG is filled only into authorized tanks
+23 Permissible level of filling
+24 Plackards, plates from RID chapter 5.3 are visible on wagon
+25 Correct Closure of wagons / tanks
+26 Leackage on wagons / tanks
+
+Unloader:
+31 Damage of packages or of tanks
+32 Required DG documentation available
+33 Cleaning, degasing, decontamination of wagons from residues
+34 Plackards, plates from RID chapter 5.3 are removed from wagon
+</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="01"/>
+							<xs:enumeration value="02"/>
+							<xs:enumeration value="11"/>
+							<xs:enumeration value="12"/>
+							<xs:enumeration value="13"/>
+							<xs:enumeration value="21"/>
+							<xs:enumeration value="22"/>
+							<xs:enumeration value="23"/>
+							<xs:enumeration value="24"/>
+							<xs:enumeration value="25"/>
+							<xs:enumeration value="26"/>
+							<xs:enumeration value="31"/>
+							<xs:enumeration value="32"/>
+							<xs:enumeration value="33"/>
+							<xs:enumeration value="34"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CheckingDateTime" type="xs:dateTime">
+					<xs:annotation>
+						<xs:documentation>Date and Time when the check was performed</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CheckingLocation" type="LocationIdent">
+					<xs:annotation>
+						<xs:documentation>The location where the check took place</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CheckingResults">
+					<xs:annotation>
+						<xs:documentation>Description of the checks' results (in conjunction with the element CheckingType) and possible need for follow-up:
+
+01 Results OK, no follow up needed during transportation
+02 Results OK, but follow up needed during transportation
+03 Results not OK, transportation rejected</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="01"/>
+							<xs:pattern value="02"/>
+							<xs:pattern value="03"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
@@ -7285,18 +7446,6 @@ IT72	Train report stop cancelled
 		</xs:annotation>
 		<xs:restriction base="xs:float"/>
 	</xs:simpleType>
-	<xs:element name="WagonArrivalNoticeMessage">
-		<xs:annotation>
-			<xs:documentation>This message is used by the last RU/Service Provider in the transport chain to inform the Lead RU that the wagon has arrived at its yard.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="MessageHeader"/>
-				<xs:element ref="WagonInformation"/>
-				<xs:element ref="ArrivalAtDestination"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
 	<xs:element name="WagonAtDeparture">
 		<xs:annotation>
 			<xs:documentation>Departure point of a wagon with location and departure time</xs:documentation>
@@ -7318,7 +7467,7 @@ IT72	Train report stop cancelled
 				<xs:element ref="WagonTrainPosition"/>
 				<xs:element ref="WagonOperationalData"/>
 				<xs:element ref="WagonTechData"/>
-				<xs:element name="IntermodalTransportData" type="IntermodalTransportDataType" minOccurs="0"/>
+				<xs:element name="IntermodalTransportData" type="IntermodalTransportDataType" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -7332,34 +7481,6 @@ IT72	Train report stop cancelled
 				<xs:element ref="WagonInformation"/>
 				<xs:element ref="DeliveryAtDestination"/>
 				<xs:element ref="Customers" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="WagonDepartureNoticeMessage">
-		<xs:annotation>
-			<xs:documentation>This message is used by the RU in charge to inform the LRU that the wagon has been picked-up (pulled) and has reached the RU's Yard of Departure.  This message is the response to the WagonReleaseNoticeMessage.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="MessageHeader"/>
-				<xs:element ref="RelatedReference" minOccurs="0"/>
-				<xs:element ref="WagonInformation"/>
-				<xs:element ref="Customers" minOccurs="0"/>
-				<xs:element ref="WagonAtDeparture"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="WagonDeviationMessage">
-		<xs:annotation>
-			<xs:documentation>This message is issued following receipt of an enquiry about the wagon deviation.  It delivers a report of all deviations of a specified wagon at all reporting points.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="MessageHeader"/>
-				<xs:element ref="RelatedReference"/>
-				<xs:element ref="WagonNumberFreight"/>
-				<xs:element ref="ActualETI"/>
-				<xs:element ref="WagonExceptionReport"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -7401,43 +7522,6 @@ IT72	Train report stop cancelled
 				</xs:element>
 				<xs:element name="EventDateTime" type="xs:dateTime"/>
 				<xs:element ref="Location"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="WagonExceptionMessage">
-		<xs:annotation>
-			<xs:documentation>This message is used by the RU/Service Provider to inform the Lead RU about deviations e.g. bad order, hold</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="MessageHeader"/>
-				<xs:element ref="WagonInformation"/>
-				<xs:element ref="WagonExceptionReport"/>
-				<xs:element ref="DangerousGoodsIndication" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="WagonExceptionReasonMessage">
-		<xs:annotation>
-			<xs:documentation>This message is used by the Lead RU to inform the other RU/Service providers about deviations and to request a new ETI/ETA.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="MessageHeader"/>
-				<xs:element ref="WagonInformation"/>
-				<xs:element ref="WagonExceptionReport"/>
-				<xs:element ref="DangerousGoodsIndication" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="WagonExceptionReport">
-		<xs:annotation>
-			<xs:documentation>Specifies the exceptions of a wagon related to a specific location</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="ExceptionPoint"/>
-				<xs:element ref="ExceptionReason" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -7532,19 +7616,6 @@ IT72	Train report stop cancelled
 			<xs:sequence>
 				<xs:element ref="Location"/>
 				<xs:element ref="DepartureTimeAtLocation"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="WagonReleaseNoticeMessage">
-		<xs:annotation>
-			<xs:documentation>This message is used by the Lead RU for the case that the LRU is not the first RU in the Transport chain.  It is to inform the RU in charge that the wagon is ready to be pulled.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="MessageHeader"/>
-				<xs:element ref="WagonInformation"/>
-				<xs:element ref="Customers" minOccurs="0"/>
-				<xs:element ref="WagonPickupAtOrigin"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -8095,6 +8166,355 @@ IT72	Train report stop cancelled
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="WagonStatusMessages">
+		<xs:annotation>
+			<xs:documentation>Always MANDATORY, independent whether only one or more messages are in the file </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="MessageHeader"/>
+				<xs:element name="WagonStatusMessage" maxOccurs="500">
+					<xs:annotation>
+						<xs:documentation>used to describe one event of one wagon  (all bounded elements are bounded to to obligations of legacy systems)</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:annotation>
+								<xs:documentation>Wagon Status Message</xs:documentation>
+							</xs:annotation>
+							<xs:element name="ReportingRU" type="CompanyCode">
+								<xs:annotation>
+									<xs:documentation>Company (RICS) Code of the RU who is reporting the event</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="MessageCreationDateTime" type="xs:dateTime">
+								<xs:annotation>
+									<xs:documentation>Timestamp of Creation of Message</xs:documentation>
+									<xs:documentation>the timestamp is created by the originally sending RU, it remains unchanged, when forwarded by the central ISR application</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element ref="WagonNumberFreight"/>
+							<xs:element name="Event">
+								<xs:annotation>
+									<xs:documentation>Information belonging to the event</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="EventType"/>
+										<xs:element name="EventDateTime" type="xs:dateTime">
+											<xs:annotation>
+												<xs:documentation>Event Time Stamp </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="EventLocationInformation" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Information concerning the event location. Optional for event types 06 and 16, these events may not have a location. But for all remaining event types, at least one of the elements EventLocation or Position should be sent</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="EventLocation" type="LocationIdent" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Location where the event happend</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Position" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Geo coordinates of the wagon  event location in WGS84 as used in the CRD</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Latitude" type="xs:decimal"/>
+																<xs:element name="Longitude" type="xs:decimal"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="LoadingStatus" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Loading status of the equipment.  0=Empty, 1=Loaded</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:enumeration value="0"/>
+										<xs:enumeration value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ShippingLocation" type="LocationIdent" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Shipping Station ( TAF location code with optional SLC type 42 or 36)</xs:documentation>
+									<xs:documentation>use here the station code of the station the wagon has started its transport run</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DestinationLocation" type="LocationIdent" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Destination Station  ( TAF location code with optional SLC type 42 or 36)</xs:documentation>
+									<xs:documentation>use here the station code of the station the wagon shall terminate its transport run </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Train" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="OperationalTrainNumberIdentifier">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="OperationalTrainNumber"/>
+													<xs:element ref="ScheduledTimeAtHandover" minOccurs="0"/>
+													<xs:element ref="ScheduledDateTimeAtTransfer" minOccurs="0"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="TrainOperatingRU" type="CompanyCode" minOccurs="0"/>
+										<xs:element ref="TrainOperationalIdentification" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>TAF TrainID of the related train</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TrainDepartureDate" type="xs:date" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Out only: Departure Date of the Train </xs:documentation>
+												<xs:documentation>use here the date the train left origin using this train number</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="ConsignmentIdentification" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>List of Identifications for the consignment In order to identify the consignment(s) on the wagon, the ControlLabel and or DossierNumber for each consignment must be present if the wagon is loaded and the Consignment Note is already available</xs:documentation>
+									<xs:documentation>consignment note number (without carrier (due to history))</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ControlLabel" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ShippingCountry">
+														<xs:annotation>
+															<xs:documentation>Forwarding UIC Country Code</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:length value="2">
+																	<xs:annotation>
+																		<xs:documentation>= 2N = UIC country code according to UIC leaflet 920-14</xs:documentation>
+																	</xs:annotation>
+																</xs:length>
+																<xs:pattern value="\d*[1-9]\d*"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ShippingStationCode">
+														<xs:annotation>
+															<xs:documentation>UIC Code of the shipping station</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="5"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ShippingStationName" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Name of the shipping station</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="24"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ShippingCarrier" type="CompanyCode" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>RICS Code of the RU who created the consignment identification (not necessarily the first carrier in the transport chain)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="AcceptanceDate" type="xs:date" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Forwarding Date</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="ConsignmentNumber" type="ConsignmentIdent"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="DossierNumber" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element ref="Routing" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Route information. Keep the sequence of each part of the route!</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="CarriersInvolved" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Carrier" maxOccurs="20">
+											<xs:annotation>
+												<xs:documentation>Carrier(s) involved</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="RU" type="CompanyCode">
+														<xs:annotation>
+															<xs:documentation>Carrier (Railway Code)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element ref="CarrierStatus" minOccurs="0"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="WagonJourneyIrregularity" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="DamageCodes" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>List of Damage Codes according to description in GCU Appendix 9 Annex 1</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="DamageCodePosition1">
+														<xs:simpleType>
+															<xs:restriction base="xs:short">
+																<xs:minInclusive value="1"/>
+																<xs:maxInclusive value="99"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="DamageCodePosition2" minOccurs="0">
+														<xs:simpleType>
+															<xs:restriction base="xs:short">
+																<xs:minInclusive value="1"/>
+																<xs:maxInclusive value="99"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="DamageCodePosition3" minOccurs="0">
+														<xs:simpleType>
+															<xs:restriction base="xs:short">
+																<xs:minInclusive value="1"/>
+																<xs:maxInclusive value="99"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="DamageCodePosition4" minOccurs="0">
+														<xs:simpleType>
+															<xs:restriction base="xs:short">
+																<xs:minInclusive value="1"/>
+																<xs:maxInclusive value="99"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="DamageOldOrNew" minOccurs="0">
+														<xs:simpleType>
+															<xs:restriction base="xs:short">
+																<xs:enumeration value="0"/>
+																<xs:enumeration value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="IsAbleToRun" type="xs:boolean" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>True if the damage does not cause an interruption of the transport run. False otherwise: The damage causes an interruption of the transport run (the wagon has to be repaired,  the loading of the good has to be bettered, . . .</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="EventType">
+		<xs:annotation>
+			<xs:documentation>Type of event</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="10">
+					<xs:annotation>
+						<xs:documentation>Wagon Ready To Pull (Based on information from customer or wagon keeper, the LRU not being the origin RU will inform the origin RU that the wagon (loaded or empty) can (or will be ready to) be pulled from the un/loading place or customer's siding.)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="20">
+					<xs:annotation>
+						<xs:documentation> Wagon Pulled (Origin RU informs other involved RU(s) that the wagon has been pulled from un/loading place or from customer's siding.)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="01">
+					<xs:annotation>
+						<xs:documentation>Wagon Left Origin (Origin RU informs other involved RU(s) that the wagon left with a train production departure station.)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="04">
+					<xs:annotation>
+						<xs:documentation>Wagon Arrival (RU informs other involved RU(s) that the wagon has arrived to station with a train.)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="03">
+					<xs:annotation>
+						<xs:documentation>Wagon Departure (RU informs other involved RU(s) that the wagon has departed from station with a train.)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="13">
+					<xs:annotation>
+						<xs:documentation>Passed through (Wagon, being part of a running train, has passed through a location.)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="14">
+					<xs:annotation>
+						<xs:documentation>Wagon Handed Over (RU informs other involved RU(s) that the wagon has been physically handed over to the next RU) (</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="24">
+					<xs:annotation>
+						<xs:documentation>Wagon Taken Over (RU informs other involved RU(s) that the wagon has been physically taken over from the previous RU.)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="06">
+					<xs:annotation>
+						<xs:documentation>Wagon Journey Irregularity (RU informs other involved RU(s) that something irregular happened with the wagon or its load which requires action and may interrupt its transportation. Details about nature of the irregularity and its consequences are to be included too.)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="16">
+					<xs:annotation>
+						<xs:documentation>Wagon Journey Recovered (RU informs other involved RU(s) that the wagon journey irregularity was recovered (e.g. wagon is repaired or load is fixed)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="05">
+					<xs:annotation>
+						<xs:documentation>Wagon Reached Destination (Destination RU informs other involved RU(s) that the wagon arrived to destination station with a train.)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="15">
+					<xs:annotation>
+						<xs:documentation>Wagon Delivered (Destination RU informs other involved RU(s) that the wagon has been delivered to un/loading place or to customer's siding.)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="60">
+					<xs:annotation>
+						<xs:documentation>GPS Location ( Information about the position of the wagon)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
 	<xs:element name="WagonTechData">
 		<xs:annotation>
 			<xs:documentation>This element shows the wagon relevant technical data for the wagons within a running train</xs:documentation>
@@ -8261,30 +8681,6 @@ IT72	Train report stop cancelled
 			<xs:documentation>The weight of an empty wagon according to the entry in the rolling stock database</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="WagonYardArrivalMessage">
-		<xs:annotation>
-			<xs:documentation>This message is used by the RU to inform the LRU that the wagon has arrived at its yard.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="MessageHeader"/>
-				<xs:element ref="WagonNumberFreight"/>
-				<xs:element ref="YardArrival"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="WagonYardDepartureMessage">
-		<xs:annotation>
-			<xs:documentation>This message is used by the RU/Service Provider to inform the Lead RU that the wagon has left the yard.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="MessageHeader"/>
-				<xs:element ref="WagonNumberFreight"/>
-				<xs:element ref="YardDeparture"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
 	<xs:element name="WeightOfSetOfCarriages" type="WeightValueTonne">
 		<xs:annotation>
 			<xs:documentation>The calculated maximum weight of all carriages without the traction</xs:documentation>
@@ -8311,8 +8707,7 @@ IT72	Train report stop cancelled
 	</xs:simpleType>
 	<xs:element name="WheelDiameter">
 		<xs:annotation>
-			<xs:documentation>Diameter of wheels meausured in mm. 
-Reference wheel diameter at maximum.			
+			<xs:documentation>Diameter of wheels meausured in mm. Reference wheel diameter at maximum.			
 			</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
@@ -8324,8 +8719,7 @@ Reference wheel diameter at maximum.
 	</xs:element>
 	<xs:element name="WheelsetGauge">
 		<xs:annotation>
-			<xs:documentation>Track Gauge measured in mm; multi-entry for wagons with changeable wheel set gauge			
-			</xs:documentation>
+			<xs:documentation>Track Gauge measured in mm; multi-entry for wagons with changeable wheel set gauge</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:integer">
