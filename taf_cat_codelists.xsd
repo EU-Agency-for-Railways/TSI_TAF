@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by - (European Railway Agency (ERA)) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.0" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.0" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.0.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.1" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.1.0">
 	<xs:annotation>
 		<xs:appinfo>
 			<dcterms:title>TAF TSI - message exchange.</dcterms:title>
@@ -618,7 +618,7 @@ The following documentation serves for the existing codes:
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-	<xs:attribute name="JourneyLocationTypeCode">
+	<xs:element name="JourneyLocationTypeCode">
 		<xs:annotation>
 			<xs:documentation>
             01 = Origin
@@ -647,7 +647,7 @@ The following documentation serves for the existing codes:
 				<xs:enumeration value="99"/>
 			</xs:restriction>
 		</xs:simpleType>
-	</xs:attribute>
+	</xs:element>
 	<xs:element name="LivestockOrPeopleIndicator">
 		<xs:annotation>
 			<xs:documentation>Indicates that livestock and people (other than train crew) will be carried. Coding: if live animals or people are transported = 1, in opposite case = 0. If code = 1, then at the wagon level for at least one wagon Info- Goods Shape, Type and Danger has to include the code '98' or Restrictions due to Load or Damage has to include code '09.'</xs:documentation>
@@ -709,6 +709,15 @@ The following documentation serves for the existing codes:
 55	Repair track	Location where a train/wagon/engine can be repaired
 56	Signal box	The location of a building containing signalling equipment
 58	OSJD system based location
+59    Train Service Substitute Stop
+60    Multifunctional rail terminal
+61    Relief facility
+70    Network Border
+71    State border
+72    Administrative border
+74    Operational handover
+75    Planning handover
+76    Other technical facility
 	</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
@@ -1077,10 +1086,64 @@ The following documentation serves for the existing codes:
 						<xs:documentation>Location code used within OSJD</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
+				<xs:enumeration value="59">
+					<xs:annotation>
+						<xs:documentation>Train Service Substitute Stop</xs:documentation>
+						<xs:documentation>Place outside of railway station or railway stop, where passengers board or leave bus or any other transport mean as substitution of train service. Physical part of Primary Location.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="60">
+					<xs:annotation>
+						<xs:documentation>Multifunctional rail terminal</xs:documentation>
+						<xs:documentation>Facilities for conventional and/or intermodal rail/road transshipment principally open for public use and for all types of cargo. This kind of facility does not only provide transshipment, but also additional services like storage, consignment or road pre/end haulage. Physical part of Primary Location.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="61">
+					<xs:annotation>
+						<xs:documentation>Relief facility</xs:documentation>
+						<xs:documentation>Facilities providing equipment and infrastructure used to overcome a disruption (derailment, collision or other accidents). Physical part of Primary Location.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
 				<xs:enumeration value="66">
 					<xs:annotation>
 						<xs:documentation>Location ENEE Code</xs:documentation>
-						<xs:documentation>Legacy ENEE code of the parent primary location</xs:documentation>
+						<xs:documentation>Legacy ENEE code of the parent primary location. Different coding of primary location.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="70">
+					<xs:annotation>
+						<xs:documentation>Network Border</xs:documentation>
+						<xs:documentation>Network border between two neighboring IM's; first or last Primary Location on a network. Attribute of primary location.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="71">
+					<xs:annotation>
+						<xs:documentation>State border</xs:documentation>
+						<xs:documentation>Political border between two member states. Attribute of primary location.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="72">
+					<xs:annotation>
+						<xs:documentation>Administrative border</xs:documentation>
+						<xs:documentation>Border point inside a member state to define federal structures or administrative districts or local areas. Attribute of primary location.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="74">
+					<xs:annotation>
+						<xs:documentation>Operational handover</xs:documentation>
+						<xs:documentation>Location where the responsibility for operation changes or can change between two involved IMs. Attribute of primary location.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="75">
+					<xs:annotation>
+						<xs:documentation>Planning handover</xs:documentation>
+						<xs:documentation>Location where the responsibility for timetable planning and path allocation changes or can change between two involved IMs. Attribute of primary location.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="76">
+					<xs:annotation>
+						<xs:documentation>Other technical facility</xs:documentation>
+						<xs:documentation>All technical installations and services that are not included in other facility types. E.g. Pre heating, de icing, air conditioning, Washing/cleaning of rolling stock, Disinfection of rolling stock, Sewage removal and Stationary brake test facilities. Physical part of Primary Location.</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="90">
@@ -1200,6 +1263,34 @@ III	Low danger
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
+	<xs:element name="ProcessType">
+		<xs:annotation>
+			<xs:documentation>Process type to further distinguish among type of requests. Possible process types:
+            0 = New Path Request and allocation process for annual timetable
+            1 = Late Path Request and allocation process for annual timetable
+            2 = Short-term path request and allocation process
+            3 = Rolling Planning path request and allocation process
+            4 = Feasibility Study process
+            5 = Path Modification process (triggered by applicant)
+            6 = Path Alteration process (triggered by IM)
+            7 = Pre-arranged Path published by RFC
+            8 = Catalogue Path published by IM
+            </xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="0"/>
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+				<xs:enumeration value="4"/>
+				<xs:enumeration value="5"/>
+				<xs:enumeration value="6"/>
+				<xs:enumeration value="7"/>
+				<xs:enumeration value="8"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
 	<xs:element name="ReasonOfReference">
 		<xs:annotation>
 			<xs:documentation>Indicates the reason/purpose of usage of element RelatedPlannedTransportIdentifier.
@@ -1250,7 +1341,11 @@ List of codes for element ReasonOfReference:
 1013 = Replaced path after modification by ResponsibleApplicant
     (Additional information: Reference to replaced path when IM is making an offer after receiving PathRequestMessage sent by RA for
     modification of booked path. Code is used only in Path Modification process in PathDetailsMessage. RPTID: PathID.)
+1014 = New Route
+    (Additional information: Reference to previous Route replaced by the new Route)
 
+1015 = Updated Route
+    (Additional information: Reference to the Route that is updated)
 Specific code only for one IM/national codes:
 
 DE01 = Reference to an associated empty/transfer train
@@ -1346,6 +1441,16 @@ DE06 = Use of same OTN as of stated train
 				<xs:enumeration value="1013">
 					<xs:annotation>
 						<xs:documentation>Replaced path after modification by ResponsibleApplicant</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="1014">
+					<xs:annotation>
+						<xs:documentation>New Route</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="1015">
+					<xs:annotation>
+						<xs:documentation>Updated Route</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="DE01">
@@ -1568,180 +1673,6 @@ CM2, CM3 and CM 4 equal M2, M3 and M4 which might be used in some legacy systems
 			<xs:enumeration value="19"/>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:element name="SpecialServiceDescriptionCode">
-		<xs:annotation>
-			<xs:documentation>Service on a Train according to TAP Code List B.4.716</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:integer">
-				<xs:enumeration value="3">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Additional loading</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="4">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Additional unloading</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="5">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Breakfast</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="6">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Dinner</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="7">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Loading</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="8">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Lunch</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="9">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Unloading</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="11">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Child</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="21">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Cold buffet</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="22">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Restaurant in 1st class only</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="23">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Hot buffet</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="24">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Meal included for 1st class passengers</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="25">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Trolley</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="26">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Snack</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="27">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Disabled</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="28">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Movies</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="29">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Business</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="30">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Nursery</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="31">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Buffet</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="32">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Special services for military</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="33">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Boarding possible 2 hours before departure</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="34">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Alighting possible until 2 hours after arrival</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="35">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Boarding possible 30 minutes before departure</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="36">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Alighting possible until 30 minutes after arrival</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="37">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Postal services</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="38">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Meal at the seat</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="39">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Self service</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="40">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Overnight stay</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="41">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Luggage transport</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="42">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Luggage transport excluded</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="43">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Music</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="44">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Check-in</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="45">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">Check-out</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
 	<xs:attribute name="TimingQualifierCode">
 		<xs:annotation>
 			<xs:documentation>
@@ -2011,24 +1942,31 @@ Identifies the command control system of the train in coded values.
 	</xs:element>
 	<xs:element name="TrainType">
 		<xs:annotation>
-			<xs:documentation>
-			1	Passenger train	Commercial train with passenger coaches or trainsets
-Empty run of Train with passenger coaches or trainsets
-Including Crew train (for Train Crew Members)
-2	Freight train	Train with freight wagons
-3	Light engine (locomotive train)	One or more engines without any carriages
-4	Engineering train	Train for measurement, maintenance, instructions, homologation, etc
-0	Other	Train types that are not covered with the four codes given above can be codified as "other" in the messages
-Passenger with Freight - military trains, the Overnight Express; Royalty, Head of States
+			<xs:documentation>Element TrainType defines the main purpose of the train in a fundamental way. These purposes are:
+Transport of passengers
+Transport of freight/goods
+Transport of passengers and freight/goods
+Train only for run of traction unit/locomotive
+Train of the IM in case of emergency
+The element is not repeatable, and it does not support any overlapping meaning. Following codes are available:
+1 - Passenger train
+2 - Freight train
+3 - Locomotive train
+4 - Maintenance train
+5 - Emergency train
+6 - Mixed train (passenger and freight train in combination)
+0 - Other train
 </xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:integer">
+				<xs:enumeration value="0"/>
 				<xs:enumeration value="1"/>
 				<xs:enumeration value="2"/>
 				<xs:enumeration value="3"/>
 				<xs:enumeration value="4"/>
-				<xs:enumeration value="0"/>
+				<xs:enumeration value="5"/>
+				<xs:enumeration value="6"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -2375,12 +2313,10 @@ Should be added to Code List. Values refer to UIC Leaflet 920-13:
 	</xs:element>
 	<xs:simpleType name="TypeOfRequestCode">
 		<xs:annotation>
-			<xs:documentation> Enumeration for 3 different basic types of the processes in the planning: Study (1), Request (2), Modification (3)
-</xs:documentation>
+			<xs:documentation> Enumeration for 3 different basic types of the processes in the planning: Study (1), Request (2), Modification (3)</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:short">
 			<xs:minInclusive value="1"/>
-			<xs:maxInclusive value="9"/>
 			<xs:enumeration value="1"/>
 			<xs:enumeration value="2"/>
 			<xs:enumeration value="3"/>
