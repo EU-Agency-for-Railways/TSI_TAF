@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by - (European Railway Agency (ERA)) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.3" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.3" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.3.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.4.0">
 	<xs:annotation>
 		<xs:appinfo>
 			<dcterms:title>TAF TSI - message exchange.</dcterms:title>
@@ -420,7 +420,11 @@ The RUs may indicate the relevant values if they are familiar with the IMs line 
 			<xs:documentation>Identifies the type of a waybill.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:token">
-			<xs:enumeration value="CIM"><xs:annotation><xs:documentation>CIM	Convention Internationale Marchandises (OTIF)	Source: CIM (OTIF)</xs:documentation></xs:annotation></xs:enumeration>
+			<xs:enumeration value="CIM">
+				<xs:annotation>
+					<xs:documentation>CIM	Convention Internationale Marchandises (OTIF)	Source: CIM (OTIF)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
 			<xs:enumeration value="Other"/>
 		</xs:restriction>
 	</xs:simpleType>
@@ -761,6 +765,52 @@ The RUs may indicate the relevant values if they are familiar with the IMs line 
 						<xs:documentation>Miscellaneous dangerous substances and articles</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
+				<xs:enumeration value="9A"/>
+				<xs:enumeration value="1 (+13)"/>
+				<xs:enumeration value="1 (+15)"/>
+				<xs:enumeration value="1.4+6.1"/>
+				<xs:enumeration value="1.4+6.1+8"/>
+				<xs:enumeration value="1.4+8"/>
+				<xs:enumeration value="1+6.1"/>
+				<xs:enumeration value="1+6.1 (+13)"/>
+				<xs:enumeration value="1+6.1 (+15)"/>
+				<xs:enumeration value="1+6.1+8"/>
+				<xs:enumeration value="1+8"/>
+				<xs:enumeration value="2.1 (+13)"/>
+				<xs:enumeration value="2.1+6.1"/>
+				<xs:enumeration value="2.1+6.1+8"/>
+				<xs:enumeration value="2.1+6.1"/>
+				<xs:enumeration value="2.1+8"/>
+				<xs:enumeration value="2.2 (+13)"/>
+				<xs:enumeration value="2.2+5.1+6.1"/>
+				<xs:enumeration value="2.2+5.1+6.1+8"/>
+				<xs:enumeration value="2.2+5.1+8"/>
+				<xs:enumeration value="2.2+6.1"/>
+				<xs:enumeration value="2.2+6.1+8"/>
+				<xs:enumeration value="2.2+5.1"/>
+				<xs:enumeration value="2.2+5.1 (+13)"/>
+				<xs:enumeration value="2.2+6.1"/>
+				<xs:enumeration value="2.2+8"/>
+				<xs:enumeration value="2.3 (+13)"/>
+				<xs:enumeration value="2.3+2.1"/>
+				<xs:enumeration value="2.3+2.1 (+13)"/>
+				<xs:enumeration value="2.3+2.1+8"/>
+				<xs:enumeration value="2.3+2.1+8 (+13)"/>
+				<xs:enumeration value="2.3+5.1"/>
+				<xs:enumeration value="2.3+5.1 (+13)"/>
+				<xs:enumeration value="2.3+5.1+8"/>
+				<xs:enumeration value="2.3+5.1+8 (+13)"/>
+				<xs:enumeration value="2.3+8"/>
+				<xs:enumeration value="2.3+8 (+13)"/>
+				<xs:enumeration value="4.1+1"/>
+				<xs:enumeration value="5.2+1"/>
+				<xs:enumeration value="6.1+4.1"/>
+				<xs:enumeration value="6.1+8"/>
+				<xs:enumeration value="6.2+2.2"/>
+				<xs:enumeration value="7X"/>
+				<xs:enumeration value="7X+7E"/>
+				<xs:enumeration value="8+6.1"/>
+				<xs:enumeration value="9+2.2"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -1428,7 +1478,7 @@ The RUs may indicate the relevant values if they are familiar with the IMs line 
 	</xs:element>
 	<xs:element name="JourneyLocationTypeCode">
 		<xs:annotation>
-			<xs:documentation></xs:documentation>
+			<xs:documentation/>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:token">
@@ -1523,7 +1573,7 @@ The RUs may indicate the relevant values if they are familiar with the IMs line 
 	</xs:element>
 	<xs:attribute name="LocationSubsidiaryTypeCode">
 		<xs:annotation>
-			<xs:documentation></xs:documentation>
+			<xs:documentation/>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:token">
@@ -2259,7 +2309,7 @@ The RUs may indicate the relevant values if they are familiar with the IMs line 
 	</xs:element>
 	<xs:element name="ProcessType">
 		<xs:annotation>
-			<xs:documentation>Process type to further distinguish among type of requests.</xs:documentation>
+			<xs:documentation>Business process type to further distinguish among type of requests.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:token">
@@ -2275,7 +2325,7 @@ The RUs may indicate the relevant values if they are familiar with the IMs line 
 				</xs:enumeration>
 				<xs:enumeration value="2">
 					<xs:annotation>
-						<xs:documentation>Short-term path request and allocation process</xs:documentation>
+						<xs:documentation>Ad hoc path request and allocation process</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="3">
@@ -2306,6 +2356,16 @@ The RUs may indicate the relevant values if they are familiar with the IMs line 
 				<xs:enumeration value="8">
 					<xs:annotation>
 						<xs:documentation>Catalogue Path publication by IM</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="10">
+					<xs:annotation>
+						<xs:documentation>Path Cancellation process</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="11">
+					<xs:annotation>
+						<xs:documentation>Path Utilisation notification process</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 			</xs:restriction>
@@ -3075,6 +3135,21 @@ CM2, CM3 and CM 4 equal M2, M3 and M4 which might be used in some legacy systems
 						<xs:documentation>Actual Location Departure</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
+				<xs:enumeration value="ERT">
+					<xs:annotation>
+						<xs:documentation>Earliest Run Through</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="ART">
+					<xs:annotation>
+						<xs:documentation>Actual Run Through</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="LRT">
+					<xs:annotation>
+						<xs:documentation>Latest Run Through</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:attribute>
@@ -3404,7 +3479,7 @@ Identifies the command control system of the train in coded values.
 			<xs:sequence>
 				<xs:element name="TrainInterrupted">
 					<xs:annotation>
-						<xs:documentation></xs:documentation>
+						<xs:documentation/>
 					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:integer">
@@ -3491,6 +3566,38 @@ The element is not repeatable, and it does not support any overlapping meaning.
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
+	<xs:simpleType name="TypeOfLoadUnitType">
+		<xs:annotation>
+			<xs:documentation>00=unknown, 01=Container, 02=swap bodies, 03=semitrailers, 04=truck</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="00">
+				<xs:annotation>
+					<xs:documentation>unknown</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="01">
+				<xs:annotation>
+					<xs:documentation>Container</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="02">
+				<xs:annotation>
+					<xs:documentation>swap bodies</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="03">
+				<xs:annotation>
+					<xs:documentation>semitrailers</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="04">
+				<xs:annotation>
+					<xs:documentation>truck</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:element name="TypeOfUsedHybridPowerunit">
 		<xs:annotation>
 			<xs:documentation>information about the type of power unit in case of using a hybrid locomotive</xs:documentation>
@@ -3921,7 +4028,7 @@ Should be added to Code List. Values refer to UIC Leaflet 920-13</xs:documentati
 	</xs:element>
 	<xs:simpleType name="TypeOfRequestCode">
 		<xs:annotation>
-			<xs:documentation> Enumeration for 3 different basic types of the processes in the planning: Study (1), Request (2), Modification (3)</xs:documentation>
+			<xs:documentation>Enumeration for the 3 different basic types of the planning processes types in the planning: Study (1), Request (2), Modification (3)</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:short">
 			<xs:minInclusive value="1"/>
