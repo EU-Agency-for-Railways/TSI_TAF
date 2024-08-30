@@ -171,7 +171,24 @@ CR 722  Reserve a message type for sector RunningStatusReportMessage
 CR 723  Adapt list in element "Severity" in ErrorMessage
 CR 724  IntermodalTrasnportData should have maxOccurs=”unbounded”
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.4" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.4.1">
+<!--
+TAF TSI maintenance release 3.5.0 (15.06.2024):
+CR 726  Change of facets for the CounterAcreditedRecognizedBody element within the RollingStockDatasetMessage
+CR 729  Usability of annotation of tilting function
+CR 730  Make element GrossWeight optional in ConsignmentOrderMessage/COMS/COM/Wagons/GoodsinWagon
+CR 731  Change Commercial Specifications structure
+CR 733  Wrong RID section in COM
+CR 734  Make element MadeOut mandatory
+CR 736  GoodsInWagon Shall become optional
+CR 739  New national code for ReasonOfReference
+CR 740  Usage of particular running status for Terminal events
+CR 741  Dangerous goods on the ILU level
+CR 742  Add parameter 'GeoLocalisationOnNetwork' in the TrainRunningInterruptionMessage (TRIM) message
+CR 743  Remove WagonDeliveryNoticeMessage 
+CR 744 Update MessageType-annotation to reflect deletion of WagonMovementMessages
+CR 745 Reserve a message type for new Sector message TrainForecastedDelayCauseMessage
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.5" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.5" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.5.0">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.4" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
@@ -1610,7 +1627,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
-										<xs:element name="MadeOut" minOccurs="0">
+										<xs:element name="MadeOut">
 											<xs:annotation>
 												<xs:documentation>Made out</xs:documentation>
 											</xs:annotation>
@@ -3135,7 +3152,7 @@ Non coded device
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
-				<xs:element ref="GrossWeight"/>
+				<xs:element ref="GrossWeight" minOccurs="0"/>
 				<xs:element name="HS_Code" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>HS-Code for sensible goods (appendix 44c of ccip) 10 digits are needed, if a good code was already assigned for 'Zollanmeldung'. In this case this good code has to be taken. These good codes may have more than 6 digits.</xs:documentation>
@@ -3392,6 +3409,7 @@ Non coded device
 		<xs:sequence>
 			<xs:element name="TypeOfLoadUnit" type="TypeOfLoadUnitType"/>
 			<xs:element name="LoadUnitNumber" type="LoadUnitNumberType"/>
+			<xs:element ref="DangerousGoodsIndication" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="InternalReferenceIdentifier" type="FreeText">
@@ -3473,6 +3491,7 @@ The other subelements help describing the interruption information more precisel
 						<xs:documentation>To provide any additional information to the RU or next IM (e.g. contact person, next steps, etc)</xs:documentation>
 					</xs:annotation>
 				</xs:element>
+				<xs:element ref="GeoLocalisationOnNetwork" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -4195,23 +4214,19 @@ The other subelements help describing the interruption information more precisel
 4004        TrainRunningForecastMessage
 4005        TrainRunningInformationMessage
 4006        TrainRunningInterruptionMessage
-4500        PassengerTrainCompositionMessage
 
 -- sector message (Operations) --
+4500        PassengerTrainCompositionMessage
 4501      RollingStockRestrictionMessage
 4504      ChangeOfTrackMessage
 4505      TrainJourneyModificationMessage
+4506      TrainForecastedDelayCauseMessage
 4510      RunningStatusReportMessage
 -- sector message  end --
 
 
 5001        AlertMessage
-5002        WagonArrivalNoticeMessage
-5003        WagonDeliveryNoticeMessage
-5004        WagonDepartureNoticeMessage
 5006        WagonETI_ETA_Message
-5007        WagonExceptionMessage
-5008        WagonExceptionReasonMessage
 
 -- sector message (Wagon interchange) --
 5009        WagonInterchangeNoticeMessage 
@@ -4219,9 +4234,6 @@ The other subelements help describing the interruption information more precisel
 5013        WagonRefusedAtInterchangeMessage
 -- sector message  end --
 
-5014        WagonReleaseNoticeMessage
-5015        WagonYardArrivalMessage
-5016        WagonYardDepartureMessage
 5020        WagonStatusMessage
 
 6002        LocationFileDatasetMessage
@@ -4486,6 +4498,12 @@ SF00 to SF99 for SFERA messages (see IRS90940)
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
+	<xs:simpleType name="Numeric0-2">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="00"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="Numeric1-5">
 		<xs:restriction base="xs:positiveInteger">
 			<xs:minInclusive value="1"/>
@@ -4966,11 +4984,7 @@ When the parking brake force is marked on the wagon the information must be prov
 				<xs:element ref="BrakeWeight" minOccurs="0"/>
 				<xs:element ref="TrainCC_System" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="TrainRadioSystem" minOccurs="0"/>
-				<xs:element ref="TiltingFunction" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>Indicates if a train uses a tilting system</xs:documentation>
-					</xs:annotation>
-				</xs:element>
+				<xs:element ref="TiltingFunction" minOccurs="0"/>
 				<xs:element ref="OperationalTrainCouplingStrength" minOccurs="0"/>
 				<xs:element ref="BogieWagonsOnly" minOccurs="0"/>
 			</xs:sequence>
@@ -5303,10 +5317,17 @@ For Path Requests, this element has to be used
 							<xs:enumeration value="2019"/>
 							<xs:enumeration value="2021"/>
 							<xs:enumeration value="2023"/>
+							<xs:enumeration value="2025"/>
+							<xs:enumeration value="2027"/>
+							<xs:enumeration value="2029"/>
+							<xs:enumeration value="2031"/>
+							<xs:enumeration value="2033"/>
+							<xs:enumeration value="2035"/>
+							<xs:enumeration value="2037"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
-				<xs:element ref="DangerousGoodsIndication"/>
+				<xs:element ref="DangerLabel" minOccurs="0" maxOccurs="5"/>
 				<xs:element name="TechnicalDescription" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>The Technical Description is an approved chemical or biological name and has to be present if the dangerous good has assigned a special provision 274 according to RID chapter 3.2, table A, column 6.</xs:documentation>
@@ -5330,26 +5351,35 @@ For Path Requests, this element has to be used
 					</xs:simpleType>
 				</xs:element>
 				<xs:element name="SpecialProvisionsRID" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>Used for any global special provisions of chapter 5.4, that are not treated by other elments in this message</xs:documentation>
-					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:minLength value="1"/>
-							<xs:maxLength value="350"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-				<xs:element name="AdditionalProvisionsRID" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>Used for any class related special provisions of chapter 5.4, that are not treated by other elments in this message</xs:documentation>
-					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:minLength value="1"/>
-							<xs:maxLength value="350"/>
-						</xs:restriction>
-					</xs:simpleType>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SpecialProvisionsRID3.3" minOccurs="0" maxOccurs="25">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="5"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SpecialProvisionRID5.4" minOccurs="0" maxOccurs="25">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="350"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="Waste" type="xs:boolean" minOccurs="0"/>
+							<xs:element name="SpecialProvisionsEnvironment" minOccurs="0">
+								<xs:complexType>
+									<xs:choice>
+										<xs:element name="EnvironmentalHazardous" type="xs:boolean"/>
+										<xs:element name="MarinePollutant" type="xs:boolean"/>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
 				</xs:element>
 				<xs:element name="ActionRequiredFromCarrier" minOccurs="0">
 					<xs:annotation>
@@ -5362,21 +5392,54 @@ For Path Requests, this element has to be used
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
-				<xs:element name="WeightNettoExplosiveMass" minOccurs="0">
+				<xs:element ref="DangerousGoodsWeight" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The weight of the dangerous goods in Kilograms</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DangerousGoodsVolume" type="VolumeValue" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The volume of the dangerous goods in cubic meters</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="WeightNettoExplosiveMass" type="WeightValueKilo" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>Special provision only necessary and allowed for Class 1 (kg)- the total net mass of explosive substance (RID 5.4.1.2.1).</xs:documentation>
 					</xs:annotation>
+				</xs:element>
+				<xs:element name="HazardIdentificationNumber" minOccurs="0">
 					<xs:simpleType>
-						<xs:restriction base="xs:decimal">
-							<xs:minInclusive value="0"/>
-							<xs:fractionDigits value="1"/>
-							<xs:totalDigits value="8"/>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="2"/>
+							<xs:maxLength value="4"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="UN_Number" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The UNNumber of the dangerous good according to the RID chapter 3.2, table A, column 1. Mandatory, except it concerns a declaration of an empty packaging of the type "EMPTY PACKAGING", "EMPTY RECEPTACLE &lt;=1000L", "EMPTY IBC" or "EMPTY LARGE PACKAGING" .</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:length value="4"/>
+							<xs:pattern value="\d*[1-9]\d*"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="RID_Class" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The Class of the dangerous good according to the RID chapter 3.2, table A, column 3a.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="4"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
 				<xs:element name="ClassificationCode" minOccurs="0">
 					<xs:annotation>
-						<xs:documentation>For Class 1 the ‘classification code’ is identical to the ‘hazard identification number’ (i.e the ‘division number’ and the ‘compatibility group letter’). For other classes it is different. The collective entries for ‘classification code’ are defined in section 2.2.2.3.; 2.2.3.3; 2.2.41.3; 2.2.42.3;2.2.43.3; 2.2.51.3; 2.2.52.3;2.2.61.3;2.2.62.3; 2.2.7x.x; 2.2.8.3; 2.2.9.3.</xs:documentation>
+						<xs:documentation>The Classification Code of the dangerous good according to the RID chapter 3.2, table A, column 3b. Mandatory for Class 1 - optional, but possibly for all the other classes.</xs:documentation>
 						<xs:documentation>CODE: OTIF RID-Specification</xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
@@ -5390,13 +5453,14 @@ For Path Requests, this element has to be used
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
+				<xs:element ref="PackingGroup" minOccurs="0"/>
 				<xs:element name="EmptyPackingCode" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>Code of empty packing as described in RID 5.4.1.1.6.2</xs:documentation>
 						<xs:documentation>CODE: OTIF RID-Specification, element EMPTY has been added as 'dummy' until the code list has been finished and approved. </xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
-						<xs:restriction base="xs:string">
+						<xs:restriction base="xs:token">
 							<xs:enumeration value="01">
 								<xs:annotation>
 									<xs:documentation>EMPTY PACKAGING</xs:documentation>
@@ -5489,6 +5553,11 @@ For Path Requests, this element has to be used
 							</xs:enumeration>
 						</xs:restriction>
 					</xs:simpleType>
+				</xs:element>
+				<xs:element name="LimitedQuantityIndicator" type="xs:boolean" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicator for labelled dangerous goods in limited quantity according to chapter 3.-4 RID</xs:documentation>
+					</xs:annotation>
 				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
@@ -5858,7 +5927,7 @@ NOTE: this is a placeholder! CR 335 by ERA is containing this element and its fu
 31, 34</xs:documentation>
 														</xs:annotation>
 													</xs:element>
-													<xs:element name="CounterAcreditedRecognizedBody" type="Numeric2-2"/>
+													<xs:element name="CounterAcreditedRecognizedBody" type="Numeric0-2"/>
 													<xs:element name="EINYear" type="Numeric2-2"/>
 													<xs:element name="EINCounter">
 														<xs:simpleType>
@@ -6617,7 +6686,7 @@ Code	F or P	Description																																				T	D	L
 	</xs:element>
 	<xs:element name="TiltingFunction" type="xs:boolean">
 		<xs:annotation>
-			<xs:documentation>Indicates if a rolling stock is fitted with a tilting system</xs:documentation>
+			<xs:documentation>Indicates if a train uses a tilting system</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:simpleType name="Time">
@@ -7471,19 +7540,6 @@ IT72	Train report stop cancelled
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="WagonDeliveryNoticeMessage">
-		<xs:annotation>
-			<xs:documentation>This message is used by the last RU/Service Provider in the transport chain to inform the Lead RU that the wagon has been placed at the consignee's siding.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="MessageHeader"/>
-				<xs:element ref="WagonInformation"/>
-				<xs:element ref="DeliveryAtDestination"/>
-				<xs:element ref="Customers" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
 	<xs:element name="WagonETI_ETA_Message">
 		<xs:annotation>
 			<xs:documentation>This message is sent by the RU to the next RU in the transport chain to give him the calculation of its ETI. The last RU sends this message with ETA to the Lead RU, which may inform its customer. Following the handover information from the IM, the RU sends with this message also the updated ETI to the next RU and the last RU sends the updated ETA to the LRU.</xs:documentation>
@@ -7801,7 +7857,7 @@ IT72	Train report stop cancelled
 					<xs:element ref="SummaryOFGoodsWithSameRID" minOccurs="0" maxOccurs="25"/>
 					<xs:sequence>
 						<xs:element ref="LoadingTackles" minOccurs="0" maxOccurs="99"/>
-						<xs:element name="GoodsInWagon" maxOccurs="99">
+						<xs:element name="GoodsInWagon" minOccurs="0" maxOccurs="99">
 							<xs:complexType>
 								<xs:sequence>
 									<xs:element name="NoGoodsOfClassX" minOccurs="0">
@@ -7809,269 +7865,7 @@ IT72	Train report stop cancelled
 											<xs:documentation>Element has to be filled with the class of the dangerous goods which are mentioned in Table 3.2 RID but are not dangerous according to chapter 2 (5.4.1.5 RID)</xs:documentation>
 										</xs:annotation>
 									</xs:element>
-									<xs:element name="RID" minOccurs="0" maxOccurs="50">
-										<xs:annotation>
-											<xs:documentation>The requirement (optional/mandatory) of the RID detail tags depend on the dangerous good and the regarding RID regulations.In contrast to the element "DangerousGoodsIndication" which only provides information to be provided to the IM according to chapter 1.4 RID, "RID" contains all information demanded in chapter 5.4 RID in order tpo provide all information used for RUs</xs:documentation>
-										</xs:annotation>
-										<xs:complexType>
-											<xs:sequence>
-												<xs:element name="Law">
-													<xs:annotation>
-														<xs:documentation>The law after which the RID data are declared.</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:int">
-															<xs:enumeration value="2013"/>
-															<xs:enumeration value="2015"/>
-															<xs:enumeration value="2017"/>
-															<xs:enumeration value="2019"/>
-															<xs:enumeration value="2021"/>
-															<xs:enumeration value="2023"/>
-															<xs:enumeration value="2025"/>
-															<xs:enumeration value="2027"/>
-															<xs:enumeration value="2029"/>
-															<xs:enumeration value="2031"/>
-															<xs:enumeration value="2033"/>
-															<xs:enumeration value="2035"/>
-															<xs:enumeration value="2037"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element ref="DangerLabel" minOccurs="0" maxOccurs="5"/>
-												<xs:element name="TechnicalDescription" minOccurs="0">
-													<xs:annotation>
-														<xs:documentation>The Technical Description is an approved chemical or biological name and has to be present if the dangerous good has assigned a special provision 274 according to RID chapter 3.2, table A, column 6.</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:minLength value="1"/>
-															<xs:maxLength value="350"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element name="ProperShippingName" minOccurs="0">
-													<xs:annotation>
-														<xs:documentation>The official name of this dangerous good according to the RID chapter 3.2, table A, column 2 Mandatory, except it concerns a declaration of an empty packaging of the type "EMPTY PACKAGING", "EMPTY RECEPTACLE", "EMPTY RECEPTACLE &lt;=1000L, "EMPTY IBC" or "EMPTY LARGE PACKAGING"</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:minLength value="1"/>
-															<xs:maxLength value="350"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element name="SpecialProvisionsRID" minOccurs="0">
-													<xs:complexType>
-														<xs:sequence>
-															<xs:element name="SpecialProvisionsRID3.3" minOccurs="0" maxOccurs="25">
-																<xs:simpleType>
-																	<xs:restriction base="xs:string">
-																		<xs:minLength value="1"/>
-																		<xs:maxLength value="5"/>
-																	</xs:restriction>
-																</xs:simpleType>
-															</xs:element>
-															<xs:element name="SpecialProvisionRID5.4" minOccurs="0" maxOccurs="25">
-																<xs:simpleType>
-																	<xs:restriction base="xs:string">
-																		<xs:minLength value="1"/>
-																		<xs:maxLength value="350"/>
-																	</xs:restriction>
-																</xs:simpleType>
-															</xs:element>
-															<xs:element name="Waste" type="xs:boolean" minOccurs="0"/>
-															<xs:element name="SpecialProvisionsEnvironment" minOccurs="0">
-																<xs:complexType>
-																	<xs:choice>
-																		<xs:element name="EnvironmentalHazardous" type="xs:boolean"/>
-																		<xs:element name="MarinePollutant" type="xs:boolean"/>
-																	</xs:choice>
-																</xs:complexType>
-															</xs:element>
-														</xs:sequence>
-													</xs:complexType>
-												</xs:element>
-												<xs:element name="ActionRequiredFromCarrier" minOccurs="0">
-													<xs:annotation>
-														<xs:documentation>Special action required by the carrier according to chapter 5.4.1.2.5.2 RID</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:minLength value="1"/>
-															<xs:maxLength value="350"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element ref="DangerousGoodsWeight" minOccurs="0">
-													<xs:annotation>
-														<xs:documentation>The weight of the dangerous goods in Kilograms</xs:documentation>
-													</xs:annotation>
-												</xs:element>
-												<xs:element name="DangerousGoodsVolume" type="VolumeValue" minOccurs="0">
-													<xs:annotation>
-														<xs:documentation>The volume of the dangerous goods in cubic meters</xs:documentation>
-													</xs:annotation>
-												</xs:element>
-												<xs:element name="WeightNettoExplosiveMass" type="WeightValueKilo" minOccurs="0">
-													<xs:annotation>
-														<xs:documentation>Special provision only necessary and allowed for Class 1 (kg)- the total net mass of explosive substance (RID 5.4.1.2.1).</xs:documentation>
-													</xs:annotation>
-												</xs:element>
-												<xs:element name="HazardIdentificationNumber" minOccurs="0">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:minLength value="2"/>
-															<xs:maxLength value="4"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element name="UN_Number" minOccurs="0">
-													<xs:annotation>
-														<xs:documentation>The UNNumber of the dangerous good according to the RID chapter 3.2, table A, column 1. Mandatory, except it concerns a declaration of an empty packaging of the type "EMPTY PACKAGING", "EMPTY RECEPTACLE &lt;=1000L", "EMPTY IBC" or "EMPTY LARGE PACKAGING" .</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:length value="4"/>
-															<xs:pattern value="\d*[1-9]\d*"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element name="RID_Class" minOccurs="0">
-													<xs:annotation>
-														<xs:documentation>The Class of the dangerous good according to the RID chapter 3.2, table A, column 3a.</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:minLength value="1"/>
-															<xs:maxLength value="4"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element name="ClassificationCode" minOccurs="0">
-													<xs:annotation>
-														<xs:documentation>The Classification Code of the dangerous good according to the RID chapter 3.2, table A, column 3b. Mandatory for Class 1 - optional, but possibly for all the other classes.</xs:documentation>
-														<xs:documentation>CODE: OTIF RID-Specification</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:minLength value="1"/>
-															<xs:maxLength value="4">
-																<xs:annotation>
-																	<xs:documentation>present only with class 1</xs:documentation>
-																</xs:annotation>
-															</xs:maxLength>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element ref="PackingGroup" minOccurs="0"/>
-												<xs:element name="EmptyPackingCode" minOccurs="0">
-													<xs:annotation>
-														<xs:documentation>Code of empty packing as described in RID 5.4.1.1.6.2</xs:documentation>
-														<xs:documentation>CODE: OTIF RID-Specification, element EMPTY has been added as 'dummy' until the code list has been finished and approved. </xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:token">
-															<xs:enumeration value="01">
-																<xs:annotation>
-																	<xs:documentation>EMPTY PACKAGING</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="02">
-																<xs:annotation>
-																	<xs:documentation>EMPTY CONTAINER</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="03">
-																<xs:annotation>
-																	<xs:documentation>EMPTY IBC</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="04">
-																<xs:annotation>
-																	<xs:documentation>EMPTY LARGE PACKAGING</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="05">
-																<xs:annotation>
-																	<xs:documentation>EMPTY TANK-VEHICLE</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="06">
-																<xs:annotation>
-																	<xs:documentation>EMPTY TANK-WAGON</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="07">
-																<xs:annotation>
-																	<xs:documentation>EMPTY DETACHABLE TANK</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="08">
-																<xs:annotation>
-																	<xs:documentation>EMPTY DEMOUNTABLE TANK</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="09">
-																<xs:annotation>
-																	<xs:documentation>EMPTY TANK-CONTAINER</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="10">
-																<xs:annotation>
-																	<xs:documentation>EMPTY PORTABLE TANK</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="11">
-																<xs:annotation>
-																	<xs:documentation>EMPTY BATTERY-VEHICLE</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="12">
-																<xs:annotation>
-																	<xs:documentation>EMPTY BATTERY-WAGON</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="13">
-																<xs:annotation>
-																	<xs:documentation>EMPTY LARGE CONTAINER WITH MULTIPLE LINKED ELEMENTS</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="14">
-																<xs:annotation>
-																	<xs:documentation>EMPTY VEHICLE</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="15">
-																<xs:annotation>
-																	<xs:documentation>EMPTY WAGON</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="16">
-																<xs:annotation>
-																	<xs:documentation>EMPTY RECEPTACLE le 1000L</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="17">
-																<xs:annotation>
-																	<xs:documentation>EMPTY RECEPTACLE gt 1000L</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-															<xs:enumeration value="18">
-																<xs:annotation>
-																	<xs:documentation>EMPTY</xs:documentation>
-																</xs:annotation>
-															</xs:enumeration>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element name="LimitedQuantityIndicator" type="xs:boolean" minOccurs="0">
-													<xs:annotation>
-														<xs:documentation>Indicator for labelled dangerous goods in limited quantity according to chapter 3.-4 RID</xs:documentation>
-													</xs:annotation>
-												</xs:element>
-											</xs:sequence>
-										</xs:complexType>
-									</xs:element>
+									<xs:element ref="RID" minOccurs="0" maxOccurs="50"/>
 									<xs:element name="Packing" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation>Packing information</xs:documentation>
@@ -8129,7 +7923,7 @@ IT72	Train report stop cancelled
 											</xs:restriction>
 										</xs:simpleType>
 									</xs:element>
-									<xs:element ref="GrossWeight"/>
+									<xs:element ref="GrossWeight" minOccurs="0"/>
 									<xs:element name="HS_Code" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation>HS-Code for sensible goods (appendix 44c of ccip) 10 digits are needed, if a good code was already assigned for 'Zollanmeldung'. In this case this good code has to be taken. These good codes may have more than 6 digits.</xs:documentation>

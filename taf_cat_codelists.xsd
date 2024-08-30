@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by - (European Railway Agency (ERA)) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.4.1">
+<!-- edited with XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) by   (ERA - European Railway Agency) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.5" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:ns1="http://www.era.europa.eu/schemes/TAFTSI/3.5" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.5" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.5.0">
 	<xs:annotation>
 		<xs:appinfo>
 			<dcterms:title>TAF TSI - message exchange.</dcterms:title>
@@ -2447,7 +2447,7 @@ DE05 = Reference to a reserved capacity
 DE06 = Use of same OTN as of stated train
     (Additional information: Responsible Applicant wants to use same OTN as in stated train because of all trains are part of same family.
     The trains have only slightly differences on various days. RPTID: TrainID.)            
-
+DE07 = PathID from a framework contract
 </xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
@@ -2567,6 +2567,11 @@ DE06 = Use of same OTN as of stated train
 				<xs:enumeration value="DE06">
 					<xs:annotation>
 						<xs:documentation>Use of same OTN as of stated train</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="DE07">
+					<xs:annotation>
+						<xs:documentation>PathID from a framework contract</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 			</xs:restriction>
@@ -3059,7 +3064,7 @@ CM2, CM3 and CM 4 equal M2, M3 and M4 which might be used in some legacy systems
 			</xs:enumeration>
 			<xs:enumeration value="14">
 				<xs:annotation>
-					<xs:documentation>Wagon departure from reporting point by train</xs:documentation>
+					<xs:documentation>Wagon departure from reporting point by train (HLR)</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="15">
@@ -3069,7 +3074,7 @@ CM2, CM3 and CM 4 equal M2, M3 and M4 which might be used in some legacy systems
 			</xs:enumeration>
 			<xs:enumeration value="16">
 				<xs:annotation>
-					<xs:documentation>Wagon parked at reporting point</xs:documentation>
+					<xs:documentation>Wagon parked at reporting point (MAD)</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="17">
