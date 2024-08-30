@@ -94,7 +94,6 @@ CR 566 - Supplement of reason for using RelatedPlannedTransportIdentifier (RPTID
 CR 612 -	 New element ReferenceTrainIDSubCalendar (Output from TOM Project), "PathNotAvailableMessage" corrected
 Corrections of CR integration errors from
 -->
-
 <!--
 TAF TSI maintenance release 3.1.0 (15.12.2021):
 CR 546	Set "LivestockOrPeopleIndicator" to non-mandatory
@@ -116,8 +115,21 @@ CR 651	Update of LocationSubsidiaryTypeCode
 CR 652	Introduction of information about telematics device reference data
 CR 654	ProcessType as new optional field
 -->
-
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.1" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.1.0">
+<!--
+TAF TSI maintenance release 3.2.0 (15.06.2022):
+CR 644	Extension of TRI to allow localisation between PLC/SLC locations, for GNSS and ETCS
+CR 660  Update Timing at location in the PathDetailsMessage - Additional TimerQualifierCode
+CR 661  New TypeOfInformation values related to route update process
+CR 662  Insufficient annotation for new global element BitmapDays and inconsistence
+CR 670  Update annotation for ScheduledTimeAtHandover and ScheduledTimeAtTransfer
+CR 671  Creation of "TrainNotReadyDescription" to give reason why train is not ready in "TrainReadyMessage" (TRM)
+CR 672  Addition of element ReasonOfReference to ops messages and code for traffic management
+CR 673  Error in xsd 3.1.0 concerning element ReasonOfReference
+CR 674  New attribute “Operational strength of the train coupling” in structure PlannedTrainTechnicalData
+CR 675  New attribute “BogieWagonsOnly” in structure PlannedTrainTechnicalData
+CR 676  Renaming the process types "Pre-arranged Path published by RFC" and "Catalogue Path published by IM"
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.2" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.2.0">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.4" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
@@ -139,7 +151,7 @@ CR 654	ProcessType as new optional field
 			<dcterms:publisher>ERA European Union Agency for Railways, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
 			<dcterms:rights>Unclassified</dcterms:rights>
 			<dcterms:rightsHolder>European Union Agency for Railways</dcterms:rightsHolder>
-			<dcterms:copyright>ERA 2020</dcterms:copyright>
+			<dcterms:copyright>ERA 2022</dcterms:copyright>
 			<dcterms:status>Final</dcterms:status>
 		</xs:appinfo>
 	</xs:annotation>
@@ -397,7 +409,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 	</xs:element>
 	<xs:element name="BitmapDays">
 		<xs:annotation>
-			<xs:documentation>Bitmapstream must be provided for the trains that are running more than one day in timetable period; it is optional otherwise.</xs:documentation>
+			<xs:documentation>Structure BitmapDays must be provided if ValidityPeriod of associated calendar contains more than one day; it is optional otherwise.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
@@ -418,6 +430,11 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 				<xs:maxInclusive value="99999"/>
 			</xs:restriction>
 		</xs:simpleType>
+	</xs:element>
+	<xs:element name="BogieWagonsOnly" type="xs:boolean">
+		<xs:annotation>
+			<xs:documentation>Indicates that the train consists of bogie wagons only or not. “Yes”/”true” means always all wagons of the train are bogie wagons. Then content of element is “no”/”false” or element isn’t used means the train contains of different wagons (not homogeneous only with bogie wagons).</xs:documentation>
+		</xs:annotation>
 	</xs:element>
 	<xs:element name="BookedLocationDateTime" type="xs:dateTime">
 		<xs:annotation>
@@ -1987,10 +2004,35 @@ Non coded device
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="Latitude"/>
-				<xs:element ref="Longitude"/>
+				<xs:element ref="Latitude">
+					<xs:annotation>
+						<xs:documentation>SRID field has not been fulfilled, value of this field will be considered as in WGS84 norm</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="Longitude">
+					<xs:annotation>
+						<xs:documentation>If SRID field has not been fulfilled, value of this field will be considered as in WGS84 norm</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="Altitude" minOccurs="0"/>
+				<xs:element ref="SRID" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
+	</xs:element>
+	<xs:element name="SRID">
+		<xs:annotation>
+			<xs:documentation>ID of coordinates system used (EPSG code)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[0-9]{4}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Altitude" type="xs:integer">
+		<xs:annotation>
+			<xs:documentation>Altitude (in m) at the beginning of the SP. Considering ETRS89 as reference. Starting at -1000m</xs:documentation>
+		</xs:annotation>
 	</xs:element>
 	<xs:element name="GeoLocalisationOnNetwork">
 		<xs:annotation>
@@ -2221,7 +2263,7 @@ Non coded device
 				<xs:element ref="PlannedTransportIdentifiers" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:sequence minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="RelatedPlannedTransportIdentifiers"/>
-					<xs:element ref="ReasonOfReference"/>
+					<xs:element ref="ReasonOfReference" minOccurs="0"/>
 				</xs:sequence>
 			</xs:sequence>
 		</xs:complexType>
@@ -2637,6 +2679,15 @@ The other subelements help describing the interruption information more precisel
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:simpleType name="LoadUnitNumberType">
+		<xs:annotation>
+			<xs:documentation>Clear Text in ISO Unicode character set</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="11"/>
+			<xs:pattern value="[A-Za-z0-9]{11}"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:element name="Location" type="LocationIdent">
 		<xs:annotation>
 			<xs:documentation>Identifies a Location using a LocationIdent</xs:documentation>
@@ -3335,6 +3386,17 @@ The other subelements help describing the interruption information more precisel
 			<xs:documentation>For the use of on demand or optional path (has to be either activated or deactived depending to network rules)</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:element name="OperationalTrainCouplingStrength">
+		<xs:annotation>
+			<xs:documentation> OperationalTrainCouplingStrength expressed in kN. The operational strength of the train coupling is a crucial technical characteristic for the determination of a freight train’s tonnage rating </xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="1"/>
+				<xs:maxInclusive value="9999"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
 	<xs:element name="OperationalTrainNumber" type="String1-8">
 		<xs:annotation>
 			<xs:documentation>Identifies the train for traffic management purposes by the Dispatcher, GSMR services, etc.</xs:documentation>
@@ -3718,6 +3780,8 @@ When the parking brake force is marked on the wagon the information must be prov
 						<xs:documentation>Indicates if a train uses a tilting system</xs:documentation>
 					</xs:annotation>
 				</xs:element>
+				<xs:element ref="OperationalTrainCouplingStrength" minOccurs="0"/>
+				<xs:element ref="BogieWagonsOnly" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -4938,12 +5002,12 @@ Type will be the RestrictionCode instead of ForwardingRestrictionType, according
 	</xs:element>
 	<xs:element name="ScheduledDateTimeAtTransfer" type="xs:dateTime">
 		<xs:annotation>
-			<xs:documentation>The scheduled date and time of arrival or exit at the border between two different IMs</xs:documentation>
+			<xs:documentation>The referenced date and time of arrival or exit at the border between two different IMs</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="ScheduledTimeAtHandover" type="xs:dateTime">
 		<xs:annotation>
-			<xs:documentation>The scheduled date and time of departure or entrance at the border between two different IMs</xs:documentation>
+			<xs:documentation>The referenced date and time of departure or entrance at the border between two different IMs</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="ScheduledTimeAtLocation" type="xs:dateTime">
@@ -5225,7 +5289,10 @@ LLA = Latest Location Arrival
 PLD = Public Location Departure
 ELD = Earliest Location Departure
 ALD = Actual Location Departure
-LLD = Latest Location Departure			
+LLD = Latest Location Departure
+ERT = Earliest Run Through
+ART = Actual Run Through
+LRT = Latest Run Through    			
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
@@ -5721,6 +5788,11 @@ IT72	Train report stop cancelled
 								</xs:simpleType>
 							</xs:element>
 							<xs:element ref="TrainDelay" minOccurs="0"/>
+							<xs:element name="TrainNotReadyDescription" type="FreeText" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Description of the reason why the train is not ready.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
 							<xs:element ref="DelayCause" minOccurs="0"/>
 						</xs:sequence>
 					</xs:complexType>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by - (European Railway Agency (ERA)) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.1" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.2" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.2.0">
 	<xs:annotation>
 		<xs:appinfo>
 			<dcterms:title>TAF TSI - message exchange.</dcterms:title>
@@ -19,7 +19,7 @@
 			<dcterms:publisher>ERA European Union Agency for Railways, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
 			<dcterms:rights>Unclassified</dcterms:rights>
 			<dcterms:rightsHolder>European Union Agency for Railways</dcterms:rightsHolder>
-			<dcterms:copyright>ERA 2019</dcterms:copyright>
+			<dcterms:copyright>ERA 2022</dcterms:copyright>
 			<dcterms:status>Final</dcterms:status>
 		</xs:appinfo>
 	</xs:annotation>
@@ -1273,21 +1273,57 @@ III	Low danger
             4 = Feasibility Study process
             5 = Path Modification process (triggered by applicant)
             6 = Path Alteration process (triggered by IM)
-            7 = Pre-arranged Path published by RFC
-            8 = Catalogue Path published by IM
+			7 = Pre-arranged Path publication by RFC 
+			8 = Catalogue Path publication by IM
             </xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:token">
-				<xs:enumeration value="0"/>
-				<xs:enumeration value="1"/>
-				<xs:enumeration value="2"/>
-				<xs:enumeration value="3"/>
-				<xs:enumeration value="4"/>
-				<xs:enumeration value="5"/>
-				<xs:enumeration value="6"/>
-				<xs:enumeration value="7"/>
-				<xs:enumeration value="8"/>
+				<xs:enumeration value="0">
+					<xs:annotation>
+						<xs:documentation>New Path Request and allocation process for annual timetable</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="1">
+					<xs:annotation>
+						<xs:documentation>Late Path Request and allocation process for annual timetable</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="2">
+					<xs:annotation>
+						<xs:documentation>Short-term path request and allocation process</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="3">
+					<xs:annotation>
+						<xs:documentation>Rolling Planning path request and allocation process</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="4">
+					<xs:annotation>
+						<xs:documentation>Feasibility Study process</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="5">
+					<xs:annotation>
+						<xs:documentation>Path Modification process (triggered by applicant)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="6">
+					<xs:annotation>
+						<xs:documentation>Path Alteration process (triggered by IM)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="7">
+					<xs:annotation>
+						<xs:documentation>Pre-arranged Path publication by RFC</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="8">
+					<xs:annotation>
+						<xs:documentation>Catalogue Path publication by IM</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -1346,6 +1382,7 @@ List of codes for element ReasonOfReference:
 
 1015 = Updated Route
     (Additional information: Reference to the Route that is updated)
+5001 = Reference to another object on the basis of incident management in operations phase
 Specific code only for one IM/national codes:
 
 DE01 = Reference to an associated empty/transfer train
@@ -1451,6 +1488,11 @@ DE06 = Use of same OTN as of stated train
 				<xs:enumeration value="1015">
 					<xs:annotation>
 						<xs:documentation>Updated Route</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="5001">
+					<xs:annotation>
+						<xs:documentation>Reference to another object on the basis of incident management in operations phase</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="DE01">
@@ -2022,6 +2064,8 @@ The element is not repeatable, and it does not support any overlapping meaning. 
 51	deactivate path (utilisation notification)
 52	confirmation of utilisation notification
 53 Path and train cancelled 
+65 = Preparation of alternative offer in progress due to route update (used in PathNotAvailableMessage)
+66 = Booked after route update (used in PathDetailsMessage)
 </xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:integer">
@@ -2236,6 +2280,16 @@ The element is not repeatable, and it does not support any overlapping meaning. 
 			<xs:enumeration value="53">
 				<xs:annotation>
 					<xs:documentation>Path and train cancelled </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="65">
+				<xs:annotation>
+					<xs:documentation>Preparation of alternative offer in progress due to route update (used in PathNotAvailableMessage)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="66">
+				<xs:annotation>
+					<xs:documentation>Booked after route update (used in PathDetailsMessage)</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 		</xs:restriction>
