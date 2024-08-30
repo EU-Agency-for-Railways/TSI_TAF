@@ -129,7 +129,20 @@ CR 674  New attribute “Operational strength of the train coupling” in struct
 CR 675  New attribute “BogieWagonsOnly” in structure PlannedTrainTechnicalData
 CR 676  Renaming the process types "Pre-arranged Path published by RFC" and "Catalogue Path published by IM"
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.2" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.2.0">
+<!--
+TAF TSI maintenance release 3.3.0 (15.12.2022):
+CR 450  Documentation of the TAF TSI code lists
+CR 642	Usage of other ValidityPeriod in LocatoinFileDataset message
+CR 643	ValidityPeriod defined twice
+CR 653	Extend ReceiptConfirmationMessage for operational usage
+CR 668  Delete Existing ConsignmentOrderMessage
+CR 669  Add new message ConsignmentOrderMessage
+CR 690  MessageType : Reserving values for SFERA messages at a European level
+CR 691  New element type of used hybrid power unit in LocoIdent
+CR 697  Addition of element Notes into TAF TrainCompositionMessage
+CR 698  End of Train Interruption : explicit notification
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.3" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.3" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.3.0">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.4" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
@@ -144,6 +157,7 @@ CR 676  Renaming the process types "Pre-arranged Path published by RFC" and "Cat
 			<dcterms:modified>2019-05-31</dcterms:modified>
 			<dcterms:modified>2020-09-03</dcterms:modified>
 			<dcterms:modified>2020-12-15</dcterms:modified>
+			<dcterms:modified>2022-12-15</dcterms:modified>
 			<dcterms:type>text/xml</dcterms:type>
 			<dcterms:subject>Transport, Freight Transport, Rail</dcterms:subject>
 			<dcterms:identifier>{http://www.era.europa.eu/schemes/TAFTSI}taf_cat_complete.xsd</dcterms:identifier>
@@ -192,6 +206,18 @@ CR 676  Renaming the process types "Pre-arranged Path published by RFC" and "Cat
 				<xs:element ref="PhoneNumber" minOccurs="0"/>
 				<xs:element ref="FaxNumber" minOccurs="0"/>
 				<xs:element ref="FreeTextField" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AffectedLocation">
+		<xs:annotation>
+			<xs:documentation>Affected location </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Location"/>
+				<xs:element ref="LocationDateTime"/>
+				<xs:element ref="OperationalTrainNumberIdentifier" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -325,6 +351,11 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 	<xs:element name="AllocationCompany" type="CompanyCode">
 		<xs:annotation>
 			<xs:documentation>Name of company who is responsible for allocation and maintenance of codes</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Altitude" type="xs:integer">
+		<xs:annotation>
+			<xs:documentation>Altitude (in m) at the beginning of the SP. Considering ETRS89 as reference. Starting at -1000m</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="ArrivalAtDestination">
@@ -472,6 +503,39 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 			<xs:extension base="FreeText"/>
 		</xs:simpleContent>
 	</xs:complexType>
+	<xs:element name="CarrierStatus">
+		<xs:annotation>
+			<xs:documentation>Status of the carrier during the transport                       
+			0  Contractual carrier / Lead carrier                                
+			1  Succesive carrier             
+			2  Substitute carrier             
+			3   to be used for all other partners (e.g. subcontractors, relevant applicants) beside the carriers in role 0, 1 and 2 (which have to be mentioned in the consignment note)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="0">
+					<xs:annotation>
+						<xs:documentation>0: Contractual carrier</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="1">
+					<xs:annotation>
+						<xs:documentation>1: Successive carrier</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="2">
+					<xs:annotation>
+						<xs:documentation>2: Substitute carrier</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="3">
+					<xs:annotation>
+						<xs:documentation>3:  to be used for all other partners (e.g. subcontractors, relevant applicants) beside the carriers in role 0, 1 and 2 (which have to be mentioned in the consignment note)</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
 	<xs:element name="ChangeofTrackMessage">
 		<xs:annotation>
 			<xs:documentation> This message is issued to show that the train is arriving at another platform to the one that was scheduled</xs:documentation>
@@ -612,7 +676,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 				<xs:element ref="MessageHeader"/>
 				<xs:element name="COMS" maxOccurs="50">
 					<xs:annotation>
-						<xs:documentation>Message</xs:documentation>
+						<xs:documentation>Message (all bounded optional elements are bounded to to obligations of legacy systems)</xs:documentation>
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>
@@ -647,9 +711,9 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 												</xs:restriction>
 											</xs:simpleType>
 										</xs:element>
-										<xs:element name="ShipmentType" minOccurs="0">
+										<xs:element name="ShipmentType">
 											<xs:annotation>
-												<xs:documentation>Classification of the wagon order as 'CUV' or 'CIM'.</xs:documentation>
+												<xs:documentation>Classification of the wagon order as 'CUV','CIM' or "SMGS".</xs:documentation>
 											</xs:annotation>
 											<xs:simpleType>
 												<xs:restriction base="xs:token">
@@ -663,6 +727,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 															<xs:documentation>Transport of empty wagons. If loaded and empty wagons are withing the same shipment, then the ShipmentType has to be set to CIM. For the empty wagons the loading status has to be set in the WagonDetails.</xs:documentation>
 														</xs:annotation>
 													</xs:enumeration>
+													<xs:enumeration value="SMGS"/>
 												</xs:restriction>
 											</xs:simpleType>
 										</xs:element>
@@ -672,9 +737,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 												<xs:documentation>Date and Time of preparation of the COM</xs:documentation>
 											</xs:annotation>
 											<xs:simpleType>
-												<xs:restriction base="xs:dateTime">
-													<xs:pattern value=".*[+-]\d{2}:\d{2}"/>
-												</xs:restriction>
+												<xs:restriction base="xs:dateTime"/>
 											</xs:simpleType>
 										</xs:element>
 										<xs:element name="DossierNumber" minOccurs="0">
@@ -696,6 +759,32 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 												<xs:restriction base="xs:int">
 													<xs:minInclusive value="0"/>
 													<xs:maxInclusive value="100"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PrintForm" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Which form to use for printout. CIM-CN or CIM-CN for combined traffic. This information assures, that the same paper document will be used for the 'duplicate of the consignment note' and the final print out of the ECN for the consignee.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:token">
+													<xs:enumeration value="WLT">
+														<xs:annotation>
+															<xs:documentation>Wagon load transport form to be used for print-out.</xs:documentation>
+														</xs:annotation>
+													</xs:enumeration>
+													<xs:enumeration value="CT">
+														<xs:annotation>
+															<xs:documentation>Combined traffic form to be used for print-out.</xs:documentation>
+														</xs:annotation>
+													</xs:enumeration>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Intermodal" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:byte">
+													<xs:pattern value="0|1"/>
 												</xs:restriction>
 											</xs:simpleType>
 										</xs:element>
@@ -740,26 +829,19 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 											<xs:complexType>
 												<xs:sequence>
 													<xs:element ref="Station"/>
+													<xs:element ref="RP_Code" minOccurs="0"/>
 													<xs:element ref="ProductionStation" minOccurs="0"/>
-													<xs:element ref="PreviousResponsibleRU" minOccurs="0">
-														<xs:annotation>
-															<xs:documentation>This element identifies the RU, which was responsible for the train operation on the journey section before an interchange point</xs:documentation>
-														</xs:annotation>
-													</xs:element>
 													<xs:element name="AcceptanceDate" minOccurs="0">
 														<xs:annotation>
 															<xs:documentation>Date and time (month, day and hour) at which the goods were accepted. </xs:documentation>
 														</xs:annotation>
 														<xs:simpleType>
-															<xs:restriction base="xs:dateTime">
-																<xs:pattern value=".*00:00[+-]\d{2}:\d{2}"/>
-															</xs:restriction>
+															<xs:restriction base="xs:dateTime"/>
 														</xs:simpleType>
 													</xs:element>
-													<xs:element ref="ResponsibleRU"/>
-													<xs:element name="COM_ConsignmentNumber">
+													<xs:element name="ConsignmentNumber">
 														<xs:annotation>
-															<xs:documentation>Running number and check digit of the consignment between Lead RU and Responsible RU. Format: NNNNNC The number consists of NNNNN = running number C = check digit, </xs:documentation>
+															<xs:documentation>Running number and check digit of the consignment between Lead RU and customer. Format: NNNNNC The number consists of NNNNN = running number C = check digit, </xs:documentation>
 														</xs:annotation>
 														<xs:simpleType>
 															<xs:restriction base="xs:string">
@@ -779,7 +861,11 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 															</xs:restriction>
 														</xs:simpleType>
 													</xs:element>
-													<xs:element ref="LoadingFacility" minOccurs="0"/>
+													<xs:element name="CarrierCode" type="CompanyCode">
+														<xs:annotation>
+															<xs:documentation>Code of the shipping carrier mentioned in the consignment number.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
 												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
@@ -790,24 +876,23 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 											<xs:complexType>
 												<xs:sequence>
 													<xs:element ref="Station"/>
+													<xs:element ref="RP_Code" minOccurs="0"/>
 													<xs:element ref="ProductionStation" minOccurs="0"/>
-													<xs:element ref="NextResponsibleRU" minOccurs="0"/>
-													<xs:element ref="LoadingFacility" minOccurs="0"/>
 												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
-										<xs:element ref="Customers" maxOccurs="2"/>
+										<xs:element ref="Customers" minOccurs="2" maxOccurs="4">
+											<xs:annotation>
+												<xs:documentation>Information about the consignor, consignee and freight payers. At least information about consignor and consignee has to be given</xs:documentation>
+											</xs:annotation>
+										</xs:element>
 										<xs:element name="ConsignorDeclarations" minOccurs="0" maxOccurs="10">
 											<xs:annotation>
 												<xs:documentation>Consignors declarartions, this element contains either declarations of the original consignor or declarations of the LeadRU as consignor</xs:documentation>
 											</xs:annotation>
 											<xs:complexType>
 												<xs:sequence>
-													<xs:element name="ConsignorDeclarationsCode" type="xs:string">
-														<xs:annotation>
-															<xs:documentation>Coded consignor declaration</xs:documentation>
-														</xs:annotation>
-													</xs:element>
+													<xs:element ref="ConsignorDeclarationCode"/>
 													<xs:element ref="DeclarationText" minOccurs="0"/>
 												</xs:sequence>
 											</xs:complexType>
@@ -826,6 +911,17 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 															<xs:restriction base="xs:string">
 																<xs:minLength value="1"/>
 																<xs:maxLength value="35"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="InformationConsignee" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Information from the consignor to the consignee relating to the consignment. This information is not to commit the carrier.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="350"/>
 															</xs:restriction>
 														</xs:simpleType>
 													</xs:element>
@@ -871,7 +967,11 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 															</xs:restriction>
 														</xs:simpleType>
 													</xs:element>
-													<xs:element ref="Quantity" minOccurs="0"/>
+													<xs:element ref="Quantity" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Amount of the documents of the specified type.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
 													<xs:element name="DocumentTypeDescription" minOccurs="0">
 														<xs:annotation>
 															<xs:documentation>Description of document type, when it is not in the UN/EDIFACT 1001 list included.</xs:documentation>
@@ -883,6 +983,18 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 															</xs:restriction>
 														</xs:simpleType>
 													</xs:element>
+													<xs:element name="Filename" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Filename of embedded pdf in legacy system</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="35"/>
+																<xs:minLength value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element ref="StatusOfDocument" minOccurs="0"/>
 												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
@@ -892,14 +1004,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 											</xs:annotation>
 											<xs:complexType>
 												<xs:sequence>
-													<xs:element name="Code">
-														<xs:annotation>
-															<xs:documentation>Commercial specifications code</xs:documentation>
-														</xs:annotation>
-														<xs:simpleType>
-															<xs:restriction base="xs:token"/>
-														</xs:simpleType>
-													</xs:element>
+													<xs:element ref="CommercialSpecificationCode"/>
 													<xs:element name="SpecificationText" minOccurs="0">
 														<xs:annotation>
 															<xs:documentation>Additional Text for codes with free text</xs:documentation>
@@ -911,11 +1016,268 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 															</xs:restriction>
 														</xs:simpleType>
 													</xs:element>
+													<xs:element name="CarrierCode" type="CompanyCode" minOccurs="0" maxOccurs="10">
+														<xs:annotation>
+															<xs:documentation>additional carrier code belonging to the given contract number</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="ContractNumber" minOccurs="0" maxOccurs="10">
+														<xs:annotation>
+															<xs:documentation>additional contract number according to the given carrier code.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1">
+																	<xs:annotation>
+																		<xs:documentation>has to be sent as n6 (with leading zeros if necessary)</xs:documentation>
+																	</xs:annotation>
+																</xs:minLength>
+																<xs:maxLength value="6"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
 												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
-										<xs:element ref="ContractNumber"/>
-										<xs:element ref="Routing" minOccurs="0"/>
+										<xs:element name="PrepaymentInstructions">
+											<xs:annotation>
+												<xs:documentation>Prepayment</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="PrepaymentCustomer" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Prepaidcode (given by the client)</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:choice>
+																<xs:element ref="PrepaidCodeCustomer"/>
+																<xs:element ref="IncotermCode"/>
+															</xs:choice>
+														</xs:complexType>
+													</xs:element>
+													<xs:element ref="PrepaidcodeCarrier"/>
+													<xs:element name="PaidUpTo" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Charges Paid Up To ... This information is being sent by the consignor in agreement with the contractual carrier so only one structure is needed for field 20 and 49. The carrier is only allowed to apply changes, when ordered by the consignor.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:complexContent>
+																<xs:extension base="LocationIdent"/>
+															</xs:complexContent>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="AdditionalCharges" minOccurs="0" maxOccurs="5">
+														<xs:annotation>
+															<xs:documentation>Additional Charges</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Code">
+																	<xs:annotation>
+																		<xs:documentation>Additional charges code according CIT GLV-CIM appendix 3</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:length value="2"/>
+																			<xs:pattern value="\d*[1-9]\d*"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="Description" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Additional charges description</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:minLength value="1"/>
+																			<xs:maxLength value="35"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Tariff">
+											<xs:annotation>
+												<xs:documentation>Number of customer agreement or tariff</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:choice>
+													<xs:element name="ContractNumber">
+														<xs:annotation>
+															<xs:documentation>Number of customer agreement.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1">
+																	<xs:annotation>
+																		<xs:documentation>has to be sent as n6 (with leading zeros if necessary)</xs:documentation>
+																	</xs:annotation>
+																</xs:minLength>
+																<xs:maxLength value="6"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="TariffNumber">
+														<xs:annotation>
+															<xs:documentation>Number of the tariff.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1">
+																	<xs:annotation>
+																		<xs:documentation>has to be sent as n6 (with leading zeros if necessary, but without check digit)</xs:documentation>
+																	</xs:annotation>
+																</xs:minLength>
+																<xs:maxLength value="6"/>
+																<xs:pattern value="\d*[1-9]\d*"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:choice>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="SectionalInvoicing" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Sectional Invoicing</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Section" maxOccurs="30">
+														<xs:annotation>
+															<xs:documentation>Sectional Invoicing</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="InvoicingCarrierCode" type="CompanyCode">
+																	<xs:annotation>
+																		<xs:documentation>Sectional invoicing by</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="InvoicedSection">
+																	<xs:annotation>
+																		<xs:documentation>Information about the section to be invoiced.</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:choice>
+																			<xs:element name="CountryCode" type="CountryIdentISO">
+																				<xs:annotation>
+																					<xs:documentation>Invoiced section specified by country</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element name="SectionCarrierCode" type="CompanyCode">
+																				<xs:annotation>
+																					<xs:documentation>Invoiced section specified by carrier</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																		</xs:choice>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="DeclarationOfValue" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Details of the value of the goods and the currency code when the value exceeds the limit given in CIM Article 30 section 2.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Amount" type="Money_Type">
+														<xs:annotation>
+															<xs:documentation>Amount</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CurrencyCode" type="CurrencyCode_Type">
+														<xs:annotation>
+															<xs:documentation>Currency abbreviation (ISO-4217 alphanumeric)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="InterestInDelivery" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Details of the amount and currency code of a special interest in delivery.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Amount" type="Money_Type">
+														<xs:annotation>
+															<xs:documentation>Amount</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CurrencyCode" type="CurrencyCode_Type">
+														<xs:annotation>
+															<xs:documentation>Currency abbreviation (ISO-4217 alphanumeric)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="CashOnDelivery" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Details of the amount to be collected on delivery and the currency code.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Amount" type="Money_Type">
+														<xs:annotation>
+															<xs:documentation>Amount</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CurrencyCode" type="CurrencyCode_Type">
+														<xs:annotation>
+															<xs:documentation>Currency abbreviation (ISO-4217 alphanumeric)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="RouteSection" minOccurs="0" maxOccurs="30">
+											<xs:annotation>
+												<xs:documentation>Route sequence Sequential information about the complete routing of the consignment, the LeadRu  decides wether to provide this information or not</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="SequenceID" type="xs:int">
+														<xs:annotation>
+															<xs:documentation>Position of the route section in transport chain. Used to determine the exact way of the transport for customs purposes.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:sequence>
+														<xs:element name="RouteCode">
+															<xs:annotation>
+																<xs:documentation>Route code (International RouteCode)</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:string">
+																	<xs:length value="5"/>
+																	<xs:pattern value="\d*[1-9]\d*0"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:element>
+														<xs:element name="RouteText" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Description of the specific route section</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:string">
+																	<xs:minLength value="1"/>
+																	<xs:maxLength value="80"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:element>
+													</xs:sequence>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
 										<xs:element ref="SpecialTreatments" minOccurs="0" maxOccurs="30"/>
 										<xs:element name="CustomsProcedures" minOccurs="0">
 											<xs:annotation>
@@ -990,105 +1352,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 																		<xs:documentation>Code of carrier, who added the declaration.</xs:documentation>
 																	</xs:annotation>
 																</xs:element>
-																<xs:element name="RU_DeclarationCode">
-																	<xs:annotation>
-																		<xs:documentation>Carrier declaration code. </xs:documentation>
-																	</xs:annotation>
-																	<xs:simpleType>
-																		<xs:restriction base="xs:string">
-																			<xs:enumeration value="1">
-																				<xs:annotation>
-																					<xs:documentation>Without packing</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="2">
-																				<xs:annotation>
-																					<xs:documentation>Unsatisfactory packaging: ...(give details)</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="3">
-																				<xs:annotation>
-																					<xs:documentation>Insufficient packaging: ... (give details)</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="4.1">
-																				<xs:annotation>
-																					<xs:documentation>Goods clearly in poor condition: ... (give details)</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="4.2">
-																				<xs:annotation>
-																					<xs:documentation>Goods damaged:(give details)</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="4.3">
-																				<xs:annotation>
-																					<xs:documentation>Goods wet: ... (give details)</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="4.4">
-																				<xs:annotation>
-																					<xs:documentation>Goods frozen: ... (give details)</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="5">
-																				<xs:annotation>
-																					<xs:documentation>Loaded by the consignor</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="6">
-																				<xs:annotation>
-																					<xs:documentation>Loaded by the carrier in inclement weather at the request of the consignor </xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="7">
-																				<xs:annotation>
-																					<xs:documentation>Unloaded by the consignee</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="8">
-																				<xs:annotation>
-																					<xs:documentation>Unloaded by the carrier in ...</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="9.1">
-																				<xs:annotation>
-																					<xs:documentation>Inclement weather, at the request of the consignee Impossible to make the examination in accordance with CIM Article 11 section 3, because of inclement weather </xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="9.2">
-																				<xs:annotation>
-																					<xs:documentation>Inclement weather, at the request of the consignee Impossible to make the examination in accordance with CIM Article 11 section 3, because of sealing of the wagon or ITU </xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="9.3">
-																				<xs:annotation>
-																					<xs:documentation>Inclement weather, at the request of the consignee Impossible to make the examination in accordance with CIM Article 11 section 3, because of load in the wagon or ITU inaccessible </xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="10">
-																				<xs:annotation>
-																					<xs:documentation>Request for examination in accordance with CIM Article 11 section 3 presented late by the consignor</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="11">
-																				<xs:annotation>
-																					<xs:documentation>Examination not made because of a shortage of resources: ... (give details)</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="12">
-																				<xs:annotation>
-																					<xs:documentation>Other reserves: ... (give details)</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																			<xs:enumeration value="13">
-																				<xs:annotation>
-																					<xs:documentation>Code used for declarations, which are no reservations. This code is not included in the official CIT code list and is not to be printed on the paper consignment note.</xs:documentation>
-																				</xs:annotation>
-																			</xs:enumeration>
-																		</xs:restriction>
-																	</xs:simpleType>
-																</xs:element>
+																<xs:element ref="RU_DeclarationCode"/>
 																<xs:element ref="DeclarationText" minOccurs="0"/>
 															</xs:sequence>
 														</xs:complexType>
@@ -1109,9 +1373,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 																		<xs:documentation>Variance of acceptance date given structure AcceptancePoint.</xs:documentation>
 																	</xs:annotation>
 																	<xs:simpleType>
-																		<xs:restriction base="xs:dateTime">
-																			<xs:pattern value=".*00:00[+-]\d{2}:\d{2}"/>
-																		</xs:restriction>
+																		<xs:restriction base="xs:dateTime"/>
 																	</xs:simpleType>
 																</xs:element>
 															</xs:sequence>
@@ -1120,7 +1382,477 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
-										<xs:element ref="Wagons" maxOccurs="99">
+										<xs:element name="Carriers" maxOccurs="30">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="CarrierStatus"/>
+													<xs:element name="CarrierCode" type="CompanyCode">
+														<xs:annotation>
+															<xs:documentation>Railway Undertaking (Railway Code)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="ResponsibleCarrierCode" type="CompanyCode" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Railway Undertaking (Railway Code) of the carrier in charge.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CarrierName" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Name of Carrier</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="35"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="StreetNumber" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Streetnumber of carrier.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="5"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Street" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Name of street of the carrier</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="35"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ZIPCode" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Postal Code</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="9"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="City" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>City/Town</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="35"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="CountryCode" type="CountryIdentISO" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Country Code (ISO Code)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="SectionFrom" type="LocationIdent">
+														<xs:annotation>
+															<xs:documentation>Start of section to be performed by the carrier. This can be a station OR a border crossing point.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="SectionTo" type="LocationIdent">
+														<xs:annotation>
+															<xs:documentation>End of section to be performed by the carrier. This can be a station OR a border crossing point.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="SubContractNumber_SplitContract" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Number of customer agreement between the responsible and the operating carrier</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1">
+																	<xs:annotation>
+																		<xs:documentation>has to be sent as n6 (with leading zeros if necessary)</xs:documentation>
+																	</xs:annotation>
+																</xs:minLength>
+																<xs:maxLength value="6"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="sequenceID" type="xs:int">
+													<xs:annotation>
+														<xs:documentation>Position of carrier during transport. </xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="LeadCarrier">
+											<xs:annotation>
+												<xs:documentation>LeadCarrier/ Contractual carrier</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="CarrierCode" type="CompanyCode">
+														<xs:annotation>
+															<xs:documentation>Contractual carrier, railway undertaking (Railway Code).</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CarrierName" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Name of contractual carrier</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="35"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="StreetNumber" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Streetnumber of carrier.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="5"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Street" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Name of street of the carrier</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="35"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ZIPCode" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Postal Code</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="9"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="City" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>City/Town</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="35"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="CountryCode" type="CountryIdentISO" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Country Code (ISO Code)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Signature" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Signature of the contractual carrier. When missing, the shipment number (CIM: 62) shall be used for signature purposes.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="35"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="MadeOut" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Made out</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Place">
+														<xs:annotation>
+															<xs:documentation>Place on which the consignment note was made out</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="35"/>
+																<xs:minLength value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Date" type="xs:date">
+														<xs:annotation>
+															<xs:documentation>Date at which the consignment note was made out.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="ChargesNote" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Charges note</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ChargesNoteAvailable" type="xs:boolean"/>
+													<xs:element name="DateOfReturn" type="xs:date" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Date, when the destination carrier sent the charges note back to the contractual carrier.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="TransitPeriodExtensions" minOccurs="0" maxOccurs="30">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="CodeOfCause"/>
+													<xs:element name="Description" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Description for CodeOfCause no. 9.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="180"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Place">
+														<xs:annotation>
+															<xs:documentation>Place of the extension.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+																<xs:maxLength value="180"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Beginning">
+														<xs:annotation>
+															<xs:documentation>Beginning of the extension.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:dateTime"/>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Ending">
+														<xs:annotation>
+															<xs:documentation>End of extension.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:dateTime"/>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="ChargingSections" maxOccurs="15">
+											<xs:annotation>
+												<xs:documentation>Charging section</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Start" type="LocationIdent">
+														<xs:annotation>
+															<xs:documentation>Start of the charging section</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="End" type="LocationIdent">
+														<xs:annotation>
+															<xs:documentation>End of the charging section</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="CommercialRouteCode" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Route code (RIP) when the customer agreement or the tariff applied provide for it. </xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:length value="3"/>
+																<xs:pattern value="\d*[1-9]\d*"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="CurrencyCode" type="CurrencyCode_Type">
+														<xs:annotation>
+															<xs:documentation>Code for the currency of the amounts entered in the charging section.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Tariff" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Freight Charges Section Tariff</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="NHMCode" type="NHMCodeType">
+																	<xs:annotation>
+																		<xs:documentation>NHM code determining the charges applicable.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="TariffNumber">
+																	<xs:annotation>
+																		<xs:documentation>Customer agreement or tariff applied</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:minLength value="1"/>
+																			<xs:maxLength value="6"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="ChargedMass" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Charged mass [weight in kg]. As appropriate, area in m² or the volume of the wagon or goods in m³ if used as the basis for charging.</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="value">
+																				<xs:simpleType>
+																					<xs:restriction base="xs:decimal">
+																						<xs:minInclusive value="1"/>
+																						<xs:totalDigits value="8"/>
+																						<xs:fractionDigits value="1"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="measure" minOccurs="0">
+																				<xs:simpleType>
+																					<xs:restriction base="xs:token">
+																						<xs:enumeration value="kg"/>
+																						<xs:enumeration value="m2"/>
+																						<xs:enumeration value="m3"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="ExchangeRate" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Exchange rate for amounts to be paid by the consignor or consignee which are not expressed in the invoicing currency.</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:decimal">
+																			<xs:totalDigits value="18"/>
+																			<xs:fractionDigits value="3"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="Distance" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Tariff distance, expressed in km or zones, between the stations or points corresponding to the beginning and end of the charging section.</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:choice>
+																			<xs:element name="KM">
+																				<xs:annotation>
+																					<xs:documentation>Tariff distance, expressed in km, between the stations or points corresponding to the beginning and end of the charging section.</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:int">
+																						<xs:minInclusive value="1"/>
+																						<xs:maxInclusive value="99999"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="Zones">
+																				<xs:annotation>
+																					<xs:documentation>Tariff distance, expressed in zones, between the stations or points corresponding to the beginning and end of the charging section.</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:int">
+																						<xs:minInclusive value="1"/>
+																						<xs:maxInclusive value="99"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																		</xs:choice>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="Fee" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Supplements, fees, deductions</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:int">
+																			<xs:totalDigits value="4"/>
+																			<xs:minInclusive value="1"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="FreightCharges" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Freight Charges (paid and due)</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:choice>
+																			<xs:element name="Prepaid" type="Money_Type">
+																				<xs:annotation>
+																					<xs:documentation>Carriage charges to be paid by the consignor in the tariff currency.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element name="Transferred" type="Money_Type">
+																				<xs:annotation>
+																					<xs:documentation>Carriage charges to be paid by the consignee in the tariff currency.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																		</xs:choice>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="AdditionalCharges" minOccurs="0" maxOccurs="10">
+														<xs:annotation>
+															<xs:documentation/>
+															<xs:documentation>Sum of Prepaid</xs:documentation>
+															<xs:documentation>Sum of Transferred</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Code">
+																	<xs:annotation>
+																		<xs:documentation>Additional charges code</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:minLength value="1"/>
+																			<xs:maxLength value="2"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:choice>
+																	<xs:element name="Prepaid" type="Money_Type">
+																		<xs:annotation>
+																			<xs:documentation>Prepaid</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="Transferred" type="Money_Type">
+																		<xs:annotation>
+																			<xs:documentation>Transferred</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:choice>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="Wagons" minOccurs="0" maxOccurs="99">
 											<xs:annotation>
 												<xs:documentation>Contains list of transported Goods, Wagons and ITU etc.</xs:documentation>
 											</xs:annotation>
@@ -1130,23 +1862,16 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 												<xs:documentation>Identifies the previous freight wagon if a shipment or Intermodal unit has changed the wagon during its journey</xs:documentation>
 											</xs:annotation>
 											<xs:simpleType>
-												<xs:restriction base="xs:string">
+												<xs:restriction base="WagonIdent">
 													<xs:length value="12"/>
 												</xs:restriction>
 											</xs:simpleType>
 										</xs:element>
-										<xs:element name="ReferenceOriginalCN" minOccurs="0">
+										<xs:element ref="AgreedTimeOfDelivery" minOccurs="0">
 											<xs:annotation>
-												<xs:documentation>Reference to the original consignment note between lead RU/contractual carrier and consignor</xs:documentation>
+												<xs:documentation>The requested Date and Time for the delivery of a wagon/Shipment or Intermodal units at customer sidings</xs:documentation>
 											</xs:annotation>
-											<xs:simpleType>
-												<xs:restriction base="xs:string">
-													<xs:minLength value="1"/>
-													<xs:maxLength value="150"/>
-												</xs:restriction>
-											</xs:simpleType>
 										</xs:element>
-										<xs:element ref="AgreedTimeOfDelivery" minOccurs="0"/>
 									</xs:sequence>
 								</xs:complexType>
 							</xs:element>
@@ -1223,6 +1948,14 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 			<xs:documentation>Date and Time of creation of data </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:simpleType name="CurrencyCode_Type">
+		<xs:annotation>
+			<xs:documentation>CODE: ISO Currency code (ISO-4217)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z][A-Z][A-Z]"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:element name="Customer">
 		<xs:annotation>
 			<xs:documentation>Consignor or Consignee</xs:documentation>
@@ -1412,30 +2145,126 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 	</xs:element>
 	<xs:element name="Customers">
 		<xs:annotation>
-			<xs:documentation>Information about the consignor and consignee</xs:documentation>
+			<xs:documentation>Information about the consignor, consignee and freight payers.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="CustomerType">
+				<xs:element ref="CustomerType"/>
+				<xs:element ref="CustomerNumber" minOccurs="0">
 					<xs:annotation>
-						<xs:documentation>Type of participation CR: Consignor  CE: Consignee  </xs:documentation>
+						<xs:documentation>CustomerNumber</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="Name" minOccurs="0"/>
+				<xs:element name="AddidtionalInformation" minOccurs="0"/>
+				<xs:element name="VAT" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>VAT identification Nr of customer</xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
-							<xs:enumeration value="CR"/>
-							<xs:enumeration value="CE"/>
+							<xs:minLength value="1"/>
+							<xs:maxLength value="25"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
-				<xs:sequence>
-					<xs:element ref="CustomerNumber" minOccurs="0">
-						<xs:annotation>
-							<xs:documentation>CustomerNumber</xs:documentation>
-						</xs:annotation>
-					</xs:element>
-					<xs:element ref="AdministrativeContactInformation"/>
-					<xs:element ref="LeadRU"/>
-				</xs:sequence>
+				<xs:element name="POBox" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>P.O. Box</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="35"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="StreetNumber" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>House number</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="5"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Street" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Street</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="35"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Country" type="CountryIdentISO" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Country Code (ISO Code)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ZIPCode" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Postal Code</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="9"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="City" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>City/Town</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="35"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Signature" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Signature</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="35"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element ref="AdministrativeContactInformation"/>
+				<xs:element name="Contacts" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Contact information</xs:documentation>
+						<xs:documentation>RULE: Transmission of empty tag is prohibited.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="PhoneNumber" type="CommunicationRefID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Telephone number</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="FaxNumber" type="CommunicationRefID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Fax number</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Email" type="CommunicationRefID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Email address</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -1993,6 +2822,31 @@ Non coded device
 			<xs:documentation>Identifies that the Entity or Location is for Freight Activity</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:simpleType name="ForwardingRestrictionType">
+		<xs:annotation>
+			<xs:documentation>Code List Candidate: This code is designed to identify any special aspects or restrictions which might be relevant to wagon handling operations in train formation yards or in trains because of technical feature of the wagon or its load</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="07"/>
+			<xs:enumeration value="08"/>
+			<xs:enumeration value="09"/>
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="13"/>
+			<xs:enumeration value="15"/>
+			<xs:enumeration value="16"/>
+			<xs:enumeration value="41"/>
+			<xs:enumeration value="42"/>
+			<xs:enumeration value="61"/>
+			<xs:enumeration value="62"/>
+			<xs:enumeration value="63"/>
+			<xs:enumeration value="70"/>
+			<xs:enumeration value="71"/>
+			<xs:enumeration value="92"/>
+			<xs:enumeration value="94"/>
+			<xs:enumeration value=""/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:element name="GeographicalCoordinates" type="xs:string">
 		<xs:annotation>
 			<xs:documentation>Longitude and latitude as defined in UIC Leafle 920-2</xs:documentation>
@@ -2028,11 +2882,6 @@ Non coded device
 				<xs:pattern value="[0-9]{4}"/>
 			</xs:restriction>
 		</xs:simpleType>
-	</xs:element>
-	<xs:element name="Altitude" type="xs:integer">
-		<xs:annotation>
-			<xs:documentation>Altitude (in m) at the beginning of the SP. Considering ETRS89 as reference. Starting at -1000m</xs:documentation>
-		</xs:annotation>
 	</xs:element>
 	<xs:element name="GeoLocalisationOnNetwork">
 		<xs:annotation>
@@ -2559,6 +3408,16 @@ The other subelements help describing the interruption information more precisel
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="KeeperShortNameVKM">
+		<xs:annotation>
+			<xs:documentation>Free text, short name/vehicle keeper marking of the wagon keeper</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="10"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
 	<xs:element name="LastModifiedDateTime" type="xs:dateTime">
 		<xs:annotation>
 			<xs:documentation>Date and Time of last update or modification of data</xs:documentation>
@@ -2761,16 +3620,16 @@ The other subelements help describing the interruption information more precisel
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
-				<xs:element ref="LocationValidityPeriod"/>
+				<xs:element ref="ValidityPeriod"/>
 				<xs:element ref="ContainerHandlingFlag" minOccurs="0"/>
 				<xs:element ref="HandoverPointFlag" minOccurs="0"/>
 				<xs:sequence minOccurs="0">
 					<xs:element ref="FreightFlag"/>
-					<xs:element name="FreightValidityPeriod" type="ValidityPeriod" minOccurs="0"/>
+					<xs:element ref="ValidityPeriod" minOccurs="0"/>
 				</xs:sequence>
 				<xs:sequence minOccurs="0">
 					<xs:element ref="PassengerFlag"/>
-					<xs:element name="PassengerValidityPeriod" type="ValidityPeriod" minOccurs="0"/>
+					<xs:element ref="ValidityPeriod" minOccurs="0"/>
 				</xs:sequence>
 				<xs:element ref="GeographicCoordinates" minOccurs="0"/>
 				<xs:element name="NUTS_Code" minOccurs="0">
@@ -2826,7 +3685,7 @@ The other subelements help describing the interruption information more precisel
 				<xs:element ref="LocationSubsidiaryCode"/>
 				<xs:element ref="LocationSubsidiaryName"/>
 				<xs:element ref="AllocationCompany"/>
-				<xs:element ref="LocationValidityPeriod"/>
+				<xs:element ref="ValidityPeriod"/>
 				<xs:element ref="Comments" minOccurs="0"/>
 				<xs:element ref="GeographicCoordinates" minOccurs="0"/>
 			</xs:sequence>
@@ -3118,6 +3977,9 @@ The other subelements help describing the interruption information more precisel
 
 9000        ErrorMessage
 
+--Reserved:  (IM-RU for SFERA) ---
+SF00 to SF99 for SFERA messages (see IRS90940)
+– Reserved end –
 			
 			</xs:documentation>
 		</xs:annotation>
@@ -3198,6 +4060,15 @@ The other subelements help describing the interruption information more precisel
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
+	<xs:simpleType name="Money_Type">
+		<xs:annotation>
+			<xs:documentation>Type for all payments</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:totalDigits value="18"/>
+			<xs:fractionDigits value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:element name="Name" type="FreeText">
 		<xs:annotation>
 			<xs:documentation>Generic Name in Free Text</xs:documentation>
@@ -3297,6 +4168,21 @@ The other subelements help describing the interruption information more precisel
 				<xs:maxInclusive value="999"/>
 			</xs:restriction>
 		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Notes">
+		<xs:annotation>
+			<xs:documentation>Remarks to be transmitted to IM</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="NoteLocationIdent" type="LocationIdent" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Identification of location for which is note valid</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Note" type="FreeText"/>
+			</xs:sequence>
+		</xs:complexType>
 	</xs:element>
 	<xs:element name="NumberOfAxles">
 		<xs:annotation>
@@ -3863,6 +4749,9 @@ The identifiers in this message have to be same as those that have come from sen
 				<xs:element ref="TypeOfRequest" minOccurs="0"/>
 				<xs:element ref="TypeOfInformation" minOccurs="0"/>
 				<xs:element ref="AffectedSection" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="AffectedLocation" minOccurs="0"/>
+				<xs:element ref="Remarks" minOccurs="0"/>
+				<xs:element ref="InternalReferenceIdentifier" minOccurs="0"/>
 				<xs:element ref="RelatedReference"/>
 			</xs:sequence>
 		</xs:complexType>
@@ -5162,6 +6051,21 @@ Type will be the RestrictionCode instead of ForwardingRestrictionType, according
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="StatusOfDocument">
+		<xs:annotation>
+			<xs:documentation>
+			Enumerated value for  the status of the attached document    
+			1 = not electronical attached     
+			2 embedded in ECTD, ECN or PCN    
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
 	<xs:simpleType name="String1-10">
 		<xs:restriction base="xs:string">
 			<xs:minLength value="1"/>
@@ -5511,6 +6415,7 @@ IT72	Train report stop cancelled
 					<xs:complexType>
 						<xs:sequence>
 							<xs:element ref="TractionType"/>
+							<xs:element ref="TypeOfUsedHybridPowerunit" minOccurs="0"/>
 							<xs:element ref="LocoTypeNumber" minOccurs="0"/>
 							<xs:element ref="LocoNumber" minOccurs="0"/>
 							<xs:element ref="TractionMode" minOccurs="0"/>
@@ -5848,6 +6753,7 @@ IT72	Train report stop cancelled
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
+				<xs:element ref="Notes" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -5904,7 +6810,7 @@ IT72	Train report stop cancelled
 				<xs:element ref="ReferenceOTN" minOccurs="0"/>
 				<xs:element ref="ResponsibleRU" minOccurs="0"/>
 				<xs:element ref="InterruptionPoint"/>
-				<xs:element ref="TrainNotAtInterruptionPoint" minOccurs="0"/>
+				<xs:element ref="TrainRunningInterruptionStatus" minOccurs="0"/>
 				<xs:element ref="TransferPoint" minOccurs="0"/>
 				<xs:element ref="TransfereeIM" minOccurs="0"/>
 			</xs:sequence>
@@ -6023,12 +6929,6 @@ IT72	Train report stop cancelled
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:complexType name="ValidityPeriod">
-		<xs:sequence>
-			<xs:element ref="StartDate"/>
-			<xs:element ref="EndDate" minOccurs="0"/>
-		</xs:sequence>
-	</xs:complexType>
 	<xs:element name="Value">
 		<xs:simpleType>
 			<xs:restriction base="xs:decimal">
@@ -6780,40 +7680,4 @@ Reference wheel diameter at maximum.
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:simpleType name="ForwardingRestrictionType">
-		<xs:annotation>
-			<xs:documentation>Code List Candidate: This code is designed to identify any special aspects or restrictions which might be relevant to wagon handling operations in train formation yards or in trains because of technical feature of the wagon or its load</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="07"/>
-			<xs:enumeration value="08"/>
-			<xs:enumeration value="09"/>
-			<xs:enumeration value="11"/>
-			<xs:enumeration value="12"/>
-			<xs:enumeration value="13"/>
-			<xs:enumeration value="15"/>
-			<xs:enumeration value="16"/>
-			<xs:enumeration value="41"/>
-			<xs:enumeration value="42"/>
-			<xs:enumeration value="61"/>
-			<xs:enumeration value="62"/>
-			<xs:enumeration value="63"/>
-			<xs:enumeration value="70"/>
-			<xs:enumeration value="71"/>
-			<xs:enumeration value="92"/>
-			<xs:enumeration value="94"/>
-			<xs:enumeration value=""/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:element name="KeeperShortNameVKM">
-		<xs:annotation>
-			<xs:documentation>Free text, short name/vehicle keeper marking of the wagon keeper</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:maxLength value="10"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="LocationValidityPeriod" type="ValidityPeriod"/>
 </xs:schema>
