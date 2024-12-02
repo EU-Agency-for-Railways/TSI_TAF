@@ -188,7 +188,24 @@ CR 743  Remove WagonDeliveryNoticeMessage
 CR 744 Update MessageType-annotation to reflect deletion of WagonMovementMessages
 CR 745 Reserve a message type for new Sector message TrainForecastedDelayCauseMessage
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.5" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.5" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.5.0">
+<!--
+TAF TSI maintenance release 3.5.1 (15.12.2024):
+CR 587 ServiceTypeCodeList bad defined
+CR 737 Remove deprecated SLC type codes
+CR 746 Create an additional type for volume
+CR 749 Change of the URL for the VKM
+CR 750 TrainForecastAtReportingLocationMessage MessageType code is missing
+CR 752 Removal of pattern in element RouteCode
+CR 753 Movement ReferenceNumbers is missing on good level in ILU 
+CR 754 New Consignor declaration code
+CR 755 Increase text length in Consignor Declaration
+CR 756 Increase text length in CommercialSpecifications
+CR 756 Increase text length in WagonGroupInfo
+CR 758 Increase text length in CustomsEndorsement
+CR 759 Increase text length in AdditionalGoodInformation
+CR 760 Increase text length of element Goods/AdditionalGoddInformation
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.5" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.5" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.5.1">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.4" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
@@ -206,6 +223,7 @@ CR 745 Reserve a message type for new Sector message TrainForecastedDelayCauseMe
 			<dcterms:modified>2022-12-15</dcterms:modified>
 			<dcterms:modified>2023-06-15</dcterms:modified>
 			<dcterms:modified>2023-12-15</dcterms:modified>
+			<dcterms:modified>2024-12-15</dcterms:modified>
 			<dcterms:type>text/xml</dcterms:type>
 			<dcterms:subject>Transport, Freight Transport, Rail</dcterms:subject>
 			<dcterms:identifier>{http://www.era.europa.eu/schemes/TAFTSI}taf_cat_complete.xsd</dcterms:identifier>
@@ -984,7 +1002,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 														</xs:annotation>
 														<xs:simpleType>
 															<xs:restriction base="xs:string">
-																<xs:maxLength value="500"/>
+																<xs:maxLength value="2000"/>
 																<xs:minLength value="1"/>
 															</xs:restriction>
 														</xs:simpleType>
@@ -1065,7 +1083,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 														<xs:simpleType>
 															<xs:restriction base="xs:string">
 																<xs:minLength value="1"/>
-																<xs:maxLength value="350"/>
+																<xs:maxLength value="1000"/>
 															</xs:restriction>
 														</xs:simpleType>
 													</xs:element>
@@ -1305,17 +1323,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 														</xs:annotation>
 													</xs:element>
 													<xs:sequence>
-														<xs:element name="RouteCode">
-															<xs:annotation>
-																<xs:documentation>Route code (International RouteCode)</xs:documentation>
-															</xs:annotation>
-															<xs:simpleType>
-																<xs:restriction base="xs:string">
-																	<xs:length value="5"/>
-																	<xs:pattern value="\d*[1-9]\d*0"/>
-																</xs:restriction>
-															</xs:simpleType>
-														</xs:element>
+														<xs:element ref="RouteCode"/>
 														<xs:element name="RouteText" minOccurs="0">
 															<xs:annotation>
 																<xs:documentation>Description of the specific route section</xs:documentation>
@@ -1381,7 +1389,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 														<xs:simpleType>
 															<xs:restriction base="xs:string">
 																<xs:minLength value="1"/>
-																<xs:maxLength value="350"/>
+																<xs:maxLength value="1000"/>
 															</xs:restriction>
 														</xs:simpleType>
 													</xs:element>
@@ -2491,7 +2499,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
 				<xs:minLength value="1"/>
-				<xs:maxLength value="350"/>
+				<xs:maxLength value="1000"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -3135,6 +3143,7 @@ Non coded device
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
+							<xs:element ref="ReferenceNumbers" minOccurs="0" maxOccurs="99"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
@@ -3148,7 +3157,7 @@ Non coded device
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:minLength value="1"/>
-							<xs:maxLength value="350"/>
+							<xs:maxLength value="1000"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
@@ -3691,7 +3700,7 @@ The other subelements help describing the interruption information more precisel
 	</xs:element>
 	<xs:element name="KeeperShortNameVKM">
 		<xs:annotation>
-			<xs:documentation>Free text, short name/vehicle keeper marking of the wagon keeper</xs:documentation>
+			<xs:documentation>Free text, short name/vehicle keeper marking of the wagon keeper as listed in VKM register (https://www.era.europa.eu/domains/registers/vkm_en, 2nd column (UNIQUE) - without special characters)</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
@@ -4211,6 +4220,7 @@ The other subelements help describing the interruption information more precisel
 3003        TrainCompositionMessage
 3006        TrainReadyMessage
 4001        TrainDelayCauseMessage
+4003        TrainForecastAtReportingLocationMessage
 4004        TrainRunningForecastMessage
 4005        TrainRunningInformationMessage
 4006        TrainRunningInterruptionMessage
@@ -5397,11 +5407,18 @@ For Path Requests, this element has to be used
 						<xs:documentation>The weight of the dangerous goods in Kilograms</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="DangerousGoodsVolume" type="VolumeValue" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation>The volume of the dangerous goods in cubic meters</xs:documentation>
-					</xs:annotation>
-				</xs:element>
+				<xs:choice>
+					<xs:element name="DangerousGoodsVolumeLiters" type="VolumeValueLiter" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The volume of the dangerous goods in liters</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="DangerousGoodsVolumeCubicMeters" type="VolumeValue" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The volume of the dangerous goods in cubic meters</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:choice>
 				<xs:element name="WeightNettoExplosiveMass" type="WeightValueKilo" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>Special provision only necessary and allowed for Class 1 (kg)- the total net mass of explosive substance (RID 5.4.1.2.1).</xs:documentation>
@@ -5873,7 +5890,7 @@ Unloader:
 							</xs:element>
 							<xs:element ref="KeeperShortNameVKM">
 								<xs:annotation>
-									<xs:documentation>Vehicle Keeper Marking of the wagon keeper as listed in VKM register (http://www.era.europa.eu/Document-Register/Pages/list-VKM.aspx, column B - without special characters)</xs:documentation>
+									<xs:documentation>Vehicle Keeper Marking of the wagon keeper as listed in VKM register (https://www.era.europa.eu/domains/registers/vkm_en, column B - without special characters)</xs:documentation>
 								</xs:annotation>
 							</xs:element>
 							<xs:element name="ECM">
@@ -6328,7 +6345,11 @@ Type will be the RestrictionCode instead of ForwardingRestrictionType, according
 						<xs:sequence>
 							<xs:element ref="WagonNumberFreight"/>
 							<xs:element ref="RefusalCode"/>
-							<xs:element ref="KeeperShortNameVKM" minOccurs="0"/>
+							<xs:element ref="KeeperShortNameVKM" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Vehicle Keeper Marking of the wagon keeper as listed in VKM register (https://www.era.europa.eu/domains/registers/vkm_en, 2nd column (UNIQUE) - without special characters)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
@@ -6345,6 +6366,17 @@ Type will be the RestrictionCode instead of ForwardingRestrictionType, according
 				<xs:element ref="WagonNumberFreight" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
+	</xs:element>
+	<xs:element name="RouteCode">
+		<xs:annotation>
+			<xs:documentation>Route code (International RouteCode)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="5"/>
+				<xs:pattern value="\d*[1-9]"/>
+			</xs:restriction>
+		</xs:simpleType>
 	</xs:element>
 	<xs:element name="RouteInformation" type="FreeText">
 		<xs:annotation>
@@ -6369,17 +6401,7 @@ Type will be the RestrictionCode instead of ForwardingRestrictionType, according
 								</xs:annotation>
 							</xs:element>
 							<xs:sequence>
-								<xs:element name="RouteCode">
-									<xs:annotation>
-										<xs:documentation>Route code (International RouteCode)</xs:documentation>
-									</xs:annotation>
-									<xs:simpleType>
-										<xs:restriction base="xs:string">
-											<xs:length value="5"/>
-											<xs:pattern value="\d*[1-9]\d*0"/>
-										</xs:restriction>
-									</xs:simpleType>
-								</xs:element>
+								<xs:element ref="RouteCode"/>
 								<xs:element name="RouteText" minOccurs="0">
 									<xs:annotation>
 										<xs:documentation>Description of the specific route section</xs:documentation>
@@ -7515,6 +7537,15 @@ IT72	Train report stop cancelled
 		</xs:annotation>
 		<xs:restriction base="xs:float"/>
 	</xs:simpleType>
+	<xs:simpleType name="VolumeValueLiter">
+		<xs:annotation>
+			<xs:documentation>Volume value of the load units by liters</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999999"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:element name="WagonAtDeparture">
 		<xs:annotation>
 			<xs:documentation>Departure point of a wagon with location and departure time</xs:documentation>
@@ -7919,7 +7950,7 @@ IT72	Train report stop cancelled
 										<xs:simpleType>
 											<xs:restriction base="xs:string">
 												<xs:minLength value="1"/>
-												<xs:maxLength value="350"/>
+												<xs:maxLength value="1000"/>
 											</xs:restriction>
 										</xs:simpleType>
 									</xs:element>
