@@ -199,7 +199,7 @@ General brake characteristics. The values refer to UIC leaflet 920-13.
 	</xs:element>
 	<xs:element name="BrakingPowerVariationDevice">
 		<xs:annotation>
-			<xs:documentation>Coding in 404-2, chapter 1.8</xs:documentation>
+			<xs:documentation>Coding in IRS 90920-13; A.4.2.1 (Changeover lever)</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:integer">
@@ -1174,7 +1174,7 @@ The RUs may indicate the relevant values if they are familiar with the IMs line 
 	</xs:element>
 	<xs:element name="HandBrakeType">
 		<xs:annotation>
-			<xs:documentation>Classification of hand brake</xs:documentation>
+			<xs:documentation>Classification of hand brake according to IRS 90920-13; A.3.2</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:token">
@@ -1284,7 +1284,7 @@ The RUs may indicate the relevant values if they are familiar with the IMs line 
 	</xs:simpleType>
 	<xs:element name="InfoOnGoodsShapeTypeDanger">
 		<xs:annotation>
-			<xs:documentation>Additional codified information on the load.  Coding Structures as defined in 404-2  chapter 4.1</xs:documentation>
+			<xs:documentation>Additional codified information on the load.  Coding Structures as defined in IRS 90920-13;A.9.2(RID labels)</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:token">
@@ -2218,6 +2218,11 @@ The RUs may indicate the relevant values if they are familiar with the IMs line 
 						<xs:documentation>Path Utilisation notification process</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
+				<xs:enumeration value="12">
+					<xs:annotation>
+						<xs:documentation>Path Optimization process</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -3021,7 +3026,7 @@ Second digit – position in group of traction units with the same role
 				<xs:maxInclusive value="99"/>
 				<xs:enumeration value="11">
 					<xs:annotation>
-						<xs:documentation>Train traction - 1st traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the front of the train - 1st traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="21">
@@ -3041,12 +3046,12 @@ Second digit – position in group of traction units with the same role
 				</xs:enumeration>
 				<xs:enumeration value="51">
 					<xs:annotation>
-						<xs:documentation>No Leading Engine - 1st traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the rear of the train - 1st traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="12">
 					<xs:annotation>
-						<xs:documentation>Train traction - 2nd traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the front of the train - 2nd traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="22">
@@ -3066,12 +3071,12 @@ Second digit – position in group of traction units with the same role
 				</xs:enumeration>
 				<xs:enumeration value="52">
 					<xs:annotation>
-						<xs:documentation>No Leading Engine - 2nd traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the rear of the train - 2nd traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="13">
 					<xs:annotation>
-						<xs:documentation>Train traction - 3rd traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the front of the train - 3rd traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="23">
@@ -3091,12 +3096,12 @@ Second digit – position in group of traction units with the same role
 				</xs:enumeration>
 				<xs:enumeration value="53">
 					<xs:annotation>
-						<xs:documentation>No Leading Engine - 3rd traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the rear of the train - 3rd traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="14">
 					<xs:annotation>
-						<xs:documentation>Train traction - 4th traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the front of the train - 4th traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="24">
@@ -3116,12 +3121,12 @@ Second digit – position in group of traction units with the same role
 				</xs:enumeration>
 				<xs:enumeration value="54">
 					<xs:annotation>
-						<xs:documentation>No Leading Engine - 4th traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the rear of the train - 4th traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="15">
 					<xs:annotation>
-						<xs:documentation>Train traction - 5th traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the front of the train - 5th traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="25">
@@ -3141,12 +3146,12 @@ Second digit – position in group of traction units with the same role
 				</xs:enumeration>
 				<xs:enumeration value="55">
 					<xs:annotation>
-						<xs:documentation>No Leading Engine - 5th traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the rear of the train - 5th traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="16">
 					<xs:annotation>
-						<xs:documentation>Train traction - 6th traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the front of the train - 6th traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 				<xs:enumeration value="26">
@@ -3166,7 +3171,7 @@ Second digit – position in group of traction units with the same role
 				</xs:enumeration>
 				<xs:enumeration value="56">
 					<xs:annotation>
-						<xs:documentation>No Leading Engine - 6th traction unit in the group</xs:documentation>
+						<xs:documentation>Train traction in the rear of the train - 6th traction unit in the group</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
 			</xs:restriction>
@@ -3707,6 +3712,16 @@ The element is not repeatable, and it does not support any overlapping meaning.
 			<xs:enumeration value="53">
 				<xs:annotation>
 					<xs:documentation>Path and train cancelled </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="55">
+				<xs:annotation>
+					<xs:documentation>Preparation of alternative offer in progress (optimization)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="56">
+				<xs:annotation>
+					<xs:documentation>Alternative offer triggered by IM (optimization)</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="65">

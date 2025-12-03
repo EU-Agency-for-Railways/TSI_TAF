@@ -205,7 +205,29 @@ CR 758 Increase text length in CustomsEndorsement
 CR 759 Increase text length in AdditionalGoodInformation
 CR 760 Increase text length of element Goods/AdditionalGoddInformation
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.5" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.5" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.5.1">
+<!--
+TAF TSI maintenance release 3.5.2 (15.12.2025):
+CR 709 Update of ILUDataQueryMessage and ILUDataMessage
+CR 768 Issue with ValidityPeriod in LocationFileDatasetMessage 3.5.1
+CR 769 Update annotation of the element ExceptionalGaugingProfile
+CR 770 Update annotation of the element AirBrakeSpecialCharacteristic
+CR 771 Update annotation of the element HandBrakeType
+CR 773 Update annotation of the element BrakingPowerVariationDevice
+CR 774 Update annotation of the element InfoOnGoodsShapeTypeDanger
+CR 775 Annotation of elements Referenced/BookedLocationDateTime
+CR 776 Add ValidityPeriod element next to LocationPrimaryCode in LocationFileDatasetMessage
+CR 778 TrainCompositionMessage: adding optional ExceptionalGaugingIdent as child of LocoIdent
+CR 779 Deletion of element RouteInformation
+CR 780 Annotation in the XSD about the codification of the element TractionMode
+CR 783 Path optimisation process - TypeofInformation – Code list update
+CR 785 Indication of compliance with the regulation for securing of semi-trailers
+CR 786 ProcessType - Code list - New code: Path Optimization process
+CR 787 Extension of Parking Brake Force Information according to TSI WAG
+CR 789 Correct the annotation for HighestPlannedSpeed element
+CR 790 Extend/complete "CurrentSpeed" value range to include 0, negative & decimals
+CR 796 Missing value 2 in RID_class
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.era.europa.eu/schemes/TAFTSI/3.5" xmlns:tap="http://www.era.europa.eu/schemes/TAPTSI/1.4" xmlns:dcterms="http://purl.org/dc/terms/" targetNamespace="http://www.era.europa.eu/schemes/TAFTSI/3.5" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.5.2">
 	<xs:include schemaLocation="taf_cat_codelists.xsd"/>
 	<xs:import namespace="http://www.era.europa.eu/schemes/TAPTSI/1.4" schemaLocation="TAP_TSI_codelist.xsd"/>
 	<xs:annotation>
@@ -224,6 +246,7 @@ CR 760 Increase text length of element Goods/AdditionalGoddInformation
 			<dcterms:modified>2023-06-15</dcterms:modified>
 			<dcterms:modified>2023-12-15</dcterms:modified>
 			<dcterms:modified>2024-12-15</dcterms:modified>
+			<dcterms:modified>2025-12-15</dcterms:modified>
 			<dcterms:type>text/xml</dcterms:type>
 			<dcterms:subject>Transport, Freight Transport, Rail</dcterms:subject>
 			<dcterms:identifier>{http://www.era.europa.eu/schemes/TAFTSI}taf_cat_complete.xsd</dcterms:identifier>
@@ -231,7 +254,7 @@ CR 760 Increase text length of element Goods/AdditionalGoddInformation
 			<dcterms:publisher>ERA European Union Agency for Railways, 120 rue Marc Lefrancq, 59307 Valenciennes Cedex, http://www.era.europa.eu/</dcterms:publisher>
 			<dcterms:rights>Unclassified</dcterms:rights>
 			<dcterms:rightsHolder>European Union Agency for Railways</dcterms:rightsHolder>
-			<dcterms:copyright>ERA 2023</dcterms:copyright>
+			<dcterms:copyright>ERA 2025</dcterms:copyright>
 			<dcterms:status>Final</dcterms:status>
 		</xs:appinfo>
 	</xs:annotation>
@@ -540,7 +563,7 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 	</xs:element>
 	<xs:element name="BookedLocationDateTime" type="xs:dateTime">
 		<xs:annotation>
-			<xs:documentation>Scheduled Date and Time of a train at a speciied location as defined in the path contract</xs:documentation>
+			<xs:documentation>Contains the most recent planned datetime including re-planning in planning and operations phase, which is the datetime of the last Path Details Message status “booked”.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="BookedLocationTime" type="xs:time"/>
@@ -2380,6 +2403,11 @@ Kk; Dr; Bo; Hik; Bd; Ch; O; KE; WE; DK; WU; WA; DM; MH, SW; KE 435; through brak
 								<xs:documentation>Explosive materials, division 1.6</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
+						<xs:enumeration value="2">
+							<xs:annotation>
+								<xs:documentation>Gases</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 						<xs:enumeration value="2.1">
 							<xs:annotation>
 								<xs:documentation>Flammable gases</xs:documentation>
@@ -2860,7 +2888,7 @@ Non coded device
 	</xs:element>
 	<xs:element name="ExceptionalGaugingProfile">
 		<xs:annotation>
-			<xs:documentation>Identification of special load.  Coding found in 404-2 chapter 4.9.1 (4AN + 3N)</xs:documentation>
+			<xs:documentation>Identification of special load.  Profile No - UIC IRS 50596-6 Macro-profile No: UIC leaflet 502-2 (4AN + 3N)</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
@@ -3045,7 +3073,7 @@ Non coded device
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="GeographicCoordinates"/>
-				<xs:element name="CurrentSpeed" type="Speed" minOccurs="0"/>
+				<xs:element name="CurrentSpeed" type="RunningSpeed" minOccurs="0"/>
 				<xs:element name="Heading" type="xs:integer" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>Direction towards which the train is going. Expressed in degrees from North (examples : 0 = North, 90 = East, 180 = South, 270 = West)</xs:documentation>
@@ -3224,18 +3252,30 @@ Non coded device
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="HandBrakeType"/>
-				<xs:element name="HandBrakedWeight" minOccurs="0">
+				<xs:element name="ParkingBrakeForces" minOccurs="0" maxOccurs="1">
 					<xs:annotation>
-						<xs:documentation>Braked weight of the hand brake in tons</xs:documentation>
+						<xs:documentation>Indicates the parking brake force of the hand brake for different conditions.</xs:documentation>
 					</xs:annotation>
-					<xs:simpleType>
-						<xs:restriction base="xs:decimal">
-							<xs:totalDigits value="4"/>
-							<xs:fractionDigits value="1"/>
-						</xs:restriction>
-					</xs:simpleType>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="MinParkingBrakeForce" type="ParkingBrakeForceType" minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Parking brake force of the freight wagon when unloaded. In kiloNewtons</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="MaxParkingBrakeForce" type="ParkingBrakeForceType" minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Maximum parking brake force of the freight wagon when loaded. In kiloNewtons</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NumberOfBrakedAxles" type="Numeric2-2" minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Number of axles on which the parking brake acts.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
 				</xs:element>
-				<xs:element ref="ParkingBrakeForce" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -3262,8 +3302,42 @@ Non coded device
 	</xs:element>
 	<xs:element name="HighestPlannedSpeed" type="Speed">
 		<xs:annotation>
-			<xs:documentation>IM may inform the RA (Responsible applicant) on the speed which was the basis for path construction</xs:documentation>
+			<xs:documentation>IM may inform the RA of the maximum theoretical speed, according to path construction. This information is not safety-relevant, it doesn't replace in any case the information given by signals or network technical documents. The respect of speed limitations is the responsibility of the operating RU.</xs:documentation>
 		</xs:annotation>
+	</xs:element>
+	<xs:element name="Hitch">
+		<xs:annotation>
+			<xs:documentation>Information on the hitches of container wagons in terms of pull out forces and the maintenance regime</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HitchID" minOccurs="0" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Unique number of the hitch for identification reasons</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:maxLength value="255"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CompliancePullOutForce" type="xs:boolean" minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Information on whether the hitch is modified and can withstand at least 85 kN pull out forces. Corresponds to the wagon inscription with a green dot.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DateLastInspection" type="String4-4" minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Date of the last inspection of the hitch as marked on the wagon. Date format in the structure MM/YY without a slash in the middle.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="InspectionInterval" type="Numeric2-2" minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Validity of the last inspection of the hitch. Specified in months.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
 	</xs:element>
 	<xs:element name="Identifiers">
 		<xs:complexType>
@@ -3294,6 +3368,312 @@ Non coded device
 				</xs:element>
 				<xs:element ref="Goods" minOccurs="0" maxOccurs="99"/>
 				<xs:element ref="SummaryOFGoodsWithSameRID" minOccurs="0" maxOccurs="25"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ILUDataMessage">
+		<xs:annotation>
+			<xs:documentation>Response Message of ILU dataset query</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="MessageHeader"/>
+				<xs:element name="QueryResponse" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="ILUData">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Type">
+											<xs:annotation>
+												<xs:documentation>Type of vehicle</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:length value="4"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="CodificationNumber" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Registration number on the codification plate</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:minLength value="7"/>
+													<xs:maxLength value="11"/>
+													<xs:pattern value="d{3}[A-Z0-9]{4,8}"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element ref="LoadUnitNumber" minOccurs="0"/>
+										<xs:element name="InternalNumber" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Internal fleet number</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:minLength value="1"/>
+													<xs:maxLength value="50"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="LicensePlates" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Plate number identification for a semi-trailer</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:minLength value="1"/>
+													<xs:maxLength value="50"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="SeatingDeviceHeight" minOccurs="0" maxOccurs="10">
+											<xs:annotation>
+												<xs:documentation>Height of the device on the wagon</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:int">
+													<xs:minInclusive value="10"/>
+													<xs:maxInclusive value="999"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="CompatibilityCodeSemiTrailers" minOccurs="0" maxOccurs="9">
+											<xs:annotation>
+												<xs:documentation>Compatibility letter between loading unit and wagon </xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:length value="1"/>
+													<xs:pattern value="[a-z]"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Profiles" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ProfileS" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Approved S profile for the loading unit (swap bodies/containers)</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="3"/>
+																<xs:maxLength value="4"/>
+																<xs:pattern value="[S]\d{2,3}"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ProfileC" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Approved C profile for the loading unit (swap bodies/containers)</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="3"/>
+																<xs:maxLength value="4"/>
+																<xs:pattern value="[C]\d{2,3}"/>
+																<xs:pattern value=""/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ProfileP" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Approved P profile for the loading unit (semi-trailers)</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="3"/>
+																<xs:maxLength value="4"/>
+																<xs:pattern value="[P]\d{2,3}"/>
+																<xs:pattern value=""/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="InterunitCode">
+											<xs:annotation>
+												<xs:documentation>Approved length code for the loading unit (reference: UIC standard)</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:int">
+													<xs:minInclusive value="10"/>
+													<xs:maxInclusive value="999"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="RIDADRCode" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Approved ADR/RID code for the loading unit (reference: ADR/RID)</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:length value="4"/>
+													<xs:pattern value="[LS]\w{3}"/>
+													<xs:pattern value=""/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="FrameNumber" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Official frame number of the loading unit</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:minLength value="1"/>
+													<xs:maxLength value="18"/>
+													<xs:pattern value="[A-Z0-9]"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Weights">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Tare">
+														<xs:annotation>
+															<xs:documentation>Tare of the loading unit in kg</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="WeightValueKilo">
+																<xs:minInclusive value="1000"/>
+																<xs:maxInclusive value="5000"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Weight">
+														<xs:annotation>
+															<xs:documentation>Total admissible weight in kg</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="WeightValueKilo">
+																<xs:minInclusive value="10000"/>
+																<xs:maxInclusive value="36000"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Dimensions">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Length">
+														<xs:annotation>
+															<xs:documentation>Total external length of the loading unit (in mm)</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:decimal">
+																<xs:minInclusive value="2000"/>
+																<xs:maxInclusive value="17000"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Width">
+														<xs:annotation>
+															<xs:documentation>Total external width of the loading unit (in mm)</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:decimal">
+																<xs:minInclusive value="2400"/>
+																<xs:maxInclusive value="2600"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Height">
+														<xs:annotation>
+															<xs:documentation>Total external width of the loading unit (in mm)</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:decimal">
+																<xs:minInclusive value="2000"/>
+																<xs:maxInclusive value="4000"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="TypeOfLoadUnit" type="TypeOfLoadUnitType" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="RefusedILUData">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="LoadUnitNumber"/>
+										<xs:element name="RefusalReason">
+											<xs:simpleType>
+												<xs:restriction base="xs:token">
+													<xs:enumeration value="01">
+														<xs:annotation>
+															<xs:documentation>LoadUnitNumber / Framework number does not exist in the ILU Refeference Database</xs:documentation>
+														</xs:annotation>
+													</xs:enumeration>
+													<xs:enumeration value="02">
+														<xs:annotation>
+															<xs:documentation>LoadUnitNumber / Framework number has been deactivated by the ILU keeper since XX.XX.XXXX</xs:documentation>
+														</xs:annotation>
+													</xs:enumeration>
+													<xs:enumeration value="03">
+														<xs:annotation>
+															<xs:documentation>LoadUnitNumber / Framework number has been deleted by the ILU keeper since XX.XX.XXXX</xs:documentation>
+														</xs:annotation>
+													</xs:enumeration>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="DeletionOrDeactivationDate" type="xs:date" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Date of deactvition or deletion by the ILU keeper</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ILUCode">
+		<xs:annotation>
+			<xs:documentation>Unique Identification of the loading unit</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="LoadUnitNumberType"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="ILUDataQueryMessage">
+		<xs:annotation>
+			<xs:documentation>Response Message of ILU dataset query</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="MessageHeader"/>
+				<xs:element name="ILUQuery" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:choice>
+							<xs:element ref="ILUCode"/>
+							<xs:element name="FrameNumber">
+								<xs:annotation>
+									<xs:documentation>Official frame number of the loading unit</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="18"/>
+										<xs:pattern value="[A-Z0-9]"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -3837,6 +4217,14 @@ The other subelements help describing the interruption information more precisel
 			<xs:pattern value="[A-Za-z0-9]{11}"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:element name="LoadUnitNumber">
+		<xs:annotation>
+			<xs:documentation>Unique Identification of the loading unit</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="LoadUnitNumberType"/>
+		</xs:simpleType>
+	</xs:element>
 	<xs:element name="Location" type="LocationIdent">
 		<xs:annotation>
 			<xs:documentation>Identifies a Location using a LocationIdent</xs:documentation>
@@ -3858,6 +4246,7 @@ The other subelements help describing the interruption information more precisel
 				<xs:element ref="MessageStatus"/>
 				<xs:element ref="CountryCodeISO"/>
 				<xs:element ref="LocationPrimaryCode"/>
+				<xs:element ref="ValidityPeriod"/>
 				<xs:choice>
 					<xs:element ref="LocationPrimaryInformation"/>
 					<xs:element ref="LocationSubsidiaryInformation"/>
@@ -3910,16 +4299,15 @@ The other subelements help describing the interruption information more precisel
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
-				<xs:element ref="ValidityPeriod"/>
 				<xs:element ref="ContainerHandlingFlag" minOccurs="0"/>
 				<xs:element ref="HandoverPointFlag" minOccurs="0"/>
 				<xs:sequence minOccurs="0">
 					<xs:element ref="FreightFlag"/>
-					<xs:element ref="ValidityPeriod" minOccurs="0"/>
+					<xs:element name="FreightValidityPeriod" type="ValidityPeriodType" minOccurs="0"/>
 				</xs:sequence>
 				<xs:sequence minOccurs="0">
 					<xs:element ref="PassengerFlag"/>
-					<xs:element ref="ValidityPeriod" minOccurs="0"/>
+					<xs:element name="PassengerValidityPeriod" type="ValidityPeriodType" minOccurs="0"/>
 				</xs:sequence>
 				<xs:element ref="GeographicCoordinates" minOccurs="0"/>
 				<xs:element name="NUTS_Code" minOccurs="0">
@@ -4514,6 +4902,12 @@ SF00 to SF99 for SFERA messages (see IRS90940)
 			<xs:maxInclusive value="99"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="Numeric0-3">
+		<xs:restriction base="xs:decimal">
+			<xs:minInclusive value="-999"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="Numeric1-5">
 		<xs:restriction base="xs:positiveInteger">
 			<xs:minInclusive value="1"/>
@@ -4664,6 +5058,15 @@ When the parking brake force is marked on the wagon the information must be prov
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
+	<xs:simpleType name="ParkingBrakeForceType">
+		<xs:annotation>
+			<xs:documentation>Indicates the parking brake force of the hand brake (kN). When the parking brake force is marked on the wagon the information must be provided in the RSRD message.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:totalDigits value="4"/>
+			<xs:fractionDigits value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:element name="PassengerFlag" type="xs:boolean">
 		<xs:annotation>
 			<xs:documentation>Identifies that the Entity or Location is for Passenger Activity</xs:documentation>
@@ -4945,7 +5348,7 @@ When the parking brake force is marked on the wagon the information must be prov
 	</xs:element>
 	<xs:element name="PlannedSpeed" type="Speed">
 		<xs:annotation>
-			<xs:documentation>IM may inform the RA on the speed which was the basis for path construction</xs:documentation>
+			<xs:documentation>IM may inform the RA of the recommended speed which was the basis for path construction. Adjusting the speed to the situation remains the responsibility of the operating RU.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="PlannedTrainData">
@@ -5099,7 +5502,7 @@ The identifiers in this message have to be same as those that have come from sen
 	</xs:element>
 	<xs:element name="ReferencedLocationDateTime" type="xs:dateTime">
 		<xs:annotation>
-			<xs:documentation>Reference to original planned Date and Time agreed by all involved IMs and RUs. </xs:documentation>
+			<xs:documentation>Contains the datetime to which IM and RU commonly reference to e.g. as the goal/target on how the train should run if there are no incidents. This usually is the datetime indicated in the path contract. Planned connections or penalties for delays might for example be managed on this basis.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="ReferenceNumbers">
@@ -6280,6 +6683,7 @@ TypeOfRemovableAccessories code list is used. Values refer to UIC Leaflet 920-13
 									<xs:documentation>Indication if tank wagon is equipped with a vapour return system</xs:documentation>
 								</xs:annotation>
 							</xs:element>
+							<xs:element name="Hitch" minOccurs="0" maxOccurs="2"/>
 							<xs:element ref="FerryPermittedFlag" minOccurs="0">
 								<xs:annotation>
 									<xs:documentation> Indication if wagon is permitted to be used on ferries</xs:documentation>
@@ -6378,11 +6782,6 @@ Type will be the RestrictionCode instead of ForwardingRestrictionType, according
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-	<xs:element name="RouteInformation" type="FreeText">
-		<xs:annotation>
-			<xs:documentation>The route of the journey for a wagon / shipment or Intermodal unit assigned by the LRU</xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<xs:element name="Routing">
 		<xs:annotation>
 			<xs:documentation>Sequential information about the complete routing of the consignment, the LeadRu  decides wether to provide this information or not</xs:documentation>
@@ -6430,6 +6829,12 @@ Type will be the RestrictionCode instead of ForwardingRestrictionType, according
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
+	<xs:simpleType name="RunningSpeed">
+		<xs:annotation>
+			<xs:documentation> Operational Speed shown in Km/h. Zero (stopped train), decimal and negative values (indicating movement opposite to the planned path e.g. shunting) are allowed. Range: -999..+999. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="Numeric0-3"/>
+	</xs:simpleType>
 	<xs:element name="RU_Partner" type="CompanyCode">
 		<xs:annotation>
 			<xs:documentation>Railway Undertaking</xs:documentation>
@@ -6990,6 +7395,7 @@ IT72	Train report stop cancelled
 								</xs:simpleType>
 							</xs:element>
 							<xs:element ref="TractionPositionInTrain" minOccurs="0"/>
+							<xs:element ref="ExceptionalGaugingIdent" minOccurs="0"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
@@ -7481,14 +7887,13 @@ IT72	Train report stop cancelled
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-	<xs:element name="ValidityPeriod">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="StartDateTime"/>
-				<xs:element ref="EndDateTime" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+	<xs:complexType name="ValidityPeriodType">
+		<xs:sequence>
+			<xs:element ref="StartDateTime"/>
+			<xs:element ref="EndDateTime" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ValidityPeriod" type="ValidityPeriodType"/>
 	<xs:element name="Value">
 		<xs:simpleType>
 			<xs:restriction base="xs:decimal">
@@ -8352,7 +8757,7 @@ IT72	Train report stop cancelled
 				<xs:element ref="BrakingPowerVariationDevice" minOccurs="0"/>
 				<xs:element name="AirBrakeSpecialCharacteristic" minOccurs="0">
 					<xs:annotation>
-						<xs:documentation>Coding in 404-2, chapter 1.8</xs:documentation>
+						<xs:documentation>IRS 90920-13; A.4.2.1 (Brake design)</xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:integer">
